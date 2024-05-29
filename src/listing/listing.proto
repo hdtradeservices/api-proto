@@ -1,0 +1,66 @@
+syntax = "proto3";
+package listing;
+
+import "google/protobuf/timestamp.proto";
+import "listing/settings.proto";
+
+option go_package = "github.com/hdtradeservices/api-proto/go/listing";
+
+// Listing is a representation of a product to be sold on a Channel
+message Listing {
+  string id = 1;
+  string category_id = 2;
+  string product_type_id = 3;
+  repeated Attribute attributes = 4;
+  message Variant {
+    string sku = 1;
+    repeated Attribute attributes = 2;
+    // total_inventory should be the sum of merchant_fulfillable_inventory
+    // and storefront_fulfillable_inventory
+    int64 total_inventory = 3;
+    int64 merchant_fulfillable_inventory = 4;
+    int64 storefront_fulfillable_inventory = 5;
+    // Any Integration-level Settings will be merged with Variant-level Settings to produce these Settings.
+    Settings settings = 6;
+  }
+  // the channel
+  // These should be in the order that are intended to be displayed one
+  repeated Variant variants = 5;
+  // These are attribute IDs that should have a corresponding Attribute in each
+  // Variant's list of Attributes
+  repeated string pivot_attributes = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// Attribute has data that describes a Listing or a Listing's Variants
+message Attribute {
+  string id = 1;
+  
+  // NumericWithUnits supports values like 1 lb
+  message NumericWithUnits {
+    double numeric = 1;
+    string units   = 2;
+  }
+
+  // MultiText supports a value that has multiple sub-values
+  // (e.g. bullet points)
+  message MultiText {
+    repeated string values = 1;
+  }
+
+  oneof value {
+    string text_value                           = 2;
+    double numeric_value                        = 3;
+    NumericWithUnits numeric_with_units_value   = 4;
+    MultiText multi_text_value                  = 5;
+  }
+
+  enum Source {
+    SOURCE_UNSPECIFIED = 0;
+    SOURCE_MAPPED_FROM_CODEC = 1;
+    SOURCE_ATTRIBUTE_OVERRIDE = 2;
+    SOURCE_ATTRIBUTE_DEFAULT_VALUE = 3;
+  }
+  Source source = 6;
+}
