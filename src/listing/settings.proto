@@ -6,9 +6,15 @@ option go_package = "github.com/hdtradeservices/api-proto/go/listing";
 // Settings represent Listing Settings at any level (Variant, Integration, etc).
 message Settings {
   string id = 1;
+  enum InheritableToggleValue {
+    INHERITABLE_TOGGLE_VALUE_UNSPECIFIED = 0;
+    INHERITABLE_TOGGLE_VALUE_INHERIT = 1;
+    INHERITABLE_TOGGLE_VALUE_TRUE = 2;
+    INHERITABLE_TOGGLE_VALUE_FALSE = 3;
+  }
   oneof value {
     string string_value = 2;
-    bool bool_value = 3;
+    InheritableToggleValue inheritable_toggle_value = 3;
   }
 }
 
