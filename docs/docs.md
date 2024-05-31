@@ -12,6 +12,13 @@
   
     - [Attribute.Source](#listing-Attribute-Source)
   
+- [listing/service.proto](#listing_service-proto)
+    - [GetRequest](#listing-GetRequest)
+    - [ListRequest](#listing-ListRequest)
+    - [ListResponse](#listing-ListResponse)
+  
+    - [ListingService](#listing-ListingService)
+  
 - [listing/settings.proto](#listing_settings-proto)
     - [Settings](#listing-Settings)
   
@@ -138,6 +145,84 @@ Listing is a representation of a product to be sold on a Channel
  
 
  
+
+ 
+
+
+
+<a name="listing_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## listing/service.proto
+
+
+
+<a name="listing-GetRequest"></a>
+
+### GetRequest
+GetRequest is the request object for the Get method
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| listing_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing-ListRequest"></a>
+
+### ListRequest
+ListRequest is the request object for the List method
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| last_update_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| next_token | [string](#string) |  |  |
+| page_length | [int32](#int32) |  |  |
+| skus | [string](#string) | repeated | protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED |
+
+
+
+
+
+
+<a name="listing-ListResponse"></a>
+
+### ListResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| listings | [Listing](#listing-Listing) | repeated |  |
+| next_token | [string](#string) |  | next_token is a token that can be provided to List request to get the next page of results. Next tokens are only valid for 5 minutes after being returned. If no `nextToken` is provided, there are no more results to return. |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="listing-ListingService"></a>
+
+### ListingService
+ListingService provides a service for listing related operations
+This includes, retrieving listings as well as sending back statuses to
+Zentail.
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#listing-GetRequest) | [Listing](#listing-Listing) | Get retrieves a single listing by its ID |
+| List | [ListRequest](#listing-ListRequest) | [ListResponse](#listing-ListResponse) | List retrieves a list of listings based on the provided query parameters |
 
  
 

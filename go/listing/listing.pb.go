@@ -318,7 +318,8 @@ type Listing_Variant struct {
 	TotalInventory                 int64 `protobuf:"varint,3,opt,name=total_inventory,json=totalInventory,proto3" json:"total_inventory,omitempty"`
 	MerchantFulfillableInventory   int64 `protobuf:"varint,4,opt,name=merchant_fulfillable_inventory,json=merchantFulfillableInventory,proto3" json:"merchant_fulfillable_inventory,omitempty"`
 	StorefrontFulfillableInventory int64 `protobuf:"varint,5,opt,name=storefront_fulfillable_inventory,json=storefrontFulfillableInventory,proto3" json:"storefront_fulfillable_inventory,omitempty"`
-	// Any Integration-level Settings will be merged with Variant-level Settings to produce these Settings.
+	// Any Integration-level Settings will be merged
+	// with Variant-level Settings to produce these Settings.
 	Settings *Settings `protobuf:"bytes,6,opt,name=settings,proto3" json:"settings,omitempty"`
 }
 

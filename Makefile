@@ -13,18 +13,19 @@ build: tools clean
 	cd $(PROTO_SRC); \
 		protoc **/*.proto \
 		-I ../googleapis/ \
+		-I ../grpc-gateway/ \
 		-I ../src/ \
-		--go_out=../$(OUTPUT_DIR) \
-		--grpc-gateway_out=../$(OUTPUT_DIR) \
 		--openapiv2_out ../openapiv2 \
 		--openapiv2_opt logtostderr=true \
+		--go_out=../$(OUTPUT_DIR) \
 		--go_opt=paths=source_relative \
 		--go-grpc_out=require_unimplemented_servers=false,paths=source_relative:../$(OUTPUT_DIR) \
+		--grpc-gateway_out=../$(OUTPUT_DIR) \
 		--grpc-gateway_opt logtostderr=true \
 		--grpc-gateway_opt paths=source_relative \
 		--doc_out=:../$(DOCS_BUILD_DIR) \
 		--doc_opt=markdown,docs.md;\
-	rm -rf ../googleapis;
+	rm -rf ../googleapis ../grpc-gateway;
 
 check-update:
 	@git diff --exit-code
@@ -49,6 +50,7 @@ tools:
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 	go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
 	git clone --depth 1 https://github.com/googleapis/googleapis.git
+	git clone --depth 1 https://github.com/grpc-ecosystem/grpc-gateway
 
 lint:
 	protolint src
