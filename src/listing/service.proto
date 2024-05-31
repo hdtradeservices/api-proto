@@ -1,0 +1,64 @@
+syntax = "proto3";
+package listing;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "listing/listing.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/hdtradeservices/api-proto/go/listing";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: { title: "Listings API";
+version: "v2";
+}
+}
+;
+
+// ListingService provides a service for listing related operations
+// This includes, retrieving listings as well as sending back statuses to
+// Zentail.
+service ListingService {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    name: "Listings Service",
+    // protolint:disable:next MAX_LINE_LENGTH
+    description: "Listings Service provides a service for listing related operations\nThis includes retrieving listings as well as sending back statuses to Zentail"
+  };
+
+  // Get retrieves a single listing by its ID
+  rpc Get(GetRequest) returns (Listing) {
+    option (google.api.http) = {
+      get: "/v2/storefront/listing/{listing_id}"
+    };
+  }
+
+  // List retrieves a list of listings based on the provided query parameters
+  rpc List(ListRequest) returns (ListResponse) {
+    option (google.api.http) = {
+      get: "/v2/storefront/listing"
+    };
+  }
+}
+
+// GetRequest is the request object for the Get method
+message GetRequest {
+  string listing_id = 1;
+}
+
+// ListRequest is the request object for the List method
+message ListRequest {
+  google.protobuf.Timestamp last_update_ts = 1;
+  string next_token                        = 2;
+  int32 page_length                        = 3;
+  // protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED
+  repeated string skus = 4;
+}
+
+message ListResponse {
+  repeated Listing listings = 1;
+
+  // next_token is a token that can be provided to List request
+  // to get the next page of results.
+  // Next tokens are only valid for 5 minutes after being returned.
+  // If no `nextToken` is provided, there are no more results to return.
+  string next_token = 2;
+}

@@ -1,0 +1,301 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Listings API",
+    "version": "v2"
+  },
+  "tags": [
+    {
+      "name": "ListingService",
+      "description": "Listings Service provides a service for listing related operations\nThis includes retrieving listings as well as sending back statuses to Zentail"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v2/storefront/listing": {
+      "get": {
+        "summary": "List retrieves a list of listings based on the provided query parameters",
+        "operationId": "ListingService_List",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listingListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lastUpdateTs",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageLength",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "skus",
+            "description": "protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/{listingId}": {
+      "get": {
+        "summary": "Get retrieves a single listing by its ID",
+        "operationId": "ListingService_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listingListing"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "listingId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AttributeMultiText": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "MultiText supports a value that has multiple sub-values\n(e.g. bullet points)"
+    },
+    "AttributeNumericWithUnits": {
+      "type": "object",
+      "properties": {
+        "numeric": {
+          "type": "number",
+          "format": "double"
+        },
+        "units": {
+          "type": "string"
+        }
+      },
+      "title": "NumericWithUnits supports values like 1 lb"
+    },
+    "AttributeSource": {
+      "type": "string",
+      "enum": [
+        "SOURCE_UNSPECIFIED",
+        "SOURCE_MAPPED_FROM_CODEC",
+        "SOURCE_ATTRIBUTE_OVERRIDE",
+        "SOURCE_ATTRIBUTE_DEFAULT_VALUE"
+      ],
+      "default": "SOURCE_UNSPECIFIED"
+    },
+    "ListingVariant": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listingAttribute"
+          }
+        },
+        "totalInventory": {
+          "type": "string",
+          "format": "int64",
+          "title": "total_inventory should be the sum of merchant_fulfillable_inventory\nand storefront_fulfillable_inventory"
+        },
+        "merchantFulfillableInventory": {
+          "type": "string",
+          "format": "int64"
+        },
+        "storefrontFulfillableInventory": {
+          "type": "string",
+          "format": "int64"
+        },
+        "settings": {
+          "$ref": "#/definitions/listingSettings",
+          "description": "Any Integration-level Settings will be merged\nwith Variant-level Settings to produce these Settings."
+        }
+      }
+    },
+    "listingAttribute": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "textValue": {
+          "type": "string"
+        },
+        "numericValue": {
+          "type": "number",
+          "format": "double"
+        },
+        "numericWithUnitsValue": {
+          "$ref": "#/definitions/AttributeNumericWithUnits"
+        },
+        "multiTextValue": {
+          "$ref": "#/definitions/AttributeMultiText"
+        },
+        "source": {
+          "$ref": "#/definitions/AttributeSource"
+        }
+      },
+      "title": "Attribute has data that describes a Listing or a Listing's Variants"
+    },
+    "listingListResponse": {
+      "type": "object",
+      "properties": {
+        "listings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listingListing"
+          }
+        },
+        "nextToken": {
+          "type": "string",
+          "description": "next_token is a token that can be provided to List request\nto get the next page of results.\nNext tokens are only valid for 5 minutes after being returned.\nIf no `nextToken` is provided, there are no more results to return."
+        }
+      }
+    },
+    "listingListing": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "productTypeId": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listingAttribute"
+          }
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListingVariant"
+          },
+          "title": "the channel\nThese should be in the order that are intended to be displayed one"
+        },
+        "pivotAttributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "These are attribute IDs that should have a corresponding Attribute in each\nVariant's list of Attributes"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Listing is a representation of a product to be sold on a Channel"
+    },
+    "listingSettings": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "stringValue": {
+          "type": "string"
+        },
+        "boolValue": {
+          "type": "boolean"
+        }
+      },
+      "description": "Settings represent Listing Settings at any level (Variant, Integration, etc)."
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
