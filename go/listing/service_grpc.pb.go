@@ -34,7 +34,7 @@ func NewListingServiceClient(cc grpc.ClientConnInterface) ListingServiceClient {
 
 func (c *listingServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Listing, error) {
 	out := new(Listing)
-	err := c.cc.Invoke(ctx, "/listing.ListingService/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func (c *listingServiceClient) Get(ctx context.Context, in *GetRequest, opts ...
 
 func (c *listingServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/listing.ListingService/List", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +92,7 @@ func _ListingService_Get_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/listing.ListingService/Get",
+		FullMethod: "/listing_api.ListingService/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ListingServiceServer).Get(ctx, req.(*GetRequest))
@@ -110,7 +110,7 @@ func _ListingService_List_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/listing.ListingService/List",
+		FullMethod: "/listing_api.ListingService/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ListingServiceServer).List(ctx, req.(*ListRequest))
@@ -122,7 +122,7 @@ func _ListingService_List_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ListingService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "listing.ListingService",
+	ServiceName: "listing_api.ListingService",
 	HandlerType: (*ListingServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

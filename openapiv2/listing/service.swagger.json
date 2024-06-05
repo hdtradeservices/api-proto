@@ -25,7 +25,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/listingListResponse"
+              "$ref": "#/definitions/listing_apiListResponse"
             }
           },
           "default": {
@@ -81,7 +81,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/listingListing"
+              "$ref": "#/definitions/listing_apiListing"
             }
           },
           "default": {
@@ -150,7 +150,7 @@
         "attributes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/listingAttribute"
+            "$ref": "#/definitions/listing_apiAttribute"
           }
         },
         "totalInventory": {
@@ -167,12 +167,12 @@
           "format": "int64"
         },
         "settings": {
-          "$ref": "#/definitions/listingSettings",
+          "$ref": "#/definitions/listing_apiSettings",
           "description": "Any Integration-level Settings will be merged\nwith Variant-level Settings to produce these Settings."
         }
       }
     },
-    "listingAttribute": {
+    "listing_apiAttribute": {
       "type": "object",
       "properties": {
         "id": {
@@ -197,13 +197,13 @@
       },
       "title": "Attribute has data that describes a Listing or a Listing's Variants"
     },
-    "listingListResponse": {
+    "listing_apiListResponse": {
       "type": "object",
       "properties": {
         "listings": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/listingListing"
+            "$ref": "#/definitions/listing_apiListing"
           }
         },
         "nextToken": {
@@ -212,7 +212,7 @@
         }
       }
     },
-    "listingListing": {
+    "listing_apiListing": {
       "type": "object",
       "properties": {
         "id": {
@@ -227,7 +227,7 @@
         "attributes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/listingAttribute"
+            "$ref": "#/definitions/listing_apiAttribute"
           }
         },
         "variants": {
@@ -255,7 +255,7 @@
       },
       "title": "Listing is a representation of a product to be sold on a Channel"
     },
-    "listingSettings": {
+    "listing_apiSettings": {
       "type": "object",
       "properties": {
         "id": {

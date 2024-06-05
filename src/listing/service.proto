@@ -1,12 +1,13 @@
 syntax = "proto3";
-package listing;
+package listing_api;
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "listing/listing.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-option go_package = "github.com/hdtradeservices/api-proto/go/listing";
+option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
+
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: { title: "Listings API";
 version: "v2";
