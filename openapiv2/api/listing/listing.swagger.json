@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "listing/listing.proto",
+    "title": "api/listing/listing.proto",
     "version": "version not set"
   },
   "consumes": [

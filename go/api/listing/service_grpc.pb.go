@@ -135,5 +135,5 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "listing/service.proto",
+	Metadata: "api/listing/service.proto",
 }

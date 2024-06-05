@@ -3,7 +3,7 @@
 
 ## Table of Contents
 
-- [listing/listing.proto](#listing_listing-proto)
+- [api/listing/listing.proto](#api_listing_listing-proto)
     - [Attribute](#listing_api-Attribute)
     - [Attribute.MultiText](#listing_api-Attribute-MultiText)
     - [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits)
@@ -12,24 +12,24 @@
   
     - [Attribute.Source](#listing_api-Attribute-Source)
   
-- [listing/service.proto](#listing_service-proto)
+- [api/listing/service.proto](#api_listing_service-proto)
     - [GetRequest](#listing_api-GetRequest)
     - [ListRequest](#listing_api-ListRequest)
     - [ListResponse](#listing_api-ListResponse)
   
     - [ListingService](#listing_api-ListingService)
   
-- [listing/settings.proto](#listing_settings-proto)
+- [api/listing/settings.proto](#api_listing_settings-proto)
     - [Settings](#listing_api-Settings)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="listing_listing-proto"></a>
+<a name="api_listing_listing-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## listing/listing.proto
+## api/listing/listing.proto
 
 
 
@@ -150,10 +150,10 @@ Listing is a representation of a product to be sold on a Channel
 
 
 
-<a name="listing_service-proto"></a>
+<a name="api_listing_service-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## listing/service.proto
+## api/listing/service.proto
 
 
 
@@ -228,10 +228,10 @@ Zentail.
 
 
 
-<a name="listing_settings-proto"></a>
+<a name="api_listing_settings-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## listing/settings.proto
+## api/listing/settings.proto
 
 
 
