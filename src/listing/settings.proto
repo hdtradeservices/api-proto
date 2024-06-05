@@ -1,14 +1,14 @@
 syntax = "proto3";
-package listing;
+package listing_api;
 
-option go_package = "github.com/hdtradeservices/api-proto/go/listing";
+option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
 
 // Settings represent Listing Settings at any level (Variant, Integration, etc).
 message Settings {
   string id = 1;
   oneof value {
     string string_value = 2;
-    bool bool_value = 3;
+    bool bool_value     = 3;
   }
 }
 

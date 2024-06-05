@@ -131,7 +131,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing.ListingService/Get", runtime.WithHTTPPathPattern("/v2/storefront/listing/{listing_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/Get", runtime.WithHTTPPathPattern("/v2/storefront/listing/{listing_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -154,7 +154,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing.ListingService/List", runtime.WithHTTPPathPattern("/v2/storefront/listing"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/List", runtime.WithHTTPPathPattern("/v2/storefront/listing"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -216,7 +216,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing.ListingService/Get", runtime.WithHTTPPathPattern("/v2/storefront/listing/{listing_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/Get", runtime.WithHTTPPathPattern("/v2/storefront/listing/{listing_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -236,7 +236,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing.ListingService/List", runtime.WithHTTPPathPattern("/v2/storefront/listing"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/List", runtime.WithHTTPPathPattern("/v2/storefront/listing"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

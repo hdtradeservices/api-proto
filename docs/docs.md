@@ -4,23 +4,23 @@
 ## Table of Contents
 
 - [listing/listing.proto](#listing_listing-proto)
-    - [Attribute](#listing-Attribute)
-    - [Attribute.MultiText](#listing-Attribute-MultiText)
-    - [Attribute.NumericWithUnits](#listing-Attribute-NumericWithUnits)
-    - [Listing](#listing-Listing)
-    - [Listing.Variant](#listing-Listing-Variant)
+    - [Attribute](#listing_api-Attribute)
+    - [Attribute.MultiText](#listing_api-Attribute-MultiText)
+    - [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits)
+    - [Listing](#listing_api-Listing)
+    - [Listing.Variant](#listing_api-Listing-Variant)
   
-    - [Attribute.Source](#listing-Attribute-Source)
+    - [Attribute.Source](#listing_api-Attribute-Source)
   
 - [listing/service.proto](#listing_service-proto)
-    - [GetRequest](#listing-GetRequest)
-    - [ListRequest](#listing-ListRequest)
-    - [ListResponse](#listing-ListResponse)
+    - [GetRequest](#listing_api-GetRequest)
+    - [ListRequest](#listing_api-ListRequest)
+    - [ListResponse](#listing_api-ListResponse)
   
-    - [ListingService](#listing-ListingService)
+    - [ListingService](#listing_api-ListingService)
   
 - [listing/settings.proto](#listing_settings-proto)
-    - [Settings](#listing-Settings)
+    - [Settings](#listing_api-Settings)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -33,7 +33,7 @@
 
 
 
-<a name="listing-Attribute"></a>
+<a name="listing_api-Attribute"></a>
 
 ### Attribute
 Attribute has data that describes a Listing or a Listing&#39;s Variants
@@ -44,16 +44,16 @@ Attribute has data that describes a Listing or a Listing&#39;s Variants
 | id | [string](#string) |  |  |
 | text_value | [string](#string) |  |  |
 | numeric_value | [double](#double) |  |  |
-| numeric_with_units_value | [Attribute.NumericWithUnits](#listing-Attribute-NumericWithUnits) |  |  |
-| multi_text_value | [Attribute.MultiText](#listing-Attribute-MultiText) |  |  |
-| source | [Attribute.Source](#listing-Attribute-Source) |  |  |
+| numeric_with_units_value | [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits) |  |  |
+| multi_text_value | [Attribute.MultiText](#listing_api-Attribute-MultiText) |  |  |
+| source | [Attribute.Source](#listing_api-Attribute-Source) |  |  |
 
 
 
 
 
 
-<a name="listing-Attribute-MultiText"></a>
+<a name="listing_api-Attribute-MultiText"></a>
 
 ### Attribute.MultiText
 MultiText supports a value that has multiple sub-values
@@ -69,7 +69,7 @@ MultiText supports a value that has multiple sub-values
 
 
 
-<a name="listing-Attribute-NumericWithUnits"></a>
+<a name="listing_api-Attribute-NumericWithUnits"></a>
 
 ### Attribute.NumericWithUnits
 NumericWithUnits supports values like 1 lb
@@ -85,7 +85,7 @@ NumericWithUnits supports values like 1 lb
 
 
 
-<a name="listing-Listing"></a>
+<a name="listing_api-Listing"></a>
 
 ### Listing
 Listing is a representation of a product to be sold on a Channel
@@ -96,8 +96,8 @@ Listing is a representation of a product to be sold on a Channel
 | id | [string](#string) |  |  |
 | category_id | [string](#string) |  |  |
 | product_type_id | [string](#string) |  |  |
-| attributes | [Attribute](#listing-Attribute) | repeated |  |
-| variants | [Listing.Variant](#listing-Listing-Variant) | repeated | the channel These should be in the order that are intended to be displayed one |
+| attributes | [Attribute](#listing_api-Attribute) | repeated |  |
+| variants | [Listing.Variant](#listing_api-Listing-Variant) | repeated | the channel These should be in the order that are intended to be displayed one |
 | pivot_attributes | [string](#string) | repeated | These are attribute IDs that should have a corresponding Attribute in each Variant&#39;s list of Attributes |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
@@ -107,7 +107,7 @@ Listing is a representation of a product to be sold on a Channel
 
 
 
-<a name="listing-Listing-Variant"></a>
+<a name="listing_api-Listing-Variant"></a>
 
 ### Listing.Variant
 
@@ -116,11 +116,11 @@ Listing is a representation of a product to be sold on a Channel
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | sku | [string](#string) |  |  |
-| attributes | [Attribute](#listing-Attribute) | repeated |  |
+| attributes | [Attribute](#listing_api-Attribute) | repeated |  |
 | total_inventory | [int64](#int64) |  | total_inventory should be the sum of merchant_fulfillable_inventory and storefront_fulfillable_inventory |
 | merchant_fulfillable_inventory | [int64](#int64) |  |  |
 | storefront_fulfillable_inventory | [int64](#int64) |  |  |
-| settings | [Settings](#listing-Settings) |  | Any Integration-level Settings will be merged with Variant-level Settings to produce these Settings. |
+| settings | [Settings](#listing_api-Settings) |  | Any Integration-level Settings will be merged with Variant-level Settings to produce these Settings. |
 
 
 
@@ -129,7 +129,7 @@ Listing is a representation of a product to be sold on a Channel
  
 
 
-<a name="listing-Attribute-Source"></a>
+<a name="listing_api-Attribute-Source"></a>
 
 ### Attribute.Source
 
@@ -157,7 +157,7 @@ Listing is a representation of a product to be sold on a Channel
 
 
 
-<a name="listing-GetRequest"></a>
+<a name="listing_api-GetRequest"></a>
 
 ### GetRequest
 GetRequest is the request object for the Get method
@@ -172,7 +172,7 @@ GetRequest is the request object for the Get method
 
 
 
-<a name="listing-ListRequest"></a>
+<a name="listing_api-ListRequest"></a>
 
 ### ListRequest
 ListRequest is the request object for the List method
@@ -190,7 +190,7 @@ ListRequest is the request object for the List method
 
 
 
-<a name="listing-ListResponse"></a>
+<a name="listing_api-ListResponse"></a>
 
 ### ListResponse
 
@@ -198,7 +198,7 @@ ListRequest is the request object for the List method
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listings | [Listing](#listing-Listing) | repeated |  |
+| listings | [Listing](#listing_api-Listing) | repeated |  |
 | next_token | [string](#string) |  | next_token is a token that can be provided to List request to get the next page of results. Next tokens are only valid for 5 minutes after being returned. If no `nextToken` is provided, there are no more results to return. |
 
 
@@ -212,7 +212,7 @@ ListRequest is the request object for the List method
  
 
 
-<a name="listing-ListingService"></a>
+<a name="listing_api-ListingService"></a>
 
 ### ListingService
 ListingService provides a service for listing related operations
@@ -221,8 +221,8 @@ Zentail.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#listing-GetRequest) | [Listing](#listing-Listing) | Get retrieves a single listing by its ID |
-| List | [ListRequest](#listing-ListRequest) | [ListResponse](#listing-ListResponse) | List retrieves a list of listings based on the provided query parameters |
+| Get | [GetRequest](#listing_api-GetRequest) | [Listing](#listing_api-Listing) | Get retrieves a single listing by its ID |
+| List | [ListRequest](#listing_api-ListRequest) | [ListResponse](#listing_api-ListResponse) | List retrieves a list of listings based on the provided query parameters |
 
  
 
@@ -235,7 +235,7 @@ Zentail.
 
 
 
-<a name="listing-Settings"></a>
+<a name="listing_api-Settings"></a>
 
 ### Settings
 Settings represent Listing Settings at any level (Variant, Integration, etc).
