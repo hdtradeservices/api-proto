@@ -1,5 +1,4 @@
-IMPORT_PATH=github.com/hdtradeservices/api-proto/go
-OUTPUT_DIR=go
+OUTPUT_DIR=go/api
 GO_BUILD_DIR=${BUILD_DIR}/github.com/hdtradeservices/api-proto/go
 OPEN_API_V2=openapiv2
 DOCS_BUILD_DIR=docs
