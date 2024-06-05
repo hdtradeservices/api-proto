@@ -1,4 +1,4 @@
-OUTPUT_DIR=go/api
+OUTPUT_DIR=go
 GO_BUILD_DIR=${BUILD_DIR}/github.com/hdtradeservices/api-proto/go
 OPEN_API_V2=openapiv2
 DOCS_BUILD_DIR=docs
@@ -10,7 +10,7 @@ all: build
 build: tools clean
 	mkdir -p $(OUTPUT_DIR) $(OPEN_API_V2) $(DOCS_BUILD_DIR)
 	cd $(PROTO_SRC); \
-		protoc **/*.proto \
+		protoc api/**/*.proto \
 		-I ../googleapis/ \
 		-I ../grpc-gateway/ \
 		-I ../src/ \

@@ -3,7 +3,7 @@ package listing_api;
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "listing/listing.proto";
+import "api/listing/listing.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
