@@ -17,15 +17,15 @@
     "application/json"
   ],
   "paths": {
-    "/v2/storefront/listing": {
+    "/storefront/v2/listing/new": {
       "get": {
-        "summary": "List retrieves a list of listings based on the provided query parameters",
-        "operationId": "ListingService_List",
+        "summary": "ListNewListings will list any listing created or updated\nsince the given timestamp where:\n1. Product data is enabled for at least one Variant in the Listing\n2. All Variants in the Listing have a status of `UNKNOWN` or\n`RETIRED` in Zentail",
+        "operationId": "ListingService_ListNewListings",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/listing_apiListResponse"
+              "$ref": "#/definitions/listing_apiListListingsResponse"
             }
           },
           "default": {
@@ -37,35 +37,200 @@
         },
         "parameters": [
           {
-            "name": "lastUpdateTs",
+            "name": "since",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
           },
           {
-            "name": "nextToken",
+            "name": "cursor",
             "in": "query",
             "required": false,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/storefront/v2/listing/product_data/updated": {
+      "get": {
+        "summary": "ListUpdateListings will return any listing that:\n1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`\n2. Has a Product Data change since the last timestamp (including Variants)\nTODO: update this based on whether or not variants can have different\n      product data enablednesses\n3. Product Data is enabled for the Listing",
+        "operationId": "ListingService_ListUpdatedListings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListListingsResponse"
+            }
           },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
           {
-            "name": "pageLength",
+            "name": "since",
             "in": "query",
             "required": false,
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "date-time"
           },
           {
-            "name": "skus",
-            "description": "protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED.",
+            "name": "cursor",
             "in": "query",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/storefront/v2/listing/variant/inventory/updated": {
+      "get": {
+        "summary": "ListVariantsWithUpdatedInventory will return any variant that:\n1. Has a status other than `UNKNOWN` or `RETIRED`\n2. Has an inventory change since the last timestamp\n3. Inventory Data is enabled for the Variant",
+        "operationId": "ListingService_ListVariantsWithUpdatedInventory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListVariantsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "externalChangesOnly",
+            "description": "Only return variants with inventory changes that have happened\noutside of sales on this channel.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/storefront/v2/listing/variant/pricing/updated": {
+      "get": {
+        "summary": "ListVariantsWithUpdatedPricing will return any variant that:\n1. Has a status other than `UNKNOWN` or `RETIRED`\n2. Has a pricing change since the last timestamp\n3. Pricing Data is enabled for the Variant",
+        "operationId": "ListingService_ListVariantsWithUpdatedPricing",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListVariantsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/storefront/v2/listing/variant/{sku}": {
+      "get": {
+        "summary": "GetVariant retrieves a single variant by its SKU",
+        "operationId": "ListingService_GetVariant",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiVariant"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/storefront/v2/listing/{listingId}": {
+      "get": {
+        "summary": "Get retrieves a single listing by its ID",
+        "operationId": "ListingService_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListing"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "listingId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -175,37 +340,6 @@
           "ListingService"
         ]
       }
-    },
-    "/v2/storefront/listing/{listingId}": {
-      "get": {
-        "summary": "Get retrieves a single listing by its ID",
-        "operationId": "ListingService_Get",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/listing_apiListing"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "listingId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ListingService"
-        ]
-      }
     }
   },
   "definitions": {
@@ -253,37 +387,6 @@
         "SEVERITY_ERROR"
       ],
       "default": "SEVERITY_UNSPECIFIED"
-    },
-    "ListingVariant": {
-      "type": "object",
-      "properties": {
-        "sku": {
-          "type": "string"
-        },
-        "attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/listing_apiAttribute"
-          }
-        },
-        "totalInventory": {
-          "type": "string",
-          "format": "int64",
-          "title": "total_inventory should be the sum of merchant_fulfillable_inventory\nand storefront_fulfillable_inventory"
-        },
-        "merchantFulfillableInventory": {
-          "type": "string",
-          "format": "int64"
-        },
-        "storefrontFulfillableInventory": {
-          "type": "string",
-          "format": "int64"
-        },
-        "settings": {
-          "$ref": "#/definitions/listing_apiSettings",
-          "description": "Any Integration-level Settings will be merged\nwith Variant-level Settings to produce these Settings."
-        }
-      }
     },
     "listing_apiAttribute": {
       "type": "object",
@@ -343,7 +446,7 @@
       ],
       "default": "TYPE_UNSPECIFIED"
     },
-    "listing_apiListResponse": {
+    "listing_apiListListingsResponse": {
       "type": "object",
       "properties": {
         "listings": {
@@ -352,11 +455,28 @@
             "$ref": "#/definitions/listing_apiListing"
           }
         },
-        "nextToken": {
+        "nextPageUrl": {
           "type": "string",
-          "description": "next_token is a token that can be provided to List request\nto get the next page of results.\nNext tokens are only valid for 5 minutes after being returned.\nIf no `nextToken` is provided, there are no more results to return."
+          "description": "The URL to the next page of results.\nIf empty, there are no more results."
         }
-      }
+      },
+      "title": "ListListingsResponse is the response object containing a list of Listings"
+    },
+    "listing_apiListVariantsResponse": {
+      "type": "object",
+      "properties": {
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiVariant"
+          }
+        },
+        "nextPageUrl": {
+          "type": "string",
+          "description": "The URL to the next page of results.\nIf empty, there are no more results."
+        }
+      },
+      "title": "ListVariantsResponse is the response object containing a list of Variants"
     },
     "listing_apiListing": {
       "type": "object",
@@ -379,7 +499,7 @@
         "variants": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ListingVariant"
+            "$ref": "#/definitions/listing_apiVariant"
           },
           "title": "the channel\nThese should be in the order that are intended to be displayed one"
         },
@@ -435,6 +555,38 @@
     "listing_apiUpdateStatusResponse": {
       "type": "object",
       "title": "UpdateStatusResponse is empty"
+    },
+    "listing_apiVariant": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiAttribute"
+          }
+        },
+        "totalInventory": {
+          "type": "string",
+          "format": "int64",
+          "title": "total_inventory should be the sum of merchant_fulfillable_inventory\nand storefront_fulfillable_inventory"
+        },
+        "merchantFulfillableInventory": {
+          "type": "string",
+          "format": "int64"
+        },
+        "storefrontFulfillableInventory": {
+          "type": "string",
+          "format": "int64"
+        },
+        "settings": {
+          "$ref": "#/definitions/listing_apiSettings",
+          "description": "Any Integration-level Settings will be merged\nwith Variant-level Settings to produce these Settings."
+        }
+      },
+      "title": "Variant is a representation of a specific SKU in a listing"
     },
     "protobufAny": {
       "type": "object",

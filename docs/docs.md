@@ -8,15 +8,18 @@
     - [Attribute.MultiText](#listing_api-Attribute-MultiText)
     - [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits)
     - [Listing](#listing_api-Listing)
-    - [Listing.Variant](#listing_api-Listing-Variant)
+    - [Variant](#listing_api-Variant)
   
     - [Attribute.Source](#listing_api-Attribute-Source)
   
 - [api/listing/service.proto](#api_listing_service-proto)
     - [Error](#listing_api-Error)
     - [GetRequest](#listing_api-GetRequest)
-    - [ListRequest](#listing_api-ListRequest)
-    - [ListResponse](#listing_api-ListResponse)
+    - [GetVariantRequest](#listing_api-GetVariantRequest)
+    - [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest)
+    - [ListListingsResponse](#listing_api-ListListingsResponse)
+    - [ListSinceRequest](#listing_api-ListSinceRequest)
+    - [ListVariantsResponse](#listing_api-ListVariantsResponse)
     - [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest)
     - [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse)
     - [UpdateStatusRequest](#listing_api-UpdateStatusRequest)
@@ -106,7 +109,7 @@ Listing is a representation of a product to be sold on a Channel
 | category_id | [string](#string) |  |  |
 | product_type_id | [string](#string) |  |  |
 | attributes | [Attribute](#listing_api-Attribute) | repeated |  |
-| variants | [Listing.Variant](#listing_api-Listing-Variant) | repeated | the channel These should be in the order that are intended to be displayed one |
+| variants | [Variant](#listing_api-Variant) | repeated | the channel These should be in the order that are intended to be displayed one |
 | pivot_attributes | [string](#string) | repeated | These are attribute IDs that should have a corresponding Attribute in each Variant&#39;s list of Attributes |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
@@ -116,10 +119,10 @@ Listing is a representation of a product to be sold on a Channel
 
 
 
-<a name="listing_api-Listing-Variant"></a>
+<a name="listing_api-Variant"></a>
 
-### Listing.Variant
-
+### Variant
+Variant is a representation of a specific SKU in a listing
 
 
 | Field | Type | Label | Description |
@@ -199,34 +202,80 @@ GetRequest is the request object for the Get method
 
 
 
-<a name="listing_api-ListRequest"></a>
+<a name="listing_api-GetVariantRequest"></a>
 
-### ListRequest
-ListRequest is the request object for the List method
+### GetVariantRequest
+GetVariantRequest is the request object for the GetVariant method
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| last_update_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| next_token | [string](#string) |  |  |
-| page_length | [int32](#int32) |  |  |
-| skus | [string](#string) | repeated | protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED |
+| sku | [string](#string) |  |  |
 
 
 
 
 
 
-<a name="listing_api-ListResponse"></a>
+<a name="listing_api-ListInventorySinceRequest"></a>
 
-### ListResponse
+### ListInventorySinceRequest
 
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| since | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| external_changes_only | [bool](#bool) |  | Only return variants with inventory changes that have happened outside of sales on this channel. |
+| cursor | [string](#string) |  | TODO: how to get these in the query params |
+
+
+
+
+
+
+<a name="listing_api-ListListingsResponse"></a>
+
+### ListListingsResponse
+ListListingsResponse is the response object containing a list of Listings
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | listings | [Listing](#listing_api-Listing) | repeated |  |
-| next_token | [string](#string) |  | next_token is a token that can be provided to List request to get the next page of results. Next tokens are only valid for 5 minutes after being returned. If no `nextToken` is provided, there are no more results to return. |
+| next_page_url | [string](#string) |  | The URL to the next page of results. If empty, there are no more results. |
+
+
+
+
+
+
+<a name="listing_api-ListSinceRequest"></a>
+
+### ListSinceRequest
+ListSinceRequestRequest is the request object for the ListSinceRequest method
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| since | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| cursor | [string](#string) |  | TODO: how to get these in the query params |
+
+
+
+
+
+
+<a name="listing_api-ListVariantsResponse"></a>
+
+### ListVariantsResponse
+ListVariantsResponse is the response object containing a list of Variants
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| variants | [Variant](#listing_api-Variant) | repeated |  |
+| next_page_url | [string](#string) |  | The URL to the next page of results. If empty, there are no more results. |
 
 
 
@@ -348,7 +397,11 @@ Zentail.
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#listing_api-GetRequest) | [Listing](#listing_api-Listing) | Get retrieves a single listing by its ID |
-| List | [ListRequest](#listing_api-ListRequest) | [ListResponse](#listing_api-ListResponse) | List retrieves a list of listings based on the provided query parameters |
+| GetVariant | [GetVariantRequest](#listing_api-GetVariantRequest) | [Variant](#listing_api-Variant) | GetVariant retrieves a single variant by its SKU |
+| ListNewListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListNewListings will list any listing created or updated since the given timestamp where: 1. Product data is enabled for at least one Variant in the Listing 2. All Variants in the Listing have a status of `UNKNOWN` or `RETIRED` in Zentail |
+| ListUpdatedListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListUpdateListings will return any listing that: 1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED` 2. Has a Product Data change since the last timestamp (including Variants) TODO: update this based on whether or not variants can have different product data enablednesses 3. Product Data is enabled for the Listing |
+| ListVariantsWithUpdatedInventory | [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedInventory will return any variant that: 1. Has a status other than `UNKNOWN` or `RETIRED` 2. Has an inventory change since the last timestamp 3. Inventory Data is enabled for the Variant |
+| ListVariantsWithUpdatedPricing | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedPricing will return any variant that: 1. Has a status other than `UNKNOWN` or `RETIRED` 2. Has a pricing change since the last timestamp 3. Pricing Data is enabled for the Variant |
 | UpdateStatus | [UpdateStatusRequest](#listing_api-UpdateStatusRequest) | [UpdateStatusResponse](#listing_api-UpdateStatusResponse) | UpdateStatus updates the status of a listing |
 | ReplaceErrors | [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest) | [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse) | ReplaceErrors replaces the errors for a variant |
 

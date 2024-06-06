@@ -20,8 +20,31 @@ const _ = grpc.SupportPackageIsVersion7
 type ListingServiceClient interface {
 	// Get retrieves a single listing by its ID
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Listing, error)
-	// List retrieves a list of listings based on the provided query parameters
-	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
+	// GetVariant retrieves a single variant by its SKU
+	GetVariant(ctx context.Context, in *GetVariantRequest, opts ...grpc.CallOption) (*Variant, error)
+	// ListNewListings will list any listing created or updated
+	// since the given timestamp where:
+	// 1. Product data is enabled for at least one Variant in the Listing
+	// 2. All Variants in the Listing have a status of `UNKNOWN` or
+	// `RETIRED` in Zentail
+	ListNewListings(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListListingsResponse, error)
+	// ListUpdateListings will return any listing that:
+	// 1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`
+	// 2. Has a Product Data change since the last timestamp (including Variants)
+	// TODO: update this based on whether or not variants can have different
+	//       product data enablednesses
+	// 3. Product Data is enabled for the Listing
+	ListUpdatedListings(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListListingsResponse, error)
+	// ListVariantsWithUpdatedInventory will return any variant that:
+	// 1. Has a status other than `UNKNOWN` or `RETIRED`
+	// 2. Has an inventory change since the last timestamp
+	// 3. Inventory Data is enabled for the Variant
+	ListVariantsWithUpdatedInventory(ctx context.Context, in *ListInventorySinceRequest, opts ...grpc.CallOption) (*ListVariantsResponse, error)
+	// ListVariantsWithUpdatedPricing will return any variant that:
+	// 1. Has a status other than `UNKNOWN` or `RETIRED`
+	// 2. Has a pricing change since the last timestamp
+	// 3. Pricing Data is enabled for the Variant
+	ListVariantsWithUpdatedPricing(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListVariantsResponse, error)
 	// UpdateStatus updates the status of a listing
 	UpdateStatus(ctx context.Context, in *UpdateStatusRequest, opts ...grpc.CallOption) (*UpdateStatusResponse, error)
 	// ReplaceErrors replaces the errors for a variant
@@ -45,9 +68,45 @@ func (c *listingServiceClient) Get(ctx context.Context, in *GetRequest, opts ...
 	return out, nil
 }
 
-func (c *listingServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/listing_api.ListingService/List", in, out, opts...)
+func (c *listingServiceClient) GetVariant(ctx context.Context, in *GetVariantRequest, opts ...grpc.CallOption) (*Variant, error) {
+	out := new(Variant)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/GetVariant", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) ListNewListings(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListListingsResponse, error) {
+	out := new(ListListingsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/ListNewListings", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) ListUpdatedListings(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListListingsResponse, error) {
+	out := new(ListListingsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/ListUpdatedListings", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) ListVariantsWithUpdatedInventory(ctx context.Context, in *ListInventorySinceRequest, opts ...grpc.CallOption) (*ListVariantsResponse, error) {
+	out := new(ListVariantsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/ListVariantsWithUpdatedInventory", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) ListVariantsWithUpdatedPricing(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListVariantsResponse, error) {
+	out := new(ListVariantsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/ListVariantsWithUpdatedPricing", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,8 +137,31 @@ func (c *listingServiceClient) ReplaceErrors(ctx context.Context, in *ReplaceErr
 type ListingServiceServer interface {
 	// Get retrieves a single listing by its ID
 	Get(context.Context, *GetRequest) (*Listing, error)
-	// List retrieves a list of listings based on the provided query parameters
-	List(context.Context, *ListRequest) (*ListResponse, error)
+	// GetVariant retrieves a single variant by its SKU
+	GetVariant(context.Context, *GetVariantRequest) (*Variant, error)
+	// ListNewListings will list any listing created or updated
+	// since the given timestamp where:
+	// 1. Product data is enabled for at least one Variant in the Listing
+	// 2. All Variants in the Listing have a status of `UNKNOWN` or
+	// `RETIRED` in Zentail
+	ListNewListings(context.Context, *ListSinceRequest) (*ListListingsResponse, error)
+	// ListUpdateListings will return any listing that:
+	// 1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`
+	// 2. Has a Product Data change since the last timestamp (including Variants)
+	// TODO: update this based on whether or not variants can have different
+	//       product data enablednesses
+	// 3. Product Data is enabled for the Listing
+	ListUpdatedListings(context.Context, *ListSinceRequest) (*ListListingsResponse, error)
+	// ListVariantsWithUpdatedInventory will return any variant that:
+	// 1. Has a status other than `UNKNOWN` or `RETIRED`
+	// 2. Has an inventory change since the last timestamp
+	// 3. Inventory Data is enabled for the Variant
+	ListVariantsWithUpdatedInventory(context.Context, *ListInventorySinceRequest) (*ListVariantsResponse, error)
+	// ListVariantsWithUpdatedPricing will return any variant that:
+	// 1. Has a status other than `UNKNOWN` or `RETIRED`
+	// 2. Has a pricing change since the last timestamp
+	// 3. Pricing Data is enabled for the Variant
+	ListVariantsWithUpdatedPricing(context.Context, *ListSinceRequest) (*ListVariantsResponse, error)
 	// UpdateStatus updates the status of a listing
 	UpdateStatus(context.Context, *UpdateStatusRequest) (*UpdateStatusResponse, error)
 	// ReplaceErrors replaces the errors for a variant
@@ -93,8 +175,20 @@ type UnimplementedListingServiceServer struct {
 func (UnimplementedListingServiceServer) Get(context.Context, *GetRequest) (*Listing, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedListingServiceServer) List(context.Context, *ListRequest) (*ListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedListingServiceServer) GetVariant(context.Context, *GetVariantRequest) (*Variant, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVariant not implemented")
+}
+func (UnimplementedListingServiceServer) ListNewListings(context.Context, *ListSinceRequest) (*ListListingsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListNewListings not implemented")
+}
+func (UnimplementedListingServiceServer) ListUpdatedListings(context.Context, *ListSinceRequest) (*ListListingsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUpdatedListings not implemented")
+}
+func (UnimplementedListingServiceServer) ListVariantsWithUpdatedInventory(context.Context, *ListInventorySinceRequest) (*ListVariantsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListVariantsWithUpdatedInventory not implemented")
+}
+func (UnimplementedListingServiceServer) ListVariantsWithUpdatedPricing(context.Context, *ListSinceRequest) (*ListVariantsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListVariantsWithUpdatedPricing not implemented")
 }
 func (UnimplementedListingServiceServer) UpdateStatus(context.Context, *UpdateStatusRequest) (*UpdateStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateStatus not implemented")
@@ -132,20 +226,92 @@ func _ListingService_Get_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ListingService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRequest)
+func _ListingService_GetVariant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVariantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ListingServiceServer).List(ctx, in)
+		return srv.(ListingServiceServer).GetVariant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/listing_api.ListingService/List",
+		FullMethod: "/listing_api.ListingService/GetVariant",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ListingServiceServer).List(ctx, req.(*ListRequest))
+		return srv.(ListingServiceServer).GetVariant(ctx, req.(*GetVariantRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_ListNewListings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSinceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).ListNewListings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/ListNewListings",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).ListNewListings(ctx, req.(*ListSinceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_ListUpdatedListings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSinceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).ListUpdatedListings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/ListUpdatedListings",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).ListUpdatedListings(ctx, req.(*ListSinceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_ListVariantsWithUpdatedInventory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListInventorySinceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).ListVariantsWithUpdatedInventory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/ListVariantsWithUpdatedInventory",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).ListVariantsWithUpdatedInventory(ctx, req.(*ListInventorySinceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_ListVariantsWithUpdatedPricing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSinceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).ListVariantsWithUpdatedPricing(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/ListVariantsWithUpdatedPricing",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).ListVariantsWithUpdatedPricing(ctx, req.(*ListSinceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -198,8 +364,24 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ListingService_Get_Handler,
 		},
 		{
-			MethodName: "List",
-			Handler:    _ListingService_List_Handler,
+			MethodName: "GetVariant",
+			Handler:    _ListingService_GetVariant_Handler,
+		},
+		{
+			MethodName: "ListNewListings",
+			Handler:    _ListingService_ListNewListings_Handler,
+		},
+		{
+			MethodName: "ListUpdatedListings",
+			Handler:    _ListingService_ListUpdatedListings_Handler,
+		},
+		{
+			MethodName: "ListVariantsWithUpdatedInventory",
+			Handler:    _ListingService_ListVariantsWithUpdatedInventory_Handler,
+		},
+		{
+			MethodName: "ListVariantsWithUpdatedPricing",
+			Handler:    _ListingService_ListVariantsWithUpdatedPricing_Handler,
 		},
 		{
 			MethodName: "UpdateStatus",

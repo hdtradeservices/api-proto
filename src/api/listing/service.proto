@@ -28,16 +28,63 @@ service ListingService {
   // Get retrieves a single listing by its ID
   rpc Get(GetRequest) returns (Listing) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing/{listing_id}"
+      get: "/storefront/v2/listing/{listing_id}"
     };
   }
 
-  // List retrieves a list of listings based on the provided query parameters
-  rpc List(ListRequest) returns (ListResponse) {
+  // GetVariant retrieves a single variant by its SKU
+  rpc GetVariant(GetVariantRequest) returns (Variant) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing"
+      get: "/storefront/v2/listing/variant/{sku}"
     };
   }
+
+  // ListNewListings will list any listing created or updated
+  // since the given timestamp where:
+  // 1. Product data is enabled for at least one Variant in the Listing
+  // 2. All Variants in the Listing have a status of `UNKNOWN` or
+  // `RETIRED` in Zentail
+  rpc ListNewListings(ListSinceRequest) returns (ListListingsResponse) {
+    option (google.api.http) = {
+      get: "/storefront/v2/listing/new"
+    };
+  }
+
+  // ListUpdateListings will return any listing that:
+  // 1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`
+  // 2. Has a Product Data change since the last timestamp (including Variants)
+  // TODO: update this based on whether or not variants can have different
+  //       product data enablednesses
+  // 3. Product Data is enabled for the Listing
+  rpc ListUpdatedListings(ListSinceRequest) returns (ListListingsResponse) {
+    option (google.api.http) = {
+      get: "/storefront/v2/listing/product_data/updated"
+    };
+  }
+
+  // ListVariantsWithUpdatedInventory will return any variant that:
+  // 1. Has a status other than `UNKNOWN` or `RETIRED`
+  // 2. Has an inventory change since the last timestamp
+  // 3. Inventory Data is enabled for the Variant
+  rpc ListVariantsWithUpdatedInventory(ListInventorySinceRequest)
+      returns (ListVariantsResponse) {
+    option (google.api.http) = {
+      get: "/storefront/v2/listing/variant/inventory/updated"
+    };
+  }
+
+  // ListVariantsWithUpdatedPricing will return any variant that:
+  // 1. Has a status other than `UNKNOWN` or `RETIRED`
+  // 2. Has a pricing change since the last timestamp
+  // 3. Pricing Data is enabled for the Variant
+  rpc ListVariantsWithUpdatedPricing(ListSinceRequest)
+      returns (ListVariantsResponse) {
+    option (google.api.http) = {
+      get: "/storefront/v2/listing/variant/pricing/updated"
+    };
+  }
+
+  // LATER: endpoints for retired variants / listings?
 
   // UpdateStatus updates the status of a listing
   rpc UpdateStatus(UpdateStatusRequest) returns (UpdateStatusResponse) {
@@ -56,57 +103,74 @@ service ListingService {
   }
 }
 
+message ListInventorySinceRequest {
+  google.protobuf.Timestamp since = 1;
+  // Only return variants with inventory changes that have happened
+  // outside of sales on this channel.
+  bool external_changes_only = 2;
+  string cursor              = 3;  // TODO: how to get these in the query params
+}
+
+// ListSinceRequestRequest is the request object for the ListSinceRequest method
+message ListSinceRequest {
+  google.protobuf.Timestamp since = 1;
+  string cursor = 2;  // TODO: how to get these in the query params
+}
+
+// ListListingsResponse is the response object containing a list of Listings
+message ListListingsResponse {
+  repeated Listing listings = 1;
+
+  // The URL to the next page of results.
+  // If empty, there are no more results.
+  string next_page_url = 2;
+}
+
+// ListVariantsResponse is the response object containing a list of Variants
+message ListVariantsResponse {
+  repeated Variant variants = 1;
+
+  // The URL to the next page of results.
+  // If empty, there are no more results.
+  string next_page_url = 2;
+}
+
 // GetRequest is the request object for the Get method
 message GetRequest {
   string listing_id = 1;
 }
 
-// ListRequest is the request object for the List method
-message ListRequest {
-  google.protobuf.Timestamp last_update_ts = 1;
-  string next_token                        = 2;
-  int32 page_length                        = 3;
-  // protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED
-  repeated string skus = 4;
-}
-
-message ListResponse {
-  repeated Listing listings = 1;
-
-  // next_token is a token that can be provided to List request
-  // to get the next page of results.
-  // Next tokens are only valid for 5 minutes after being returned.
-  // If no `nextToken` is provided, there are no more results to return.
-  string next_token = 2;
+// GetVariantRequest is the request object for the GetVariant method
+message GetVariantRequest {
+  string sku = 1;
 }
 
 // StandardStatus is the standardized status of a listing as defined by Zentail
 enum StandardStatus {
   STANDARD_STATUS_UNSPECIFIED = 0;
-  STANDARD_STATUS_PUBLISHED = 1;
+  STANDARD_STATUS_PUBLISHED   = 1;
   STANDARD_STATUS_UNPUBLISHED = 2;
-  STANDARD_STATUS_SUPPRESSED = 3;
-  STANDARD_STATUS_RETIRED = 4;
+  STANDARD_STATUS_SUPPRESSED  = 3;
+  STANDARD_STATUS_RETIRED     = 4;
 }
 
 // UpdateStatusRequest provides the status of a SKU
 message UpdateStatusRequest {
-  string sku = 1;
+  string sku            = 1;
   StandardStatus status = 2;
   string channel_status = 3;
   // The channel's ID for this particular SKU.
   // Should be more specific than Listing.
-  string channel_id = 4;
+  string channel_id  = 4;
   string listing_url = 5;
 }
 
 // UpdateStatusResponse is empty
-message UpdateStatusResponse {
-}
+message UpdateStatusResponse {}
 
 // ReplaceErrorsRequest provides all the channel-generated errors for a SKU
 message ReplaceErrorsRequest {
-  string sku = 1;
+  string sku            = 1;
   repeated Error errors = 2;
 }
 
@@ -115,17 +179,17 @@ message Error {
   repeated string attribute_ids = 1;
   enum Severity {
     SEVERITY_UNSPECIFIED = 0;
-    SEVERITY_NOTICE = 1;
-    SEVERITY_WARNING = 2;
-    SEVERITY_ERROR = 3;
+    SEVERITY_NOTICE      = 1;
+    SEVERITY_WARNING     = 2;
+    SEVERITY_ERROR       = 3;
   }
   Severity severity = 2;
   enum Type {
-    TYPE_UNSPECIFIED = 0;
-    TYPE_MISSING_VALUE = 1;
-    TYPE_INVALID_VALUE = 2;
+    TYPE_UNSPECIFIED      = 0;
+    TYPE_MISSING_VALUE    = 1;
+    TYPE_INVALID_VALUE    = 2;
     TYPE_RESTRICTED_VALUE = 3;
-    TYPE_OTHER = 4;
+    TYPE_OTHER            = 4;
   }
   Type type = 3;
   // Message is required if Type is TYPE_OTHER
@@ -133,6 +197,5 @@ message Error {
 }
 
 // ReplaceErrorsResponse is empty
-message ReplaceErrorsResponse {
-}
+message ReplaceErrorsResponse {}
 
