@@ -1,9 +1,9 @@
 syntax = "proto3";
 package listing_api;
 
+import "api/listing/listing.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "api/listing/listing.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
@@ -38,6 +38,22 @@ service ListingService {
       get: "/v2/storefront/listing"
     };
   }
+
+  // UpdateStatus updates the status of a listing
+  rpc UpdateStatus(UpdateStatusRequest) returns (UpdateStatusResponse) {
+    option (google.api.http) = {
+      post: "/v2/storefront/listing/variant/{sku}/status"
+      body: "*"
+    };
+  }
+
+  // ReplaceErrors replaces the errors for a variant
+  rpc ReplaceErrors(ReplaceErrorsRequest) returns (ReplaceErrorsResponse) {
+    option (google.api.http) = {
+      post: "/v2/storefront/listing/variant/{sku}/errors"
+      body: "*"
+    };
+  }
 }
 
 // GetRequest is the request object for the Get method
@@ -63,3 +79,60 @@ message ListResponse {
   // If no `nextToken` is provided, there are no more results to return.
   string next_token = 2;
 }
+
+// StandardStatus is the standardized status of a listing as defined by Zentail
+enum StandardStatus {
+  STANDARD_STATUS_UNSPECIFIED = 0;
+  STANDARD_STATUS_PUBLISHED = 1;
+  STANDARD_STATUS_UNPUBLISHED = 2;
+  STANDARD_STATUS_SUPPRESSED = 3;
+  STANDARD_STATUS_RETIRED = 4;
+}
+
+// UpdateStatusRequest provides the status of a SKU
+message UpdateStatusRequest {
+  string sku = 1;
+  StandardStatus status = 2;
+  string channel_status = 3;
+  // The channel's ID for this particular SKU.
+  // Should be more specific than Listing.
+  string channel_id = 4;
+  string listing_url = 5;
+}
+
+// UpdateStatusResponse is empty
+message UpdateStatusResponse {
+}
+
+// ReplaceErrorsRequest provides all the channel-generated errors for a SKU
+message ReplaceErrorsRequest {
+  string sku = 1;
+  repeated Error errors = 2;
+}
+
+message Error {
+  // One or more attributes that this error applies to
+  repeated string attribute_ids = 1;
+  enum Severity {
+    SEVERITY_UNSPECIFIED = 0;
+    SEVERITY_NOTICE = 1;
+    SEVERITY_WARNING = 2;
+    SEVERITY_ERROR = 3;
+  }
+  Severity severity = 2;
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_MISSING_VALUE = 1;
+    TYPE_INVALID_VALUE = 2;
+    TYPE_RESTRICTED_VALUE = 3;
+    TYPE_OTHER = 4;
+  }
+  Type type = 3;
+  // Message is required if Type is TYPE_OTHER
+  string message = 4;
+}
+
+// ReplaceErrorsResponse is empty
+message ReplaceErrorsResponse {
+}
+

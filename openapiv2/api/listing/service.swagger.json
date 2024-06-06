@@ -73,6 +73,109 @@
         ]
       }
     },
+    "/v2/storefront/listing/variant/{sku}/errors": {
+      "post": {
+        "summary": "ReplaceErrors replaces the errors for a variant",
+        "operationId": "ListingService_ReplaceErrors",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiReplaceErrorsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/listing_apiError"
+                  }
+                }
+              },
+              "title": "ReplaceErrorsRequest provides all the channel-generated errors for a SKU"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/variant/{sku}/status": {
+      "post": {
+        "summary": "UpdateStatus updates the status of a listing",
+        "operationId": "ListingService_UpdateStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiUpdateStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/listing_apiStandardStatus"
+                },
+                "channelStatus": {
+                  "type": "string"
+                },
+                "channelId": {
+                  "type": "string",
+                  "description": "The channel's ID for this particular SKU.\nShould be more specific than Listing."
+                },
+                "listingUrl": {
+                  "type": "string"
+                }
+              },
+              "title": "UpdateStatusRequest provides the status of a SKU"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/v2/storefront/listing/{listingId}": {
       "get": {
         "summary": "Get retrieves a single listing by its ID",
@@ -141,6 +244,16 @@
       ],
       "default": "SOURCE_UNSPECIFIED"
     },
+    "ErrorSeverity": {
+      "type": "string",
+      "enum": [
+        "SEVERITY_UNSPECIFIED",
+        "SEVERITY_NOTICE",
+        "SEVERITY_WARNING",
+        "SEVERITY_ERROR"
+      ],
+      "default": "SEVERITY_UNSPECIFIED"
+    },
     "ListingVariant": {
       "type": "object",
       "properties": {
@@ -196,6 +309,39 @@
         }
       },
       "title": "Attribute has data that describes a Listing or a Listing's Variants"
+    },
+    "listing_apiError": {
+      "type": "object",
+      "properties": {
+        "attributeIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "One or more attributes that this error applies to"
+        },
+        "severity": {
+          "$ref": "#/definitions/ErrorSeverity"
+        },
+        "type": {
+          "$ref": "#/definitions/listing_apiErrorType"
+        },
+        "message": {
+          "type": "string",
+          "title": "Message is required if Type is TYPE_OTHER"
+        }
+      }
+    },
+    "listing_apiErrorType": {
+      "type": "string",
+      "enum": [
+        "TYPE_UNSPECIFIED",
+        "TYPE_MISSING_VALUE",
+        "TYPE_INVALID_VALUE",
+        "TYPE_RESTRICTED_VALUE",
+        "TYPE_OTHER"
+      ],
+      "default": "TYPE_UNSPECIFIED"
     },
     "listing_apiListResponse": {
       "type": "object",
@@ -255,6 +401,10 @@
       },
       "title": "Listing is a representation of a product to be sold on a Channel"
     },
+    "listing_apiReplaceErrorsResponse": {
+      "type": "object",
+      "title": "ReplaceErrorsResponse is empty"
+    },
     "listing_apiSettings": {
       "type": "object",
       "properties": {
@@ -269,6 +419,22 @@
         }
       },
       "description": "Settings represent Listing Settings at any level (Variant, Integration, etc)."
+    },
+    "listing_apiStandardStatus": {
+      "type": "string",
+      "enum": [
+        "STANDARD_STATUS_UNSPECIFIED",
+        "STANDARD_STATUS_PUBLISHED",
+        "STANDARD_STATUS_UNPUBLISHED",
+        "STANDARD_STATUS_SUPPRESSED",
+        "STANDARD_STATUS_RETIRED"
+      ],
+      "default": "STANDARD_STATUS_UNSPECIFIED",
+      "title": "StandardStatus is the standardized status of a listing as defined by Zentail"
+    },
+    "listing_apiUpdateStatusResponse": {
+      "type": "object",
+      "title": "UpdateStatusResponse is empty"
     },
     "protobufAny": {
       "type": "object",

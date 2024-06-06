@@ -22,6 +22,10 @@ type ListingServiceClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Listing, error)
 	// List retrieves a list of listings based on the provided query parameters
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
+	// UpdateStatus updates the status of a listing
+	UpdateStatus(ctx context.Context, in *UpdateStatusRequest, opts ...grpc.CallOption) (*UpdateStatusResponse, error)
+	// ReplaceErrors replaces the errors for a variant
+	ReplaceErrors(ctx context.Context, in *ReplaceErrorsRequest, opts ...grpc.CallOption) (*ReplaceErrorsResponse, error)
 }
 
 type listingServiceClient struct {
@@ -50,6 +54,24 @@ func (c *listingServiceClient) List(ctx context.Context, in *ListRequest, opts .
 	return out, nil
 }
 
+func (c *listingServiceClient) UpdateStatus(ctx context.Context, in *UpdateStatusRequest, opts ...grpc.CallOption) (*UpdateStatusResponse, error) {
+	out := new(UpdateStatusResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/UpdateStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) ReplaceErrors(ctx context.Context, in *ReplaceErrorsRequest, opts ...grpc.CallOption) (*ReplaceErrorsResponse, error) {
+	out := new(ReplaceErrorsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/ReplaceErrors", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ListingServiceServer is the server API for ListingService service.
 // All implementations should embed UnimplementedListingServiceServer
 // for forward compatibility
@@ -58,6 +80,10 @@ type ListingServiceServer interface {
 	Get(context.Context, *GetRequest) (*Listing, error)
 	// List retrieves a list of listings based on the provided query parameters
 	List(context.Context, *ListRequest) (*ListResponse, error)
+	// UpdateStatus updates the status of a listing
+	UpdateStatus(context.Context, *UpdateStatusRequest) (*UpdateStatusResponse, error)
+	// ReplaceErrors replaces the errors for a variant
+	ReplaceErrors(context.Context, *ReplaceErrorsRequest) (*ReplaceErrorsResponse, error)
 }
 
 // UnimplementedListingServiceServer should be embedded to have forward compatible implementations.
@@ -69,6 +95,12 @@ func (UnimplementedListingServiceServer) Get(context.Context, *GetRequest) (*Lis
 }
 func (UnimplementedListingServiceServer) List(context.Context, *ListRequest) (*ListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedListingServiceServer) UpdateStatus(context.Context, *UpdateStatusRequest) (*UpdateStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateStatus not implemented")
+}
+func (UnimplementedListingServiceServer) ReplaceErrors(context.Context, *ReplaceErrorsRequest) (*ReplaceErrorsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReplaceErrors not implemented")
 }
 
 // UnsafeListingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -118,6 +150,42 @@ func _ListingService_List_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ListingService_UpdateStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).UpdateStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/UpdateStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).UpdateStatus(ctx, req.(*UpdateStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_ReplaceErrors_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReplaceErrorsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).ReplaceErrors(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/ReplaceErrors",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).ReplaceErrors(ctx, req.(*ReplaceErrorsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ListingService_ServiceDesc is the grpc.ServiceDesc for ListingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -132,6 +200,14 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _ListingService_List_Handler,
+		},
+		{
+			MethodName: "UpdateStatus",
+			Handler:    _ListingService_UpdateStatus_Handler,
+		},
+		{
+			MethodName: "ReplaceErrors",
+			Handler:    _ListingService_ReplaceErrors_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
