@@ -13,9 +13,18 @@
     - [Attribute.Source](#listing_api-Attribute-Source)
   
 - [api/listing/service.proto](#api_listing_service-proto)
+    - [Error](#listing_api-Error)
     - [GetRequest](#listing_api-GetRequest)
     - [ListRequest](#listing_api-ListRequest)
     - [ListResponse](#listing_api-ListResponse)
+    - [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest)
+    - [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse)
+    - [UpdateStatusRequest](#listing_api-UpdateStatusRequest)
+    - [UpdateStatusResponse](#listing_api-UpdateStatusResponse)
+  
+    - [Error.Severity](#listing_api-Error-Severity)
+    - [Error.Type](#listing_api-Error-Type)
+    - [StandardStatus](#listing_api-StandardStatus)
   
     - [ListingService](#listing_api-ListingService)
   
@@ -157,6 +166,24 @@ Listing is a representation of a product to be sold on a Channel
 
 
 
+<a name="listing_api-Error"></a>
+
+### Error
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| attribute_ids | [string](#string) | repeated | One or more attributes that this error applies to |
+| severity | [Error.Severity](#listing_api-Error-Severity) |  |  |
+| type | [Error.Type](#listing_api-Error-Type) |  |  |
+| message | [string](#string) |  | Message is required if Type is TYPE_OTHER |
+
+
+
+
+
+
 <a name="listing_api-GetRequest"></a>
 
 ### GetRequest
@@ -205,7 +232,106 @@ ListRequest is the request object for the List method
 
 
 
+
+<a name="listing_api-ReplaceErrorsRequest"></a>
+
+### ReplaceErrorsRequest
+ReplaceErrorsRequest provides all the channel-generated errors for a SKU
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sku | [string](#string) |  |  |
+| errors | [Error](#listing_api-Error) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-ReplaceErrorsResponse"></a>
+
+### ReplaceErrorsResponse
+ReplaceErrorsResponse is empty
+
+
+
+
+
+
+<a name="listing_api-UpdateStatusRequest"></a>
+
+### UpdateStatusRequest
+UpdateStatusRequest provides the status of a SKU
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sku | [string](#string) |  |  |
+| status | [StandardStatus](#listing_api-StandardStatus) |  |  |
+| channel_status | [string](#string) |  |  |
+| channel_id | [string](#string) |  | The channel&#39;s ID for this particular SKU. Should be more specific than Listing. |
+| listing_url | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-UpdateStatusResponse"></a>
+
+### UpdateStatusResponse
+UpdateStatusResponse is empty
+
+
+
+
+
  
+
+
+<a name="listing_api-Error-Severity"></a>
+
+### Error.Severity
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| SEVERITY_UNSPECIFIED | 0 |  |
+| SEVERITY_NOTICE | 1 |  |
+| SEVERITY_WARNING | 2 |  |
+| SEVERITY_ERROR | 3 |  |
+
+
+
+<a name="listing_api-Error-Type"></a>
+
+### Error.Type
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| TYPE_UNSPECIFIED | 0 |  |
+| TYPE_MISSING_VALUE | 1 |  |
+| TYPE_INVALID_VALUE | 2 |  |
+| TYPE_RESTRICTED_VALUE | 3 |  |
+| TYPE_OTHER | 4 |  |
+
+
+
+<a name="listing_api-StandardStatus"></a>
+
+### StandardStatus
+StandardStatus is the standardized status of a listing as defined by Zentail
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| STANDARD_STATUS_UNSPECIFIED | 0 |  |
+| STANDARD_STATUS_PUBLISHED | 1 |  |
+| STANDARD_STATUS_UNPUBLISHED | 2 |  |
+| STANDARD_STATUS_SUPPRESSED | 3 |  |
+| STANDARD_STATUS_RETIRED | 4 |  |
+
 
  
 
@@ -223,6 +349,8 @@ Zentail.
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#listing_api-GetRequest) | [Listing](#listing_api-Listing) | Get retrieves a single listing by its ID |
 | List | [ListRequest](#listing_api-ListRequest) | [ListResponse](#listing_api-ListResponse) | List retrieves a list of listings based on the provided query parameters |
+| UpdateStatus | [UpdateStatusRequest](#listing_api-UpdateStatusRequest) | [UpdateStatusResponse](#listing_api-UpdateStatusResponse) | UpdateStatus updates the status of a listing |
+| ReplaceErrors | [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest) | [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse) | ReplaceErrors replaces the errors for a variant |
 
  
 
