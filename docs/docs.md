@@ -8,9 +8,13 @@
     - [Attribute.MultiText](#listing_api-Attribute-MultiText)
     - [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits)
     - [Listing](#listing_api-Listing)
+    - [Listing.ProductData](#listing_api-Listing-ProductData)
     - [Variant](#listing_api-Variant)
+    - [Variant.Attributes](#listing_api-Variant-Attributes)
+    - [Variant.Inventory](#listing_api-Variant-Inventory)
+    - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
-    - [Attribute.Source](#listing_api-Attribute-Source)
+    - [Variant.Status](#listing_api-Variant-Status)
   
 - [api/listing/service.proto](#api_listing_service-proto)
     - [Error](#listing_api-Error)
@@ -58,7 +62,6 @@ Attribute has data that describes a Listing or a Listing&#39;s Variants
 | numeric_value | [double](#double) |  |  |
 | numeric_with_units_value | [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits) |  |  |
 | multi_text_value | [Attribute.MultiText](#listing_api-Attribute-MultiText) |  |  |
-| source | [Attribute.Source](#listing_api-Attribute-Source) |  |  |
 
 
 
@@ -101,18 +104,35 @@ NumericWithUnits supports values like 1 lb
 
 ### Listing
 Listing is a representation of a product to be sold on a Channel
+LATER: comment this more
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  |  |
-| category_id | [string](#string) |  |  |
-| product_type_id | [string](#string) |  |  |
-| attributes | [Attribute](#listing_api-Attribute) | repeated |  |
-| variants | [Variant](#listing_api-Variant) | repeated | the channel These should be in the order that are intended to be displayed one |
-| pivot_attributes | [string](#string) | repeated | These are attribute IDs that should have a corresponding Attribute in each Variant&#39;s list of Attributes |
+| product_data | [Listing.ProductData](#listing_api-Listing-ProductData) |  |  |
+| variants | [Variant](#listing_api-Variant) | repeated |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Listing-ProductData"></a>
+
+### Listing.ProductData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| enabled | [bool](#bool) |  |  |
+| category_id | [string](#string) |  |  |
+| product_type_id | [string](#string) |  |  |
+| pivot_attributes | [string](#string) | repeated |  |
+| attributes | [Attribute](#listing_api-Attribute) | repeated |  |
 
 
 
@@ -123,16 +143,74 @@ Listing is a representation of a product to be sold on a Channel
 
 ### Variant
 Variant is a representation of a specific SKU in a listing
+LATER: comment this more
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | sku | [string](#string) |  |  |
+| status | [Variant.Status](#listing_api-Variant-Status) |  |  |
+| channel_status | [string](#string) |  |  |
+| channel_id | [string](#string) |  |  |
+| settings | [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry) | repeated | Any Integration-level Settings will be merged with Variant-level Settings to produce these Settings. |
+| inventory | [Variant.Inventory](#listing_api-Variant-Inventory) |  | LATER: do we need desired_status / intended action? |
+| product_data | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
+| pricing | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
+| logistics | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Variant-Attributes"></a>
+
+### Variant.Attributes
+Attributes is a container for a list of attributes of a similar
+classification
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| disabled | [bool](#bool) |  |  |
 | attributes | [Attribute](#listing_api-Attribute) | repeated |  |
-| total_inventory | [int64](#int64) |  | total_inventory should be the sum of merchant_fulfillable_inventory and storefront_fulfillable_inventory |
-| merchant_fulfillable_inventory | [int64](#int64) |  |  |
-| storefront_fulfillable_inventory | [int64](#int64) |  |  |
-| settings | [Settings](#listing_api-Settings) |  | Any Integration-level Settings will be merged with Variant-level Settings to produce these Settings. |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Variant-Inventory"></a>
+
+### Variant.Inventory
+Inventory contains information about the availability of this variant
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| disabled | [bool](#bool) |  |  |
+| total_quantity | [int64](#int64) |  | total_quantity should be the sum of merchant_fulfillable_inventory and storefront_fulfillable_quantity |
+| merchant_fulfillable_quantity | [int64](#int64) |  |  |
+| storefront_fulfillable_quantity | [int64](#int64) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_externally_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Variant-SettingsEntry"></a>
+
+### Variant.SettingsEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [string](#string) |  |  |
 
 
 
@@ -141,17 +219,19 @@ Variant is a representation of a specific SKU in a listing
  
 
 
-<a name="listing_api-Attribute-Source"></a>
+<a name="listing_api-Variant-Status"></a>
 
-### Attribute.Source
-
+### Variant.Status
+Status indicates a standardized status that can be used to understand
+the state of this variant on the channel
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| SOURCE_UNSPECIFIED | 0 |  |
-| SOURCE_MAPPED_FROM_CODEC | 1 |  |
-| SOURCE_ATTRIBUTE_OVERRIDE | 2 |  |
-| SOURCE_ATTRIBUTE_DEFAULT_VALUE | 3 |  |
+| STATUS_UNSPECIFIED | 0 |  |
+| STATUS_UNPUBLISHED | 1 |  |
+| STATUS_PUBLISHED | 2 |  |
+| STATUS_SUPPRESSED | 3 |  |
+| STATUS_RETIRED | 4 |  |
 
 
  
@@ -398,10 +478,34 @@ Zentail.
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#listing_api-GetRequest) | [Listing](#listing_api-Listing) | Get retrieves a single listing by its ID |
 | GetVariant | [GetVariantRequest](#listing_api-GetVariantRequest) | [Variant](#listing_api-Variant) | GetVariant retrieves a single variant by its SKU |
-| ListNewListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListNewListings will list any listing created or updated since the given timestamp where: 1. Product data is enabled for at least one Variant in the Listing 2. All Variants in the Listing have a status of `UNKNOWN` or `RETIRED` in Zentail |
-| ListUpdatedListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListUpdateListings will return any listing that: 1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED` 2. Has a Product Data change since the last timestamp (including Variants) TODO: update this based on whether or not variants can have different product data enablednesses 3. Product Data is enabled for the Listing |
-| ListVariantsWithUpdatedInventory | [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedInventory will return any variant that: 1. Has a status other than `UNKNOWN` or `RETIRED` 2. Has an inventory change since the last timestamp 3. Inventory Data is enabled for the Variant |
-| ListVariantsWithUpdatedPricing | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedPricing will return any variant that: 1. Has a status other than `UNKNOWN` or `RETIRED` 2. Has a pricing change since the last timestamp 3. Pricing Data is enabled for the Variant |
+| ListNewListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListNewListings will list any listing created or updated since the given timestamp where:
+
+1. Product data is enabled for at least one Variant in the Listing
+
+2. All Variants in the Listing have a status of `UNKNOWN` or `RETIRED` in Zentail |
+| ListUpdatedListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListUpdateListings will return any listing that:
+
+1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`
+
+2. Has a Product Data change since the last timestamp (including Variants)
+
+TODO: update this based on whether or not variants can have different product data enablednesses
+
+3. Product Data is enabled for the Listing |
+| ListVariantsWithUpdatedInventory | [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedInventory will return any variant that:
+
+1. Has a status other than `UNKNOWN` or `RETIRED`
+
+2. Has an inventory change since the last timestamp
+
+3. Inventory Data is enabled for the Variant |
+| ListVariantsWithUpdatedPricing | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedPricing will return any variant that:
+
+1. Has a status other than `UNKNOWN` or `RETIRED`
+
+2. Has a pricing change since the last timestamp
+
+3. Pricing Data is enabled for the Variant |
 | UpdateStatus | [UpdateStatusRequest](#listing_api-UpdateStatusRequest) | [UpdateStatusResponse](#listing_api-UpdateStatusResponse) | UpdateStatus updates the status of a listing |
 | ReplaceErrors | [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest) | [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse) | ReplaceErrors replaces the errors for a variant |
 
