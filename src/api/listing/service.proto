@@ -41,7 +41,9 @@ service ListingService {
 
   // ListNewListings will list any listing created or updated
   // since the given timestamp where:
+  //
   // 1. Product data is enabled for at least one Variant in the Listing
+  //
   // 2. All Variants in the Listing have a status of `UNKNOWN` or
   // `RETIRED` in Zentail
   rpc ListNewListings(ListSinceRequest) returns (ListListingsResponse) {
@@ -51,10 +53,14 @@ service ListingService {
   }
 
   // ListUpdateListings will return any listing that:
+  //
   // 1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`
+  //
   // 2. Has a Product Data change since the last timestamp (including Variants)
+  //
   // TODO: update this based on whether or not variants can have different
   //       product data enablednesses
+  //
   // 3. Product Data is enabled for the Listing
   rpc ListUpdatedListings(ListSinceRequest) returns (ListListingsResponse) {
     option (google.api.http) = {
@@ -63,8 +69,11 @@ service ListingService {
   }
 
   // ListVariantsWithUpdatedInventory will return any variant that:
+  //
   // 1. Has a status other than `UNKNOWN` or `RETIRED`
+  //
   // 2. Has an inventory change since the last timestamp
+  //
   // 3. Inventory Data is enabled for the Variant
   rpc ListVariantsWithUpdatedInventory(ListInventorySinceRequest)
       returns (ListVariantsResponse) {
@@ -74,8 +83,11 @@ service ListingService {
   }
 
   // ListVariantsWithUpdatedPricing will return any variant that:
+  //
   // 1. Has a status other than `UNKNOWN` or `RETIRED`
+  //
   // 2. Has a pricing change since the last timestamp
+  //
   // 3. Pricing Data is enabled for the Variant
   rpc ListVariantsWithUpdatedPricing(ListSinceRequest)
       returns (ListVariantsResponse) {

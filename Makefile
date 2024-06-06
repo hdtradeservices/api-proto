@@ -16,6 +16,7 @@ build: tools clean
 		-I ../src/ \
 		--openapiv2_out ../openapiv2 \
 		--openapiv2_opt logtostderr=true \
+		--openapiv2_opt use_go_templates=true \
 		--go_out=../$(OUTPUT_DIR) \
 		--go_opt=paths=source_relative \
 		--go-grpc_out=require_unimplemented_servers=false,paths=source_relative:../$(OUTPUT_DIR) \
