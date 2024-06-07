@@ -411,7 +411,7 @@
     "VariantAttributes": {
       "type": "object",
       "properties": {
-        "disabled": {
+        "enabled": {
           "type": "boolean"
         },
         "attributes": {
@@ -430,7 +430,7 @@
     "VariantInventory": {
       "type": "object",
       "properties": {
-        "disabled": {
+        "enabled": {
           "type": "boolean"
         },
         "totalQuantity": {

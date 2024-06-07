@@ -37,8 +37,7 @@ type ListingServiceClient interface {
 	// 2. Has a Product Data change since the last timestamp (including Variants)
 	//
 	// TODO: update this based on whether or not variants can have different
-	//
-	//	product data enablednesses
+	//       product data enablednesses
 	//
 	// 3. Product Data is enabled for the Listing
 	ListUpdatedListings(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListListingsResponse, error)
@@ -167,8 +166,7 @@ type ListingServiceServer interface {
 	// 2. Has a Product Data change since the last timestamp (including Variants)
 	//
 	// TODO: update this based on whether or not variants can have different
-	//
-	//	product data enablednesses
+	//       product data enablednesses
 	//
 	// 3. Product Data is enabled for the Listing
 	ListUpdatedListings(context.Context, *ListSinceRequest) (*ListListingsResponse, error)
