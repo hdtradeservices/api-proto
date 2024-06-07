@@ -172,7 +172,7 @@ classification
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| disabled | [bool](#bool) |  |  |
+| enabled | [bool](#bool) |  |  |
 | attributes | [Attribute](#listing_api-Attribute) | repeated |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
@@ -189,7 +189,7 @@ Inventory contains information about the availability of this variant
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| disabled | [bool](#bool) |  |  |
+| enabled | [bool](#bool) |  |  |
 | total_quantity | [int64](#int64) |  | total_quantity should be the sum of merchant_fulfillable_inventory and storefront_fulfillable_quantity |
 | merchant_fulfillable_quantity | [int64](#int64) |  |  |
 | storefront_fulfillable_quantity | [int64](#int64) |  |  |
