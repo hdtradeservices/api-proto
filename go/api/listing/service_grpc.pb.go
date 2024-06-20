@@ -59,6 +59,8 @@ type ListingServiceClient interface {
 	ListVariantsWithUpdatedPricing(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListVariantsResponse, error)
 	// UpdateStatus updates the status of a listing
 	UpdateStatus(ctx context.Context, in *UpdateStatusRequest, opts ...grpc.CallOption) (*UpdateStatusResponse, error)
+	// UpdateChannelListingID updates the channel ID for the listing
+	UpdateChannelListingID(ctx context.Context, in *UpdateChannelListingIDRequest, opts ...grpc.CallOption) (*UpdateChannelListingIDResponse, error)
 	// ReplaceErrors replaces the errors for a variant
 	ReplaceErrors(ctx context.Context, in *ReplaceErrorsRequest, opts ...grpc.CallOption) (*ReplaceErrorsResponse, error)
 }
@@ -134,6 +136,15 @@ func (c *listingServiceClient) UpdateStatus(ctx context.Context, in *UpdateStatu
 	return out, nil
 }
 
+func (c *listingServiceClient) UpdateChannelListingID(ctx context.Context, in *UpdateChannelListingIDRequest, opts ...grpc.CallOption) (*UpdateChannelListingIDResponse, error) {
+	out := new(UpdateChannelListingIDResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/UpdateChannelListingID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *listingServiceClient) ReplaceErrors(ctx context.Context, in *ReplaceErrorsRequest, opts ...grpc.CallOption) (*ReplaceErrorsResponse, error) {
 	out := new(ReplaceErrorsResponse)
 	err := c.cc.Invoke(ctx, "/listing_api.ListingService/ReplaceErrors", in, out, opts...)
@@ -188,6 +199,8 @@ type ListingServiceServer interface {
 	ListVariantsWithUpdatedPricing(context.Context, *ListSinceRequest) (*ListVariantsResponse, error)
 	// UpdateStatus updates the status of a listing
 	UpdateStatus(context.Context, *UpdateStatusRequest) (*UpdateStatusResponse, error)
+	// UpdateChannelListingID updates the channel ID for the listing
+	UpdateChannelListingID(context.Context, *UpdateChannelListingIDRequest) (*UpdateChannelListingIDResponse, error)
 	// ReplaceErrors replaces the errors for a variant
 	ReplaceErrors(context.Context, *ReplaceErrorsRequest) (*ReplaceErrorsResponse, error)
 }
@@ -216,6 +229,9 @@ func (UnimplementedListingServiceServer) ListVariantsWithUpdatedPricing(context.
 }
 func (UnimplementedListingServiceServer) UpdateStatus(context.Context, *UpdateStatusRequest) (*UpdateStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateStatus not implemented")
+}
+func (UnimplementedListingServiceServer) UpdateChannelListingID(context.Context, *UpdateChannelListingIDRequest) (*UpdateChannelListingIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateChannelListingID not implemented")
 }
 func (UnimplementedListingServiceServer) ReplaceErrors(context.Context, *ReplaceErrorsRequest) (*ReplaceErrorsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReplaceErrors not implemented")
@@ -358,6 +374,24 @@ func _ListingService_UpdateStatus_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ListingService_UpdateChannelListingID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateChannelListingIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).UpdateChannelListingID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/UpdateChannelListingID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).UpdateChannelListingID(ctx, req.(*UpdateChannelListingIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ListingService_ReplaceErrors_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReplaceErrorsRequest)
 	if err := dec(in); err != nil {
@@ -410,6 +444,10 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateStatus",
 			Handler:    _ListingService_UpdateStatus_Handler,
+		},
+		{
+			MethodName: "UpdateChannelListingID",
+			Handler:    _ListingService_UpdateChannelListingID_Handler,
 		},
 		{
 			MethodName: "ReplaceErrors",

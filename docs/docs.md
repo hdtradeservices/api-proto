@@ -26,6 +26,8 @@
     - [ListVariantsResponse](#listing_api-ListVariantsResponse)
     - [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest)
     - [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse)
+    - [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest)
+    - [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse)
     - [UpdateStatusRequest](#listing_api-UpdateStatusRequest)
     - [UpdateStatusResponse](#listing_api-UpdateStatusResponse)
   
@@ -388,6 +390,32 @@ ReplaceErrorsResponse is empty
 
 
 
+<a name="listing_api-UpdateChannelListingIDRequest"></a>
+
+### UpdateChannelListingIDRequest
+UpdateChannelListingIDRequest provides the status of a SKU
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sku | [string](#string) |  |  |
+| channel_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-UpdateChannelListingIDResponse"></a>
+
+### UpdateChannelListingIDResponse
+UpdateChannelListingIDResponse is empty
+
+
+
+
+
+
 <a name="listing_api-UpdateStatusRequest"></a>
 
 ### UpdateStatusRequest
@@ -507,6 +535,7 @@ TODO: update this based on whether or not variants can have different product da
 
 3. Pricing Data is enabled for the Variant |
 | UpdateStatus | [UpdateStatusRequest](#listing_api-UpdateStatusRequest) | [UpdateStatusResponse](#listing_api-UpdateStatusResponse) | UpdateStatus updates the status of a listing |
+| UpdateChannelListingID | [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest) | [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse) | UpdateChannelListingID updates the channel ID for the listing |
 | ReplaceErrors | [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest) | [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse) | ReplaceErrors replaces the errors for a variant |
 
  

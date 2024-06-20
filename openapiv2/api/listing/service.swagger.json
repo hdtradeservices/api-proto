@@ -242,6 +242,51 @@
         ]
       }
     },
+    "/v2/storefront/listing/variant/{sku}/channel_id": {
+      "post": {
+        "summary": "UpdateChannelListingID updates the channel ID for the listing",
+        "operationId": "ListingService_UpdateChannelListingID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiUpdateChannelListingIDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "channelId": {
+                  "type": "string"
+                }
+              },
+              "title": "UpdateChannelListingIDRequest provides the status of a SKU"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/v2/storefront/listing/variant/{sku}/errors": {
       "post": {
         "summary": "ReplaceErrors replaces the errors for a variant",
@@ -603,6 +648,10 @@
       ],
       "default": "STANDARD_STATUS_UNSPECIFIED",
       "title": "StandardStatus is the standardized status of a listing as defined by Zentail"
+    },
+    "listing_apiUpdateChannelListingIDResponse": {
+      "type": "object",
+      "title": "UpdateChannelListingIDResponse is empty"
     },
     "listing_apiUpdateStatusResponse": {
       "type": "object",
