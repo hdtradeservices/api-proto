@@ -106,6 +106,15 @@ service ListingService {
     };
   }
 
+  // UpdateChannelListingID updates the channel ID for the listing
+  rpc UpdateChannelListingID(UpdateChannelListingIDRequest)
+      returns (UpdateChannelListingIDResponse) {
+    option (google.api.http) = {
+      post: "/v2/storefront/listing/variant/{sku}/channel_id"
+      body: "*"
+    };
+  }
+
   // ReplaceErrors replaces the errors for a variant
   rpc ReplaceErrors(ReplaceErrorsRequest) returns (ReplaceErrorsResponse) {
     option (google.api.http) = {
@@ -179,6 +188,15 @@ message UpdateStatusRequest {
 
 // UpdateStatusResponse is empty
 message UpdateStatusResponse {}
+
+// UpdateChannelListingIDRequest provides the status of a SKU
+message UpdateChannelListingIDRequest {
+  string sku        = 1;
+  string channel_id = 2;
+}
+
+// UpdateChannelListingIDResponse is empty
+message UpdateChannelListingIDResponse {}
 
 // ReplaceErrorsRequest provides all the channel-generated errors for a SKU
 message ReplaceErrorsRequest {

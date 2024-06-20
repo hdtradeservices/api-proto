@@ -1,7 +1,6 @@
 syntax = "proto3";
 package listing_api;
 
-import "api/listing/settings.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
