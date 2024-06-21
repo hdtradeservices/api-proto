@@ -142,9 +142,9 @@ message ListSinceRequest {
 message ListListingsResponse {
   repeated Listing listings = 1;
 
-  // The URL to the next page of results.
+  // The cursor token for the next page of results.
   // If empty, there are no more results.
-  string next_page_url = 2;
+  string next_page_cursor = 2;
 }
 
 // ListVariantsResponse is the response object containing a list of Variants

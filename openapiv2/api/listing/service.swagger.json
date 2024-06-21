@@ -584,9 +584,9 @@
             "$ref": "#/definitions/listing_apiListing"
           }
         },
-        "nextPageUrl": {
+        "nextPageCursor": {
           "type": "string",
-          "description": "The URL to the next page of results.\nIf empty, there are no more results."
+          "description": "The cursor token for the next page of results.\nIf empty, there are no more results."
         }
       },
       "title": "ListListingsResponse is the response object containing a list of Listings"
