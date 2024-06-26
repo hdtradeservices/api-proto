@@ -8,28 +8,17 @@ option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
 // Variant is a representation of a specific SKU in a listing
 // LATER: comment this more
 message Variant {
-  string sku            = 1;
-  Status status         = 2;
-  string channel_status = 3;
-  string channel_id     = 4;
+  string sku        = 1;
+  string channel_id = 2;
+
   // Any Integration-level Settings will be merged
   // with Variant-level Settings to produce these Settings.
-  map<string, string> settings = 5;
+  map<string, string> settings = 3;
   // LATER: do we need desired_status / intended action?
-  Inventory inventory     = 6;
-  Attributes product_data = 7;
-  Attributes pricing      = 8;
-  Attributes logistics    = 9;
-
-  // Status indicates a standardized status that can be used to understand
-  // the state of this variant on the channel
-  enum Status {
-    STATUS_UNSPECIFIED = 0;
-    STATUS_UNPUBLISHED = 1;
-    STATUS_PUBLISHED   = 2;
-    STATUS_SUPPRESSED  = 3;
-    STATUS_RETIRED     = 4;
-  }
+  Inventory inventory     = 4;
+  Attributes product_data = 5;
+  Attributes pricing      = 6;
+  Attributes logistics    = 7;
 
   // Inventory contains information about the availability of this variant
   message Inventory {

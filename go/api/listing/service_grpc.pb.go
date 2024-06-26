@@ -27,35 +27,27 @@ type ListingServiceClient interface {
 	//
 	// 1. Product data is enabled for at least one Variant in the Listing
 	//
-	// 2. All Variants in the Listing have a status of `UNKNOWN` or
-	// `RETIRED` in Zentail
+	// 2. No variants have a channel ID
 	ListNewListings(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListListingsResponse, error)
 	// ListUpdateListings will return any listing that:
 	//
-	// 1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`
+	// 1. Has at least one Variant with a channel ID
 	//
 	// 2. Has a Product Data change since the last timestamp (including Variants)
-	//
-	// TODO: update this based on whether or not variants can have different
-	//       product data enablednesses
 	//
 	// 3. Product Data is enabled for the Listing
 	ListUpdatedListings(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListListingsResponse, error)
 	// ListVariantsWithUpdatedInventory will return any variant that:
 	//
-	// 1. Has a status other than `UNKNOWN` or `RETIRED`
+	// 1. Has an inventory change since the last timestamp
 	//
-	// 2. Has an inventory change since the last timestamp
-	//
-	// 3. Inventory Data is enabled for the Variant
+	// 2. Inventory Data is enabled for the Variant
 	ListVariantsWithUpdatedInventory(ctx context.Context, in *ListInventorySinceRequest, opts ...grpc.CallOption) (*ListVariantsResponse, error)
 	// ListVariantsWithUpdatedPricing will return any variant that:
 	//
-	// 1. Has a status other than `UNKNOWN` or `RETIRED`
+	// 1. Has a pricing change since the last timestamp
 	//
-	// 2. Has a pricing change since the last timestamp
-	//
-	// 3. Pricing Data is enabled for the Variant
+	// 2. Pricing Data is enabled for the Variant
 	ListVariantsWithUpdatedPricing(ctx context.Context, in *ListSinceRequest, opts ...grpc.CallOption) (*ListVariantsResponse, error)
 	// UpdateStatus updates the status of a listing
 	UpdateStatus(ctx context.Context, in *UpdateStatusRequest, opts ...grpc.CallOption) (*UpdateStatusResponse, error)
@@ -167,35 +159,27 @@ type ListingServiceServer interface {
 	//
 	// 1. Product data is enabled for at least one Variant in the Listing
 	//
-	// 2. All Variants in the Listing have a status of `UNKNOWN` or
-	// `RETIRED` in Zentail
+	// 2. No variants have a channel ID
 	ListNewListings(context.Context, *ListSinceRequest) (*ListListingsResponse, error)
 	// ListUpdateListings will return any listing that:
 	//
-	// 1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`
+	// 1. Has at least one Variant with a channel ID
 	//
 	// 2. Has a Product Data change since the last timestamp (including Variants)
-	//
-	// TODO: update this based on whether or not variants can have different
-	//       product data enablednesses
 	//
 	// 3. Product Data is enabled for the Listing
 	ListUpdatedListings(context.Context, *ListSinceRequest) (*ListListingsResponse, error)
 	// ListVariantsWithUpdatedInventory will return any variant that:
 	//
-	// 1. Has a status other than `UNKNOWN` or `RETIRED`
+	// 1. Has an inventory change since the last timestamp
 	//
-	// 2. Has an inventory change since the last timestamp
-	//
-	// 3. Inventory Data is enabled for the Variant
+	// 2. Inventory Data is enabled for the Variant
 	ListVariantsWithUpdatedInventory(context.Context, *ListInventorySinceRequest) (*ListVariantsResponse, error)
 	// ListVariantsWithUpdatedPricing will return any variant that:
 	//
-	// 1. Has a status other than `UNKNOWN` or `RETIRED`
+	// 1. Has a pricing change since the last timestamp
 	//
-	// 2. Has a pricing change since the last timestamp
-	//
-	// 3. Pricing Data is enabled for the Variant
+	// 2. Pricing Data is enabled for the Variant
 	ListVariantsWithUpdatedPricing(context.Context, *ListSinceRequest) (*ListVariantsResponse, error)
 	// UpdateStatus updates the status of a listing
 	UpdateStatus(context.Context, *UpdateStatusRequest) (*UpdateStatusResponse, error)
