@@ -14,8 +14,6 @@
     - [Variant.Inventory](#listing_api-Variant-Inventory)
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
-    - [Variant.Status](#listing_api-Variant-Status)
-  
 - [api/listing/service.proto](#api_listing_service-proto)
     - [Error](#listing_api-Error)
     - [GetRequest](#listing_api-GetRequest)
@@ -151,8 +149,6 @@ LATER: comment this more
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | sku | [string](#string) |  |  |
-| status | [Variant.Status](#listing_api-Variant-Status) |  |  |
-| channel_status | [string](#string) |  |  |
 | channel_id | [string](#string) |  |  |
 | settings | [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry) | repeated | Any Integration-level Settings will be merged with Variant-level Settings to produce these Settings. |
 | inventory | [Variant.Inventory](#listing_api-Variant-Inventory) |  | LATER: do we need desired_status / intended action? |
@@ -219,22 +215,6 @@ Inventory contains information about the availability of this variant
 
 
  
-
-
-<a name="listing_api-Variant-Status"></a>
-
-### Variant.Status
-Status indicates a standardized status that can be used to understand
-the state of this variant on the channel
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| STATUS_UNSPECIFIED | 0 |  |
-| STATUS_UNPUBLISHED | 1 |  |
-| STATUS_PUBLISHED | 2 |  |
-| STATUS_SUPPRESSED | 3 |  |
-| STATUS_RETIRED | 4 |  |
-
 
  
 
@@ -510,30 +490,24 @@ Zentail.
 
 1. Product data is enabled for at least one Variant in the Listing
 
-2. All Variants in the Listing have a status of `UNKNOWN` or `RETIRED` in Zentail |
+2. No variants have a channel ID |
 | ListUpdatedListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListUpdateListings will return any listing that:
 
-1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`
+1. Has at least one Variant with a channel ID
 
 2. Has a Product Data change since the last timestamp (including Variants)
-
-TODO: update this based on whether or not variants can have different product data enablednesses
 
 3. Product Data is enabled for the Listing |
 | ListVariantsWithUpdatedInventory | [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedInventory will return any variant that:
 
-1. Has a status other than `UNKNOWN` or `RETIRED`
+1. Has an inventory change since the last timestamp
 
-2. Has an inventory change since the last timestamp
-
-3. Inventory Data is enabled for the Variant |
+2. Inventory Data is enabled for the Variant |
 | ListVariantsWithUpdatedPricing | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedPricing will return any variant that:
 
-1. Has a status other than `UNKNOWN` or `RETIRED`
+1. Has a pricing change since the last timestamp
 
-2. Has a pricing change since the last timestamp
-
-3. Pricing Data is enabled for the Variant |
+2. Pricing Data is enabled for the Variant |
 | UpdateStatus | [UpdateStatusRequest](#listing_api-UpdateStatusRequest) | [UpdateStatusResponse](#listing_api-UpdateStatusResponse) | UpdateStatus updates the status of a listing |
 | UpdateChannelListingID | [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest) | [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse) | UpdateChannelListingID updates the channel ID for the listing |
 | ReplaceErrors | [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest) | [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse) | ReplaceErrors replaces the errors for a variant |

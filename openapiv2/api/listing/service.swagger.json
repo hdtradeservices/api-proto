@@ -20,7 +20,7 @@
     "/storefront/v2/listing/new": {
       "get": {
         "summary": "ListNewListings will list any listing created or updated\nsince the given timestamp where:",
-        "description": "1. Product data is enabled for at least one Variant in the Listing\n\n2. All Variants in the Listing have a status of `UNKNOWN` or\n`RETIRED` in Zentail",
+        "description": "1. Product data is enabled for at least one Variant in the Listing\n\n2. No variants have a channel ID",
         "operationId": "ListingService_ListNewListings",
         "responses": {
           "200": {
@@ -32,7 +32,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -59,7 +59,7 @@
     "/storefront/v2/listing/product_data/updated": {
       "get": {
         "summary": "ListUpdateListings will return any listing that:",
-        "description": "1. Has at least one Variant with a status other than `UNKNOWN` or `RETIRED`\n\n2. Has a Product Data change since the last timestamp (including Variants)\n\nTODO: update this based on whether or not variants can have different\n      product data enablednesses\n\n3. Product Data is enabled for the Listing",
+        "description": "1. Has at least one Variant with a channel ID\n\n2. Has a Product Data change since the last timestamp (including Variants)\n\n3. Product Data is enabled for the Listing",
         "operationId": "ListingService_ListUpdatedListings",
         "responses": {
           "200": {
@@ -71,7 +71,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -98,7 +98,7 @@
     "/storefront/v2/listing/variant/inventory/updated": {
       "get": {
         "summary": "ListVariantsWithUpdatedInventory will return any variant that:",
-        "description": "1. Has a status other than `UNKNOWN` or `RETIRED`\n\n2. Has an inventory change since the last timestamp\n\n3. Inventory Data is enabled for the Variant",
+        "description": "1. Has an inventory change since the last timestamp\n\n2. Inventory Data is enabled for the Variant",
         "operationId": "ListingService_ListVariantsWithUpdatedInventory",
         "responses": {
           "200": {
@@ -110,7 +110,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -144,7 +144,7 @@
     "/storefront/v2/listing/variant/pricing/updated": {
       "get": {
         "summary": "ListVariantsWithUpdatedPricing will return any variant that:",
-        "description": "1. Has a status other than `UNKNOWN` or `RETIRED`\n\n2. Has a pricing change since the last timestamp\n\n3. Pricing Data is enabled for the Variant",
+        "description": "1. Has a pricing change since the last timestamp\n\n2. Pricing Data is enabled for the Variant",
         "operationId": "ListingService_ListVariantsWithUpdatedPricing",
         "responses": {
           "200": {
@@ -156,7 +156,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -194,7 +194,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -225,7 +225,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -256,7 +256,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -301,7 +301,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -349,7 +349,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -502,24 +502,6 @@
       },
       "title": "Inventory contains information about the availability of this variant"
     },
-    "googlerpcStatus": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
-          "type": "string"
-        },
-        "details": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/protobufAny"
-          }
-        }
-      }
-    },
     "listing_apiAttribute": {
       "type": "object",
       "properties": {
@@ -663,12 +645,6 @@
         "sku": {
           "type": "string"
         },
-        "status": {
-          "$ref": "#/definitions/listing_apiVariantStatus"
-        },
-        "channelStatus": {
-          "type": "string"
-        },
         "channelId": {
           "type": "string"
         },
@@ -695,18 +671,6 @@
       },
       "title": "Variant is a representation of a specific SKU in a listing\nLATER: comment this more"
     },
-    "listing_apiVariantStatus": {
-      "type": "string",
-      "enum": [
-        "STATUS_UNSPECIFIED",
-        "STATUS_UNPUBLISHED",
-        "STATUS_PUBLISHED",
-        "STATUS_SUPPRESSED",
-        "STATUS_RETIRED"
-      ],
-      "default": "STATUS_UNSPECIFIED",
-      "title": "Status indicates a standardized status that can be used to understand\nthe state of this variant on the channel"
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -715,6 +679,24 @@
         }
       },
       "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
     }
   }
 }
