@@ -1,0 +1,24 @@
+syntax = "proto3";
+package listing_api;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
+
+// Submission represents specific data sent to a channel for a particular SKU
+message Submission {
+  // submission_id is returned by the API, setting this when calling
+  // ReplaceSubmissions will have no effect
+  int64 submission_id          = 1;
+  string sku                   = 2;
+  string content_sent          = 3;
+  string content_received      = 4;
+  map<string, string> metadata = 5;
+  // type is a user-specified type which is used to match like submissions when
+  // doing a replace operation
+  string type                               = 6;
+  bool successful                           = 7;
+  google.protobuf.Timestamp prepared_at     = 8;
+  google.protobuf.Timestamp submitted_at    = 9;
+  google.protobuf.Timestamp acknowledged_at = 10;
+}

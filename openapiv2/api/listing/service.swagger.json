@@ -242,6 +242,89 @@
         ]
       }
     },
+    "/v2/storefront/listing/submission": {
+      "post": {
+        "summary": "ReplaceSubmissions replaces the submissions for a variant",
+        "operationId": "ListingService_ReplaceSubmissions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiReplaceSubmissionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/listing_apiReplaceSubmissionsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/submission/{submissionId}/inventory": {
+      "post": {
+        "summary": "SetInventorySubmissionDetails is used to set the inventory details for a\ngiven submission",
+        "operationId": "ListingService_SetInventorySubmissionDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiSetInventorySubmissionDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "inventoryLevelSent": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "successful": {
+                  "type": "boolean"
+                }
+              },
+              "title": "SetInventorySubmissionDetailsRequest is used to create inventory submission\ndetails"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/v2/storefront/listing/variant/{sku}/channel_id": {
       "post": {
         "summary": "UpdateChannelListingID updates the channel ID for the listing",
@@ -619,6 +702,34 @@
       "type": "object",
       "title": "ReplaceErrorsResponse is empty"
     },
+    "listing_apiReplaceSubmissionsRequest": {
+      "type": "object",
+      "properties": {
+        "submissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiSubmission"
+          }
+        }
+      },
+      "title": "ReplaceSubmissionsRequest is used to replace all submissions for the given\ntype and sku"
+    },
+    "listing_apiReplaceSubmissionsResponse": {
+      "type": "object",
+      "properties": {
+        "submissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiSubmission"
+          }
+        }
+      },
+      "title": "ReplaceSubmissionsResponse contains the submissions created"
+    },
+    "listing_apiSetInventorySubmissionDetailsResponse": {
+      "type": "object",
+      "title": "SetInventorySubmissionDetailsResponse is currently an empty response"
+    },
     "listing_apiStandardStatus": {
       "type": "string",
       "enum": [
@@ -630,6 +741,51 @@
       ],
       "default": "STANDARD_STATUS_UNSPECIFIED",
       "title": "StandardStatus is the standardized status of a listing as defined by Zentail"
+    },
+    "listing_apiSubmission": {
+      "type": "object",
+      "properties": {
+        "submissionId": {
+          "type": "string",
+          "format": "int64",
+          "title": "submission_id is returned by the API, setting this when calling\nReplaceSubmissions will have no effect"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "contentSent": {
+          "type": "string"
+        },
+        "contentReceived": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "title": "type is a user-specified type which is used to match like submissions when\ndoing a replace operation"
+        },
+        "successful": {
+          "type": "boolean"
+        },
+        "preparedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "acknowledgedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Submission represents specific data sent to a channel for a particular SKU"
     },
     "listing_apiUpdateChannelListingIDResponse": {
       "type": "object",

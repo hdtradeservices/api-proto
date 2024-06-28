@@ -55,6 +55,11 @@ type ListingServiceClient interface {
 	UpdateChannelListingID(ctx context.Context, in *UpdateChannelListingIDRequest, opts ...grpc.CallOption) (*UpdateChannelListingIDResponse, error)
 	// ReplaceErrors replaces the errors for a variant
 	ReplaceErrors(ctx context.Context, in *ReplaceErrorsRequest, opts ...grpc.CallOption) (*ReplaceErrorsResponse, error)
+	// ReplaceSubmissions replaces the submissions for a variant
+	ReplaceSubmissions(ctx context.Context, in *ReplaceSubmissionsRequest, opts ...grpc.CallOption) (*ReplaceSubmissionsResponse, error)
+	// SetInventorySubmissionDetails is used to set the inventory details for a
+	// given submission
+	SetInventorySubmissionDetails(ctx context.Context, in *SetInventorySubmissionDetailsRequest, opts ...grpc.CallOption) (*SetInventorySubmissionDetailsResponse, error)
 }
 
 type listingServiceClient struct {
@@ -146,6 +151,24 @@ func (c *listingServiceClient) ReplaceErrors(ctx context.Context, in *ReplaceErr
 	return out, nil
 }
 
+func (c *listingServiceClient) ReplaceSubmissions(ctx context.Context, in *ReplaceSubmissionsRequest, opts ...grpc.CallOption) (*ReplaceSubmissionsResponse, error) {
+	out := new(ReplaceSubmissionsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/ReplaceSubmissions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) SetInventorySubmissionDetails(ctx context.Context, in *SetInventorySubmissionDetailsRequest, opts ...grpc.CallOption) (*SetInventorySubmissionDetailsResponse, error) {
+	out := new(SetInventorySubmissionDetailsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/SetInventorySubmissionDetails", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ListingServiceServer is the server API for ListingService service.
 // All implementations should embed UnimplementedListingServiceServer
 // for forward compatibility
@@ -187,6 +210,11 @@ type ListingServiceServer interface {
 	UpdateChannelListingID(context.Context, *UpdateChannelListingIDRequest) (*UpdateChannelListingIDResponse, error)
 	// ReplaceErrors replaces the errors for a variant
 	ReplaceErrors(context.Context, *ReplaceErrorsRequest) (*ReplaceErrorsResponse, error)
+	// ReplaceSubmissions replaces the submissions for a variant
+	ReplaceSubmissions(context.Context, *ReplaceSubmissionsRequest) (*ReplaceSubmissionsResponse, error)
+	// SetInventorySubmissionDetails is used to set the inventory details for a
+	// given submission
+	SetInventorySubmissionDetails(context.Context, *SetInventorySubmissionDetailsRequest) (*SetInventorySubmissionDetailsResponse, error)
 }
 
 // UnimplementedListingServiceServer should be embedded to have forward compatible implementations.
@@ -219,6 +247,12 @@ func (UnimplementedListingServiceServer) UpdateChannelListingID(context.Context,
 }
 func (UnimplementedListingServiceServer) ReplaceErrors(context.Context, *ReplaceErrorsRequest) (*ReplaceErrorsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReplaceErrors not implemented")
+}
+func (UnimplementedListingServiceServer) ReplaceSubmissions(context.Context, *ReplaceSubmissionsRequest) (*ReplaceSubmissionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReplaceSubmissions not implemented")
+}
+func (UnimplementedListingServiceServer) SetInventorySubmissionDetails(context.Context, *SetInventorySubmissionDetailsRequest) (*SetInventorySubmissionDetailsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetInventorySubmissionDetails not implemented")
 }
 
 // UnsafeListingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -394,6 +428,42 @@ func _ListingService_ReplaceErrors_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ListingService_ReplaceSubmissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReplaceSubmissionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).ReplaceSubmissions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/ReplaceSubmissions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).ReplaceSubmissions(ctx, req.(*ReplaceSubmissionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_SetInventorySubmissionDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetInventorySubmissionDetailsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).SetInventorySubmissionDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/SetInventorySubmissionDetails",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).SetInventorySubmissionDetails(ctx, req.(*SetInventorySubmissionDetailsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ListingService_ServiceDesc is the grpc.ServiceDesc for ListingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -436,6 +506,14 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReplaceErrors",
 			Handler:    _ListingService_ReplaceErrors_Handler,
+		},
+		{
+			MethodName: "ReplaceSubmissions",
+			Handler:    _ListingService_ReplaceSubmissions_Handler,
+		},
+		{
+			MethodName: "SetInventorySubmissionDetails",
+			Handler:    _ListingService_SetInventorySubmissionDetails_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
