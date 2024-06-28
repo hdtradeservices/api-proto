@@ -24,6 +24,10 @@
     - [ListVariantsResponse](#listing_api-ListVariantsResponse)
     - [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest)
     - [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse)
+    - [ReplaceSubmissionsRequest](#listing_api-ReplaceSubmissionsRequest)
+    - [ReplaceSubmissionsResponse](#listing_api-ReplaceSubmissionsResponse)
+    - [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest)
+    - [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse)
     - [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest)
     - [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse)
     - [UpdateStatusRequest](#listing_api-UpdateStatusRequest)
@@ -37,6 +41,10 @@
   
 - [api/listing/settings.proto](#api_listing_settings-proto)
     - [Settings](#listing_api-Settings)
+  
+- [api/listing/submission.proto](#api_listing_submission-proto)
+    - [Submission](#listing_api-Submission)
+    - [Submission.MetadataEntry](#listing_api-Submission-MetadataEntry)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -370,6 +378,65 @@ ReplaceErrorsResponse is empty
 
 
 
+<a name="listing_api-ReplaceSubmissionsRequest"></a>
+
+### ReplaceSubmissionsRequest
+ReplaceSubmissionsRequest is used to replace all submissions for the given
+type and sku
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| submissions | [Submission](#listing_api-Submission) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-ReplaceSubmissionsResponse"></a>
+
+### ReplaceSubmissionsResponse
+ReplaceSubmissionsResponse contains the submissions created
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| submissions | [Submission](#listing_api-Submission) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-SetInventorySubmissionDetailsRequest"></a>
+
+### SetInventorySubmissionDetailsRequest
+SetInventorySubmissionDetailsRequest is used to create inventory submission
+details
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| submission_id | [int64](#int64) |  |  |
+| inventory_level_sent | [int64](#int64) |  |  |
+| successful | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="listing_api-SetInventorySubmissionDetailsResponse"></a>
+
+### SetInventorySubmissionDetailsResponse
+SetInventorySubmissionDetailsResponse is currently an empty response
+
+
+
+
+
+
 <a name="listing_api-UpdateChannelListingIDRequest"></a>
 
 ### UpdateChannelListingIDRequest
@@ -511,6 +578,8 @@ Zentail.
 | UpdateStatus | [UpdateStatusRequest](#listing_api-UpdateStatusRequest) | [UpdateStatusResponse](#listing_api-UpdateStatusResponse) | UpdateStatus updates the status of a listing |
 | UpdateChannelListingID | [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest) | [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse) | UpdateChannelListingID updates the channel ID for the listing |
 | ReplaceErrors | [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest) | [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse) | ReplaceErrors replaces the errors for a variant |
+| ReplaceSubmissions | [ReplaceSubmissionsRequest](#listing_api-ReplaceSubmissionsRequest) | [ReplaceSubmissionsResponse](#listing_api-ReplaceSubmissionsResponse) | ReplaceSubmissions replaces the submissions for a variant |
+| SetInventorySubmissionDetails | [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest) | [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse) | SetInventorySubmissionDetails is used to set the inventory details for a given submission |
 
  
 
@@ -534,6 +603,62 @@ Settings represent Listing Settings at any level (Variant, Integration, etc).
 | id | [string](#string) |  |  |
 | string_value | [string](#string) |  |  |
 | bool_value | [bool](#bool) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="api_listing_submission-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/listing/submission.proto
+
+
+
+<a name="listing_api-Submission"></a>
+
+### Submission
+Submission represents specific data sent to a channel for a particular SKU
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| submission_id | [int64](#int64) |  | submission_id is returned by the API, setting this when calling ReplaceSubmissions will have no effect |
+| sku | [string](#string) |  |  |
+| content_sent | [string](#string) |  |  |
+| content_received | [string](#string) |  |  |
+| metadata | [Submission.MetadataEntry](#listing_api-Submission-MetadataEntry) | repeated |  |
+| type | [string](#string) |  | type is a user-specified type which is used to match like submissions when doing a replace operation |
+| successful | [bool](#bool) |  |  |
+| prepared_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| submitted_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| acknowledged_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Submission-MetadataEntry"></a>
+
+### Submission.MetadataEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [string](#string) |  |  |
 
 
 

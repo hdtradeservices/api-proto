@@ -2,6 +2,7 @@ syntax = "proto3";
 package listing_api;
 
 import "api/listing/listing.proto";
+import "api/listing/submission.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -112,7 +113,48 @@ service ListingService {
       body: "*"
     };
   }
+
+  // ReplaceSubmissions replaces the submissions for a variant
+  rpc ReplaceSubmissions(ReplaceSubmissionsRequest)
+      returns (ReplaceSubmissionsResponse) {
+    option (google.api.http) = {
+      post: "/v2/storefront/listing/submission"
+      body: "*"
+    };
+  }
+
+  // SetInventorySubmissionDetails is used to set the inventory details for a
+  // given submission
+  rpc SetInventorySubmissionDetails(SetInventorySubmissionDetailsRequest)
+      returns (SetInventorySubmissionDetailsResponse) {
+    option (google.api.http) = {
+      post: "/v2/storefront/listing/submission/{submission_id}/inventory"
+      body: "*"
+    };
+  }
 }
+
+// ReplaceSubmissionsRequest is used to replace all submissions for the given
+// type and sku
+message ReplaceSubmissionsRequest {
+  repeated Submission submissions = 1;
+}
+
+// ReplaceSubmissionsResponse contains the submissions created
+message ReplaceSubmissionsResponse {
+  repeated Submission submissions = 1;
+}
+
+// SetInventorySubmissionDetailsRequest is used to create inventory submission
+// details
+message SetInventorySubmissionDetailsRequest {
+  int64 submission_id        = 1;
+  int64 inventory_level_sent = 2;
+  bool successful            = 3;
+}
+
+// SetInventorySubmissionDetailsResponse is currently an empty response
+message SetInventorySubmissionDetailsResponse {}
 
 message ListInventorySinceRequest {
   google.protobuf.Timestamp since = 1;
