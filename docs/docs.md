@@ -337,7 +337,7 @@ ListVariantsResponse is the response object containing a list of Variants
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | variants | [Variant](#listing_api-Variant) | repeated |  |
-| next_page_url | [string](#string) |  | The URL to the next page of results. If empty, there are no more results. |
+| next_page_cursor | [string](#string) |  | The cursor token for the next page of results. If empty, there are no more results. |
 
 
 
