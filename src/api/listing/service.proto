@@ -33,6 +33,14 @@ service ListingService {
     };
   }
 
+  // GetBySKU retrieves a single listing which contains a variant with the given
+  // SKU
+  rpc GetBySKU(GetBySKURequest) returns (Listing) {
+    option (google.api.http) = {
+      get: "/storefront/v2/listing/sku/{sku}"
+    };
+  }
+
   // GetVariant retrieves a single variant by its SKU
   rpc GetVariant(GetVariantRequest) returns (Variant) {
     option (google.api.http) = {
@@ -195,6 +203,11 @@ message GetRequest {
 
 // GetVariantRequest is the request object for the GetVariant method
 message GetVariantRequest {
+  string sku = 1;
+}
+
+// GetBySKURequest is the request object for the GetBySKU method
+message GetBySKURequest {
   string sku = 1;
 }
 
