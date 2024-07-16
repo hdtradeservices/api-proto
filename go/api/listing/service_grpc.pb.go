@@ -20,6 +20,9 @@ const _ = grpc.SupportPackageIsVersion7
 type ListingServiceClient interface {
 	// Get retrieves a single listing by its ID
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Listing, error)
+	// GetBySKU retrieves a single listing which contains a variant with the given
+	// SKU
+	GetBySKU(ctx context.Context, in *GetBySKURequest, opts ...grpc.CallOption) (*Listing, error)
 	// GetVariant retrieves a single variant by its SKU
 	GetVariant(ctx context.Context, in *GetVariantRequest, opts ...grpc.CallOption) (*Variant, error)
 	// ListNewListings will list any listing created or updated
@@ -73,6 +76,15 @@ func NewListingServiceClient(cc grpc.ClientConnInterface) ListingServiceClient {
 func (c *listingServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Listing, error) {
 	out := new(Listing)
 	err := c.cc.Invoke(ctx, "/listing_api.ListingService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) GetBySKU(ctx context.Context, in *GetBySKURequest, opts ...grpc.CallOption) (*Listing, error) {
+	out := new(Listing)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/GetBySKU", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -175,6 +187,9 @@ func (c *listingServiceClient) SetInventorySubmissionDetails(ctx context.Context
 type ListingServiceServer interface {
 	// Get retrieves a single listing by its ID
 	Get(context.Context, *GetRequest) (*Listing, error)
+	// GetBySKU retrieves a single listing which contains a variant with the given
+	// SKU
+	GetBySKU(context.Context, *GetBySKURequest) (*Listing, error)
 	// GetVariant retrieves a single variant by its SKU
 	GetVariant(context.Context, *GetVariantRequest) (*Variant, error)
 	// ListNewListings will list any listing created or updated
@@ -223,6 +238,9 @@ type UnimplementedListingServiceServer struct {
 
 func (UnimplementedListingServiceServer) Get(context.Context, *GetRequest) (*Listing, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedListingServiceServer) GetBySKU(context.Context, *GetBySKURequest) (*Listing, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBySKU not implemented")
 }
 func (UnimplementedListingServiceServer) GetVariant(context.Context, *GetVariantRequest) (*Variant, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVariant not implemented")
@@ -280,6 +298,24 @@ func _ListingService_Get_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ListingServiceServer).Get(ctx, req.(*GetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_GetBySKU_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBySKURequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).GetBySKU(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/GetBySKU",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).GetBySKU(ctx, req.(*GetBySKURequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -474,6 +510,10 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _ListingService_Get_Handler,
+		},
+		{
+			MethodName: "GetBySKU",
+			Handler:    _ListingService_GetBySKU_Handler,
 		},
 		{
 			MethodName: "GetVariant",

@@ -95,6 +95,37 @@
         ]
       }
     },
+    "/storefront/v2/listing/sku/{sku}": {
+      "get": {
+        "summary": "GetBySKU retrieves a single listing which contains a variant with the given\nSKU",
+        "operationId": "ListingService_GetBySKU",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListing"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/storefront/v2/listing/variant/inventory/updated": {
       "get": {
         "summary": "ListVariantsWithUpdatedInventory will return any variant that:",

@@ -16,6 +16,7 @@
   
 - [api/listing/service.proto](#api_listing_service-proto)
     - [Error](#listing_api-Error)
+    - [GetBySKURequest](#listing_api-GetBySKURequest)
     - [GetRequest](#listing_api-GetRequest)
     - [GetVariantRequest](#listing_api-GetVariantRequest)
     - [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest)
@@ -251,6 +252,21 @@ Inventory contains information about the availability of this variant
 | severity | [Error.Severity](#listing_api-Error-Severity) |  |  |
 | type | [Error.Type](#listing_api-Error-Type) |  |  |
 | message | [string](#string) |  | Message is required if Type is TYPE_OTHER |
+
+
+
+
+
+
+<a name="listing_api-GetBySKURequest"></a>
+
+### GetBySKURequest
+GetBySKURequest is the request object for the GetBySKU method
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sku | [string](#string) |  |  |
 
 
 
@@ -552,6 +568,7 @@ Zentail.
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#listing_api-GetRequest) | [Listing](#listing_api-Listing) | Get retrieves a single listing by its ID |
+| GetBySKU | [GetBySKURequest](#listing_api-GetBySKURequest) | [Listing](#listing_api-Listing) | GetBySKU retrieves a single listing which contains a variant with the given SKU |
 | GetVariant | [GetVariantRequest](#listing_api-GetVariantRequest) | [Variant](#listing_api-Variant) | GetVariant retrieves a single variant by its SKU |
 | ListNewListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListNewListings will list any listing created or updated since the given timestamp where:
 
