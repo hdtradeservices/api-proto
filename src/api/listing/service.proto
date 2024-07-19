@@ -162,7 +162,8 @@ message SetInventorySubmissionDetailsRequest {
 }
 
 // SetInventorySubmissionDetailsResponse is currently an empty response
-message SetInventorySubmissionDetailsResponse {}
+message SetInventorySubmissionDetailsResponse {
+}
 
 message ListInventorySinceRequest {
   google.protobuf.Timestamp since = 1;
@@ -232,7 +233,8 @@ message UpdateStatusRequest {
 }
 
 // UpdateStatusResponse is empty
-message UpdateStatusResponse {}
+message UpdateStatusResponse {
+}
 
 // UpdateChannelListingIDRequest provides the status of a SKU
 message UpdateChannelListingIDRequest {
@@ -241,7 +243,8 @@ message UpdateChannelListingIDRequest {
 }
 
 // UpdateChannelListingIDResponse is empty
-message UpdateChannelListingIDResponse {}
+message UpdateChannelListingIDResponse {
+}
 
 // ReplaceErrorsRequest provides all the channel-generated errors for a SKU
 message ReplaceErrorsRequest {
@@ -272,5 +275,6 @@ message Error {
 }
 
 // ReplaceErrorsResponse is empty
-message ReplaceErrorsResponse {}
+message ReplaceErrorsResponse {
+}
 
