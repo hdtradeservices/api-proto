@@ -16,6 +16,7 @@ message Variant {
   map<string, string> settings = 3;
   // LATER: do we need desired_status / intended action?
   Inventory inventory     = 4;
+  Attributes identifiers  = 8;
   Attributes product_data = 5;
   Attributes pricing      = 6;
   Attributes logistics    = 7;

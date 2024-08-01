@@ -839,6 +839,9 @@
           "$ref": "#/definitions/VariantInventory",
           "title": "LATER: do we need desired_status / intended action?"
         },
+        "identifiers": {
+          "$ref": "#/definitions/VariantAttributes"
+        },
         "productData": {
           "$ref": "#/definitions/VariantAttributes"
         },

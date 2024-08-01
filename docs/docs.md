@@ -161,6 +161,7 @@ LATER: comment this more
 | channel_id | [string](#string) |  |  |
 | settings | [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry) | repeated | Any Integration-level Settings will be merged with Variant-level Settings to produce these Settings. |
 | inventory | [Variant.Inventory](#listing_api-Variant-Inventory) |  | LATER: do we need desired_status / intended action? |
+| identifiers | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
 | product_data | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
 | pricing | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
 | logistics | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
