@@ -433,6 +433,9 @@
             "schema": {
               "type": "object",
               "properties": {
+                "submissionType": {
+                  "type": "string"
+                },
                 "errors": {
                   "type": "array",
                   "items": {

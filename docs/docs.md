@@ -376,6 +376,7 @@ ReplaceErrorsRequest provides all the channel-generated errors for a SKU
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | sku | [string](#string) |  |  |
+| submission_type | [string](#string) |  |  |
 | errors | [Error](#listing_api-Error) | repeated |  |
 
 
