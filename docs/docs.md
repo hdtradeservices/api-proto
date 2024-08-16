@@ -5,6 +5,7 @@
 
 - [api/listing/listing.proto](#api_listing_listing-proto)
     - [Attribute](#listing_api-Attribute)
+    - [Attribute.Money](#listing_api-Attribute-Money)
     - [Attribute.MultiText](#listing_api-Attribute-MultiText)
     - [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits)
     - [Listing](#listing_api-Listing)
@@ -71,6 +72,23 @@ Attribute has data that describes a Listing or a Listing&#39;s Variants
 | numeric_value | [double](#double) |  |  |
 | numeric_with_units_value | [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits) |  |  |
 | multi_text_value | [Attribute.MultiText](#listing_api-Attribute-MultiText) |  |  |
+| money_value | [Attribute.Money](#listing_api-Attribute-Money) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Attribute-Money"></a>
+
+### Attribute.Money
+Money supports values like with amount and currency_code
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| money | [string](#string) |  |  |
+| currency_code | [string](#string) |  |  |
 
 
 
