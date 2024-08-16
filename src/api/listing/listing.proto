@@ -78,10 +78,17 @@ message Attribute {
     repeated string values = 1;
   }
 
+  // Money supports values like with amount and currency_code
+  message Money {
+    string money         = 1;
+    string currency_code = 2;
+  }
+
   oneof value {
     string text_value                         = 2;
     double numeric_value                      = 3;
     NumericWithUnits numeric_with_units_value = 4;
     MultiText multi_text_value                = 5;
+    Money money_value                         = 6;
   }
 }

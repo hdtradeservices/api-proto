@@ -506,6 +506,18 @@
     }
   },
   "definitions": {
+    "AttributeMoney": {
+      "type": "object",
+      "properties": {
+        "money": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        }
+      },
+      "title": "Money supports values like with amount and currency_code"
+    },
     "AttributeMultiText": {
       "type": "object",
       "properties": {
@@ -627,6 +639,9 @@
         },
         "multiTextValue": {
           "$ref": "#/definitions/AttributeMultiText"
+        },
+        "moneyValue": {
+          "$ref": "#/definitions/AttributeMoney"
         }
       },
       "title": "Attribute has data that describes a Listing or a Listing's Variants"
