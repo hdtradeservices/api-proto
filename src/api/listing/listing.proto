@@ -80,7 +80,7 @@ message Attribute {
 
   // Money supports values like with amount and currency_code
   message Money {
-    string money         = 1;
+    string amount        = 1;
     string currency_code = 2;
   }
 
