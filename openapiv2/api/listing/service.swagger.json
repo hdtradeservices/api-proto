@@ -512,7 +512,7 @@
     "AttributeMoney": {
       "type": "object",
       "properties": {
-        "money": {
+        "amount": {
           "type": "string"
         },
         "currencyCode": {

@@ -87,7 +87,7 @@ Money supports values like with amount and currency_code
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| money | [string](#string) |  |  |
+| amount | [string](#string) |  |  |
 | currency_code | [string](#string) |  |  |
 
 
