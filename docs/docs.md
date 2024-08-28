@@ -216,8 +216,10 @@ Inventory contains information about the availability of this variant
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | enabled | [bool](#bool) |  |  |
-| merchant_fulfillable_quantity | [int64](#int64) |  | total_quantity should be the sum of merchant_fulfillable_inventory and storefront_fulfillable_quantity -- removing for now since it isn&#39;t implemented and will always be 0 -- int64 total_quantity = 2; |
-| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | -- removing for now since isn&#39;t implemented and will always be 0 -- int64 storefront_fulfillable_quantity = 4; |
+| total_quantity | [int64](#int64) |  | total_quantity should be the sum of merchant_fulfillable_inventory and storefront_fulfillable_quantity |
+| merchant_fulfillable_quantity | [int64](#int64) |  |  |
+| storefront_fulfillable_quantity | [int64](#int64) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_externally_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 

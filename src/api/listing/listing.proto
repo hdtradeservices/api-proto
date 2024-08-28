@@ -26,11 +26,9 @@ message Variant {
     bool enabled = 1;
     // total_quantity should be the sum of merchant_fulfillable_inventory
     // and storefront_fulfillable_quantity
-    // -- removing for now since it isn't implemented and will always be 0 --
-    // int64 total_quantity                            = 2;
+    int64 total_quantity                            = 2;
     int64 merchant_fulfillable_quantity             = 3;
-    // -- removing for now since isn't implemented and will always be 0 --
-    // int64 storefront_fulfillable_quantity           = 4;
+    int64 storefront_fulfillable_quantity           = 4;
     google.protobuf.Timestamp updated_at            = 5;
     google.protobuf.Timestamp updated_externally_at = 6;
   }
