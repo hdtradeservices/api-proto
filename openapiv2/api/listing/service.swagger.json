@@ -607,15 +607,22 @@
         "enabled": {
           "type": "boolean"
         },
-        "merchantFulfillableQuantity": {
+        "totalQuantity": {
           "type": "string",
           "format": "int64",
-          "title": "total_quantity should be the sum of merchant_fulfillable_inventory\nand storefront_fulfillable_quantity\n-- removing for now since it isn't implemented and will always be 0 --\nint64 total_quantity                            = 2;"
+          "title": "total_quantity should be the sum of merchant_fulfillable_inventory\nand storefront_fulfillable_quantity"
+        },
+        "merchantFulfillableQuantity": {
+          "type": "string",
+          "format": "int64"
+        },
+        "storefrontFulfillableQuantity": {
+          "type": "string",
+          "format": "int64"
         },
         "updatedAt": {
           "type": "string",
-          "format": "date-time",
-          "title": "-- removing for now since isn't implemented and will always be 0 --\nint64 storefront_fulfillable_quantity           = 4;"
+          "format": "date-time"
         },
         "updatedExternallyAt": {
           "type": "string",
