@@ -13,6 +13,8 @@
     - [Variant](#listing_api-Variant)
     - [Variant.Attributes](#listing_api-Variant-Attributes)
     - [Variant.Inventory](#listing_api-Variant-Inventory)
+    - [Variant.Pricing](#listing_api-Variant-Pricing)
+    - [Variant.Pricing.ScheduledSale](#listing_api-Variant-Pricing-ScheduledSale)
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
 - [api/listing/service.proto](#api_listing_service-proto)
@@ -181,7 +183,7 @@ LATER: comment this more
 | inventory | [Variant.Inventory](#listing_api-Variant-Inventory) |  | LATER: do we need desired_status / intended action? |
 | identifiers | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
 | product_data | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
-| pricing | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
+| pricing | [Variant.Pricing](#listing_api-Variant-Pricing) |  |  |
 | logistics | [Variant.Attributes](#listing_api-Variant-Attributes) |  |  |
 
 
@@ -221,6 +223,43 @@ Inventory contains information about the availability of this variant
 | storefront_fulfillable_quantity | [int64](#int64) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_externally_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Variant-Pricing"></a>
+
+### Variant.Pricing
+Pricing is a container for a list of pricing attributes as well as
+structured information about scheduled sales
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| enabled | [bool](#bool) |  |  |
+| attributes | [Attribute](#listing_api-Attribute) | repeated |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| sales | [Variant.Pricing.ScheduledSale](#listing_api-Variant-Pricing-ScheduledSale) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-Variant-Pricing-ScheduledSale"></a>
+
+### Variant.Pricing.ScheduledSale
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| strike_through_price | [double](#double) |  |  |
+| sale_price | [double](#double) |  |  |
+| start_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| end_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 
 

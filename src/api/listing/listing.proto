@@ -18,7 +18,7 @@ message Variant {
   Inventory inventory     = 4;
   Attributes identifiers  = 8;
   Attributes product_data = 5;
-  Attributes pricing      = 6;
+  Pricing pricing         = 6;
   Attributes logistics    = 7;
 
   // Inventory contains information about the availability of this variant
@@ -39,6 +39,21 @@ message Variant {
     bool enabled                         = 1;
     repeated Attribute attributes        = 2;
     google.protobuf.Timestamp updated_at = 3;
+  }
+
+  // Pricing is a container for a list of pricing attributes as well as
+  // structured information about scheduled sales
+  message Pricing {
+    bool enabled                         = 1;
+    repeated Attribute attributes        = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    repeated ScheduledSale sales         = 4;
+    message ScheduledSale {
+      double strike_through_price        = 1;
+      double sale_price                  = 2;
+      google.protobuf.Timestamp start_at = 3;
+      google.protobuf.Timestamp end_at   = 4;
+    }
   }
 }
 
