@@ -24,7 +24,7 @@ build: tools clean
 		--grpc-gateway_opt logtostderr=true \
 		--grpc-gateway_opt paths=source_relative \
 		--doc_out=:../$(DOCS_BUILD_DIR) \
-		--doc_opt=markdown,docs.md;\
+		--doc_opt=markdown,full-reference.md;\
 	rm -rf ../googleapis ../grpc-gateway;
 
 check-update:
