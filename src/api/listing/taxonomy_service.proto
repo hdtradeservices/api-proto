@@ -1,0 +1,263 @@
+syntax = "proto3";
+package listing_api;
+
+import "api/listing/taxonomy.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
+option php_generic_services = true;
+
+// TaxonomyService provides a service for managing the Taxonomy data
+// for a Listing integration.
+service TaxonomyService {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    name: "Listing Taxonomy Service",
+    // protolint:disable:next MAX_LINE_LENGTH
+    description: "Listing Taxonomy Service provides a service for managing the taxonomy data for a listing integration."
+  };
+
+  // ListCategories will return a list of all categories.
+  // If a parent_category_id is provided, only categories under that parent
+  // will be returned
+  rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse) {
+    option (google.api.http) = {
+      get: "/v2/storefront/taxonomy/category"
+    };
+  }
+
+  // CreateCategory will create a new Category
+  rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse) {
+    option (google.api.http) = {
+      post: "/v2/storefront/taxonomy/category",
+      body: "*"
+    };
+  }
+
+  // UpdateCategory will update the Category with the given ID
+  rpc UpdateCategory(UpdateCategoryRequest) returns (UpdateCategoryResponse) {
+    option (google.api.http) = {
+      put: "/v2/storefront/taxonomy/category",
+      body: "*"
+    };
+  }
+
+  // ListProductTypes will return all product types
+  rpc ListProductTypes(ListProductTypesRequest)
+      returns (ListProductTypesResponse) {
+    option (google.api.http) = {
+      get: "/v2/storefront/taxonomy/product_type"
+    };
+  }
+
+  // CreateProductType will create a new ProductType
+  rpc CreateProductType(CreateProductTypeRequest)
+      returns (CreateProductTypeResponse) {
+    option (google.api.http) = {
+      post: "/v2/storefront/taxonomy/product_type",
+      body: "*"
+    };
+  }
+
+  // DeleteProductType will delete the ProductType with the given ID
+  rpc DeleteProductType(DeleteProductTypeRequest)
+      returns (DeleteProductTypeResponse) {
+    option (google.api.http) = {
+      delete: "/v2/storefront/taxonomy/product_type/{product_type_id}"
+    };
+  }
+
+  // AttributeSpec can be used to retrieve a single AttributeSpec
+  rpc AttributeSpec(AttributeSpecRequest) returns (listing_api.AttributeSpec) {
+    option (google.api.http) = {
+      get: "/v2/storefront/taxonomy/attribute_spec/{category_id}/{attribute_spec_id}"
+    };
+  }
+
+  // CreateAttributeSpec will create a new AttributeSpec
+  rpc CreateAttributeSpec(CreateAttributeSpecRequest)
+      returns (listing_api.AttributeSpec) {
+    option (google.api.http) = {
+      post: "/v2/storefront/taxonomy/attribute_spec/{category_id}",
+      body: "*"
+    };
+  }
+
+  // UpdateAttributeSpec will update the AttributeSpec with the given
+  // category_id and attribute_spec_id
+  rpc UpdateAttributeSpec(UpdateAttributeSpecRequest)
+      returns (listing_api.AttributeSpec) {
+    option (google.api.http) = {
+      put: "/v2/storefront/taxonomy/attribute_spec/{category_id}",
+      body: "*"
+    };
+  }
+
+  // DeleteAttributeSpec will delete the AttributeSpec with the given
+  // category_id and attribute_spec_id
+  rpc DeleteAttributeSpec(DeleteAttributeSpecRequest)
+      returns (DeleteAttributeSpecResponse) {
+    option (google.api.http) = {
+      delete: "/v2/storefront/taxonomy/attribute_spec/{category_id}/{attribute_spec_id}"
+    };
+  }
+
+  // ListQualityAttributeSpecs will return all quality attribute specs
+  rpc ListQualityAttributeSpecs(ListQualityAttributeSpecsRequest)
+      returns (ListQualityAttributeSpecsResponse) {
+    option (google.api.http) = {
+      get: "/v2/storefront/taxonomy/quality_attribute_spec/{product_type_id}"
+    };
+  }
+
+  // CreateQualityAttributeSpec will create a new QualityAttributeSpec
+  rpc CreateQualityAttributeSpec(CreateQualityAttributeSpecRequest)
+      returns (QualityAttributeSpec) {
+    option (google.api.http) = {
+      post: "/v2/storefront/taxonomy/quality_attribute_spec/{product_type_id}",
+      body: "*"
+    };
+  }
+
+  // UpdateQualityAttributeSpec will update the QualityAttributeSpec with the
+  // given product_type_id, category_id, and attribute_spec_id
+  rpc UpdateQualityAttributeSpec(UpdateQualityAttributeSpecRequest)
+      returns (QualityAttributeSpec) {
+    option (google.api.http) = {
+      put: "/v2/storefront/taxonomy/quality_attribute_spec/{product_type_id}",
+      body: "*"
+    };
+  }
+
+  // DeleteQualityAttributeSpec will delete the QualityAttributeSpec with the
+  // given product_type_id and attribute_spec_id
+  rpc DeleteQualityAttributeSpec(DeleteQualityAttributeSpecRequest)
+      returns (DeleteQualityAttributeSpecResponse) {
+    option (google.api.http) = {
+      delete: "/v2/storefront/taxonomy/quality_attribute_spec/{product_type_id}/{attribute_spec_id}"
+    };
+  }
+}
+
+// ListCategoriesRequest is used to request a list of categories
+message ListCategoriesRequest {
+  // Optional - The category ID to search under, if null will
+  // return only top-level categories.
+  string parent_category_id = 1;
+}
+
+// ListCategoriesResponse contains the list of categories
+message ListCategoriesResponse {
+  repeated Category categories = 1;
+}
+
+// CreateCategoryRequest will create a new Category
+message CreateCategoryRequest {
+  Category category = 1;
+}
+
+// CreateCategoryResponse returns the newly created Category
+message CreateCategoryResponse {
+  Category category = 1;
+}
+
+// UpdateCategoryRequest will update the category with the matching
+// channel_category_id and parent_category_id
+message UpdateCategoryRequest {
+  Category category = 1;
+}
+
+// UpdateCategoryResponse will return the updated category
+message UpdateCategoryResponse {
+  Category category = 1;
+}
+
+// ListProductTypesRequest is used to send the ListProductTypes request
+message ListProductTypesRequest {}
+
+// ListProductTypesResponse contains all of the product types returned
+message ListProductTypesResponse {
+  repeated ProductType product_types = 1;
+}
+
+// CreateProductTypeRequest is used to create a new ProductType
+message CreateProductTypeRequest {
+  ProductType product_type = 1;
+}
+
+// CreateProductTypeResponse returns the newly created ProductType
+message CreateProductTypeResponse {
+  ProductType product_type = 1;
+}
+
+// DeleteProductTypeRequest is used to delete an existing ProductType
+message DeleteProductTypeRequest {
+  string product_type_id = 1;
+}
+
+// DeleteProductTypeResponse is returned by the DeleteProduct type action
+message DeleteProductTypeResponse {}
+
+// AttributeSpecRequest is used to retrieve a single Attribute Spec
+message AttributeSpecRequest {
+  string category_id       = 1;
+  string attribute_spec_id = 2;
+}
+
+// CreateAttributeSpecRequest is used to create a new AttributeSpec
+message CreateAttributeSpecRequest {
+  string category_id           = 1;
+  AttributeSpec attribute_spec = 2;
+}
+
+// UpdateAttributeSpecRequest is used to update an existing AttributeSpec
+message UpdateAttributeSpecRequest {
+  string category_id           = 1;
+  AttributeSpec attribute_spec = 2;
+}
+
+// DeleteAttributeSpecRequest is used to Delete an AttributeSpec
+message DeleteAttributeSpecRequest {
+  string category_id       = 1;
+  string attribute_spec_id = 2;
+}
+
+// DeleteAttributeSpecResponse is returned after deleting an AttributeSpec
+message DeleteAttributeSpecResponse {}
+
+// ListQualityAttributeSpecsRequest is used to request all of the quality
+// attribute specs in the given ProductType
+message ListQualityAttributeSpecsRequest {
+  string product_type_id = 1;
+}
+
+// ListQualityAttributeSpecsResponse contains all of the quality attribute specs
+// in the requested ProductType
+message ListQualityAttributeSpecsResponse {
+  repeated QualityAttributeSpec quality_attribute_specs = 1;
+}
+
+// CreateQualityAttributeSpecRequest is used to create a new
+// QualityAttributeSpec
+message CreateQualityAttributeSpecRequest {
+  string product_type_id                      = 1;
+  string category_id                          = 2;
+  QualityAttributeSpec quality_attribute_spec = 3;
+}
+
+// UpdateQualityAttributeSpecRequest will update the QualityAttributeSpec
+message UpdateQualityAttributeSpecRequest {
+  string product_type_id                      = 1;
+  string category_id                          = 2;
+  QualityAttributeSpec quality_attribute_spec = 3;
+}
+
+// DeleteQualityAttributeSpecRequest is used to delete a QualityAttributeSpec
+message DeleteQualityAttributeSpecRequest {
+  string attribute_spec_id = 1;
+  string product_type_id   = 2;
+}
+
+// DeleteQualityAttributeSpecResponse is returned after deleting a
+// QualityAttributeSpec
+message DeleteQualityAttributeSpecResponse {}

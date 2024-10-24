@@ -17,7 +17,7 @@
     "application/json"
   ],
   "paths": {
-    "/storefront/v2/listing/new": {
+    "/v2/storefront/listing/new": {
       "get": {
         "summary": "ListNewListings will list any listing created or updated\nsince the given timestamp where:",
         "description": "1. Product data is enabled for at least one Variant in the Listing\n\n2. No variants have a channel ID",
@@ -56,7 +56,7 @@
         ]
       }
     },
-    "/storefront/v2/listing/product_data/updated": {
+    "/v2/storefront/listing/product_data/updated": {
       "get": {
         "summary": "ListUpdateListings will return any listing that:",
         "description": "1. Has at least one Variant with a channel ID\n\n2. Has a Product Data change since the last timestamp (including Variants)\n\n3. Product Data is enabled for the Listing",
@@ -95,7 +95,7 @@
         ]
       }
     },
-    "/storefront/v2/listing/sku/{sku}": {
+    "/v2/storefront/listing/sku/{sku}": {
       "get": {
         "summary": "GetBySKU retrieves a single listing which contains a variant with the given\nSKU",
         "operationId": "ListingService_GetBySKU",
@@ -116,153 +116,6 @@
         "parameters": [
           {
             "name": "sku",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ListingService"
-        ]
-      }
-    },
-    "/storefront/v2/listing/variant/inventory/updated": {
-      "get": {
-        "summary": "ListVariantsWithUpdatedInventory will return any variant that:",
-        "description": "1. Has an inventory change since the last timestamp\n\n2. Inventory Data is enabled for the Variant",
-        "operationId": "ListingService_ListVariantsWithUpdatedInventory",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/listing_apiListVariantsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "since",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "date-time"
-          },
-          {
-            "name": "externalChangesOnly",
-            "description": "Only return variants with inventory changes that have happened\noutside of sales on this channel.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ListingService"
-        ]
-      }
-    },
-    "/storefront/v2/listing/variant/pricing/updated": {
-      "get": {
-        "summary": "ListVariantsWithUpdatedPricing will return any variant that:",
-        "description": "1. Has a pricing change since the last timestamp\n\n2. Pricing Data is enabled for the Variant",
-        "operationId": "ListingService_ListVariantsWithUpdatedPricing",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/listing_apiListVariantsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "since",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "date-time"
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ListingService"
-        ]
-      }
-    },
-    "/storefront/v2/listing/variant/{sku}": {
-      "get": {
-        "summary": "GetVariant retrieves a single variant by its SKU",
-        "operationId": "ListingService_GetVariant",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/listing_apiVariant"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "sku",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ListingService"
-        ]
-      }
-    },
-    "/storefront/v2/listing/{listingId}": {
-      "get": {
-        "summary": "Get retrieves a single listing by its ID",
-        "operationId": "ListingService_Get",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/listing_apiListing"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "listingId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -349,6 +202,122 @@
               },
               "title": "SetInventorySubmissionDetailsRequest is used to create inventory submission\ndetails"
             }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/variant/inventory/updated": {
+      "get": {
+        "summary": "ListVariantsWithUpdatedInventory will return any variant that:",
+        "description": "1. Has an inventory change since the last timestamp\n\n2. Inventory Data is enabled for the Variant",
+        "operationId": "ListingService_ListVariantsWithUpdatedInventory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListVariantsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "externalChangesOnly",
+            "description": "Only return variants with inventory changes that have happened\noutside of sales on this channel.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/variant/pricing/updated": {
+      "get": {
+        "summary": "ListVariantsWithUpdatedPricing will return any variant that:",
+        "description": "1. Has a pricing change since the last timestamp\n\n2. Pricing Data is enabled for the Variant",
+        "operationId": "ListingService_ListVariantsWithUpdatedPricing",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListVariantsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/variant/{sku}": {
+      "get": {
+        "summary": "GetVariant retrieves a single variant by its SKU",
+        "operationId": "ListingService_GetVariant",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiVariant"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -500,6 +469,37 @@
               },
               "title": "UpdateStatusRequest provides the status of a SKU"
             }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/{listingId}": {
+      "get": {
+        "summary": "Get retrieves a single listing by its ID",
+        "operationId": "ListingService_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListing"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "listingId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
