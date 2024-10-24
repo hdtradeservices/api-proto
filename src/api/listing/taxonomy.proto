@@ -1,0 +1,90 @@
+syntax = "proto3";
+package listing_api;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
+
+// AttributeSpec is the specification of an attribute within a Product Type on
+// your channel.
+message AttributeSpec {
+  // This is the ID that will be used when retrieving listing data or submitting
+  // error to Zentail. It should reflect whatever meaningful identifier can be
+  // used to ingest this attribute into your system. In the past we have seen it
+  // be a numeric identifier or an xpath/jsonpath string
+  string attribute_spec_id = 1;
+
+  // Human-readable name for the attribute. Used for display purposes only.
+  string display_name = 2;
+
+  // Type specifies what form the related attribute should be rendered into
+  enum Type {
+    TYPE_UNSPECIFIED        = 0;
+    TYPE_TEXT               = 1;
+    TYPE_SELECT             = 2;
+    TYPE_NUMERIC            = 3;
+    TYPE_NUMERIC_WITH_UNITS = 4;
+    TYPE_MULTI_TEXT         = 5;
+    TYPE_MULTI_SELECT       = 6;
+    TYPE_MONEY              = 7;
+  }
+  Type type = 3;
+
+  // If the type is SELECT or MULTI_SELECT, provide the valid values here
+  repeated string valid_values = 4;
+
+  // If the type is NUMERIC_WITH_UNITS, provide the valid units here
+  repeated string valid_units = 5;
+
+  // Optional, used to specify the unit of the numeric value when the type is
+  // TYPE_NUMERIC This will allow Zentail to convert values with units in
+  // Zentail to a single numeric value if your channel does not support units
+  string unit = 6;
+
+  // Level specifies whether this AttributeSpec should be rendered
+  // on the Listing-level or the Variant-level
+  enum Level {
+    LEVEL_UNSPECIFIED = 0;
+    LEVEL_LISTING     = 1;
+    LEVEL_VARIANT     = 2;
+  }
+  Level level = 7;
+
+  // Classification specifies whether this AttributeSpec relates to
+  // Product, Inventory, or Pricing data
+  enum Classification {
+    CLASSIFICATION_UNSPECIFIED = 0;
+    CLASSIFICATION_PRODUCT     = 1;
+    CLASSIFICATION_INVENTORY   = 2;
+    CLASSIFICATION_PRICING     = 3;
+    CLASSIFICATION_LOGISTICS   = 4;
+    CLASSIFICATION_IDENTIFIER  = 5;
+  }
+  Classification classification = 8;
+
+  // Usage indicates if the spec is required or just recommended
+  enum Usage {
+    USAGE_UNSPECIFIED = 0;
+    USAGE_AVAILABLE   = 1;
+    USAGE_REQUIRED    = 2;
+    USAGE_RECOMMENDED = 3;
+  }
+  Usage usage = 9;
+
+  google.protobuf.Timestamp updated_at = 10;
+  google.protobuf.Timestamp created_at = 11;
+}
+
+// ProductType are detailed classifications dictated by the channel.
+// They should be at least as specific as the Category.
+// Generally they should be more specific than the Category.
+// Product Types are used to specify which attributes are required and
+// recommended for a given Listing.
+// If this is not a concept in your system, you should create a product type for
+// each category.
+message ProductType {
+  string product_type_id               = 1;
+  string display_name                  = 2;
+  google.protobuf.Timestamp updated_at = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
