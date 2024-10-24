@@ -50,6 +50,44 @@
     - [Submission](#listing_api-Submission)
     - [Submission.MetadataEntry](#listing_api-Submission-MetadataEntry)
   
+- [api/listing/taxonomy.proto](#api_listing_taxonomy-proto)
+    - [AttributeSpec](#listing_api-AttributeSpec)
+    - [Category](#listing_api-Category)
+    - [ProductType](#listing_api-ProductType)
+    - [QualityAttributeSpec](#listing_api-QualityAttributeSpec)
+  
+    - [AttributeSpec.Classification](#listing_api-AttributeSpec-Classification)
+    - [AttributeSpec.Level](#listing_api-AttributeSpec-Level)
+    - [AttributeSpec.Type](#listing_api-AttributeSpec-Type)
+    - [QualityAttributeSpec.Usage](#listing_api-QualityAttributeSpec-Usage)
+  
+- [api/listing/taxonomy_service.proto](#api_listing_taxonomy_service-proto)
+    - [AttributeSpecRequest](#listing_api-AttributeSpecRequest)
+    - [CreateAttributeSpecRequest](#listing_api-CreateAttributeSpecRequest)
+    - [CreateCategoryRequest](#listing_api-CreateCategoryRequest)
+    - [CreateCategoryResponse](#listing_api-CreateCategoryResponse)
+    - [CreateProductTypeRequest](#listing_api-CreateProductTypeRequest)
+    - [CreateProductTypeResponse](#listing_api-CreateProductTypeResponse)
+    - [CreateQualityAttributeSpecRequest](#listing_api-CreateQualityAttributeSpecRequest)
+    - [DeleteAttributeSpecRequest](#listing_api-DeleteAttributeSpecRequest)
+    - [DeleteAttributeSpecResponse](#listing_api-DeleteAttributeSpecResponse)
+    - [DeleteProductTypeRequest](#listing_api-DeleteProductTypeRequest)
+    - [DeleteProductTypeResponse](#listing_api-DeleteProductTypeResponse)
+    - [DeleteQualityAttributeSpecRequest](#listing_api-DeleteQualityAttributeSpecRequest)
+    - [DeleteQualityAttributeSpecResponse](#listing_api-DeleteQualityAttributeSpecResponse)
+    - [ListCategoriesRequest](#listing_api-ListCategoriesRequest)
+    - [ListCategoriesResponse](#listing_api-ListCategoriesResponse)
+    - [ListProductTypesRequest](#listing_api-ListProductTypesRequest)
+    - [ListProductTypesResponse](#listing_api-ListProductTypesResponse)
+    - [ListQualityAttributeSpecsRequest](#listing_api-ListQualityAttributeSpecsRequest)
+    - [ListQualityAttributeSpecsResponse](#listing_api-ListQualityAttributeSpecsResponse)
+    - [UpdateAttributeSpecRequest](#listing_api-UpdateAttributeSpecRequest)
+    - [UpdateCategoryRequest](#listing_api-UpdateCategoryRequest)
+    - [UpdateCategoryResponse](#listing_api-UpdateCategoryResponse)
+    - [UpdateQualityAttributeSpecRequest](#listing_api-UpdateQualityAttributeSpecRequest)
+  
+    - [TaxonomyService](#listing_api-TaxonomyService)
+  
 - [Scalar Value Types](#scalar-value-types)
 
 
@@ -745,6 +783,559 @@ Submission represents specific data sent to a channel for a particular SKU
  
 
  
+
+ 
+
+
+
+<a name="api_listing_taxonomy-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/listing/taxonomy.proto
+
+
+
+<a name="listing_api-AttributeSpec"></a>
+
+### AttributeSpec
+AttributeSpec is the specification of an attribute within a Category on your
+channel.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| attribute_spec_id | [string](#string) |  | This is the ID that will be used when retrieving listing data or submitting error to Zentail. It should reflect whatever meaningful identifier can be used to ingest this attribute into your system. In the past we have seen it be a numeric identifier or an xpath/jsonpath string |
+| display_name | [string](#string) |  | Human-readable name for the attribute. Used for display purposes only. |
+| type | [AttributeSpec.Type](#listing_api-AttributeSpec-Type) |  |  |
+| valid_values | [string](#string) | repeated | If the type is SELECT or MULTI_SELECT, provide the valid values here |
+| valid_units | [string](#string) | repeated | If the type is NUMERIC_WITH_UNITS, provide the valid units here |
+| unit | [string](#string) |  | Optional, used to specify the unit of the numeric value when the type is TYPE_NUMERIC This will allow Zentail to convert values with units in Zentail to a single numeric value if your channel does not support units |
+| level | [AttributeSpec.Level](#listing_api-AttributeSpec-Level) |  |  |
+| classification | [AttributeSpec.Classification](#listing_api-AttributeSpec-Classification) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Category"></a>
+
+### Category
+Category provides a (usually) high-level classification for a Listing.
+Categories can be arranged in a tree-like structure with parent and
+child categories. The category will often be a crucial piece of
+information about how the data is structured when sending to the
+channel. For example, on Amazon it dictates which path to take down
+the XSD when constructing feed messages. An example category on Amazon
+would be Clothing.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| channel_category_id | [string](#string) |  | The ID of this category defined by your system |
+| parent_category_id | [string](#string) |  | References another Category&#39;s id as this Category&#39;s parent, can be empty for top-level categories |
+| display_name | [string](#string) |  | A user-friendly name for the category |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-ProductType"></a>
+
+### ProductType
+ProductType are detailed classifications dictated by the channel.
+They should be at least as specific as the Category.
+Generally they should be more specific than the Category.
+Product Types are used to specify which attributes are required and
+recommended for a given Listing.
+If this is not a concept in your system, you should create a product type for
+each category.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category_id | [string](#string) |  |  |
+| channel_product_type_id | [string](#string) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-QualityAttributeSpec"></a>
+
+### QualityAttributeSpec
+QualityAttributeSpec provides a connection between a ProductType
+and an AttributeSpec. If a Quality Attribute Spec exists for an
+AttributeSpec in a particular ProductType, that Spec is either
+Recommended or Required in that ProductType (and the Quality
+Attribute Spec will indicate which it is).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| attribute_spec_id | [string](#string) |  |  |
+| usage | [QualityAttributeSpec.Usage](#listing_api-QualityAttributeSpec-Usage) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+ 
+
+
+<a name="listing_api-AttributeSpec-Classification"></a>
+
+### AttributeSpec.Classification
+Classification specifies whether this AttributeSpec relates to
+Product, Inventory, or Pricing data
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| CLASSIFICATION_UNSPECIFIED | 0 |  |
+| CLASSIFICATION_PRODUCT | 1 |  |
+| CLASSIFICATION_INVENTORY | 2 |  |
+| CLASSIFICATION_PRICING | 3 |  |
+| CLASSIFICATION_LOGISTICS | 4 |  |
+| CLASSIFICATION_IDENTIFIER | 5 |  |
+
+
+
+<a name="listing_api-AttributeSpec-Level"></a>
+
+### AttributeSpec.Level
+Level specifies whether this AttributeSpec should be rendered
+on the Listing-level or the Variant-level
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| LEVEL_UNSPECIFIED | 0 |  |
+| LEVEL_LISTING | 1 |  |
+| LEVEL_VARIANT | 2 |  |
+
+
+
+<a name="listing_api-AttributeSpec-Type"></a>
+
+### AttributeSpec.Type
+Type specifies what form the related attribute should be rendered into
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| TYPE_UNSPECIFIED | 0 |  |
+| TYPE_TEXT | 1 |  |
+| TYPE_SELECT | 2 |  |
+| TYPE_NUMERIC | 3 |  |
+| TYPE_NUMERIC_WITH_UNITS | 4 |  |
+| TYPE_MULTI_TEXT | 5 |  |
+| TYPE_MULTI_SELECT | 6 |  |
+| TYPE_MONEY | 7 |  |
+
+
+
+<a name="listing_api-QualityAttributeSpec-Usage"></a>
+
+### QualityAttributeSpec.Usage
+Usage indicates if the spec is required or just recommended
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| USAGE_UNSPECIFIED | 0 |  |
+| USAGE_REQUIRED | 1 |  |
+| USAGE_RECOMMENDED | 2 |  |
+
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="api_listing_taxonomy_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/listing/taxonomy_service.proto
+
+
+
+<a name="listing_api-AttributeSpecRequest"></a>
+
+### AttributeSpecRequest
+AttributeSpecRequest is used to retrieve a single Attribute Spec
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category_id | [string](#string) |  |  |
+| attribute_spec_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-CreateAttributeSpecRequest"></a>
+
+### CreateAttributeSpecRequest
+CreateAttributeSpecRequest is used to create a new AttributeSpec
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category_id | [string](#string) |  |  |
+| attribute_spec | [AttributeSpec](#listing_api-AttributeSpec) |  |  |
+
+
+
+
+
+
+<a name="listing_api-CreateCategoryRequest"></a>
+
+### CreateCategoryRequest
+CreateCategoryRequest will create a new Category
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category | [Category](#listing_api-Category) |  |  |
+
+
+
+
+
+
+<a name="listing_api-CreateCategoryResponse"></a>
+
+### CreateCategoryResponse
+CreateCategoryResponse returns the newly created Category
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category | [Category](#listing_api-Category) |  |  |
+
+
+
+
+
+
+<a name="listing_api-CreateProductTypeRequest"></a>
+
+### CreateProductTypeRequest
+CreateProductTypeRequest is used to create a new ProductType
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| product_type | [ProductType](#listing_api-ProductType) |  |  |
+
+
+
+
+
+
+<a name="listing_api-CreateProductTypeResponse"></a>
+
+### CreateProductTypeResponse
+CreateProductTypeResponse returns the newly created ProductType
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| product_type | [ProductType](#listing_api-ProductType) |  |  |
+
+
+
+
+
+
+<a name="listing_api-CreateQualityAttributeSpecRequest"></a>
+
+### CreateQualityAttributeSpecRequest
+CreateQualityAttributeSpecRequest is used to create a new
+QualityAttributeSpec
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| product_type_id | [string](#string) |  |  |
+| category_id | [string](#string) |  |  |
+| quality_attribute_spec | [QualityAttributeSpec](#listing_api-QualityAttributeSpec) |  |  |
+
+
+
+
+
+
+<a name="listing_api-DeleteAttributeSpecRequest"></a>
+
+### DeleteAttributeSpecRequest
+DeleteAttributeSpecRequest is used to Delete an AttributeSpec
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category_id | [string](#string) |  |  |
+| attribute_spec_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-DeleteAttributeSpecResponse"></a>
+
+### DeleteAttributeSpecResponse
+DeleteAttributeSpecResponse is returned after deleting an AttributeSpec
+
+
+
+
+
+
+<a name="listing_api-DeleteProductTypeRequest"></a>
+
+### DeleteProductTypeRequest
+DeleteProductTypeRequest is used to delete an existing ProductType
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| product_type_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-DeleteProductTypeResponse"></a>
+
+### DeleteProductTypeResponse
+DeleteProductTypeResponse is returned by the DeleteProduct type action
+
+
+
+
+
+
+<a name="listing_api-DeleteQualityAttributeSpecRequest"></a>
+
+### DeleteQualityAttributeSpecRequest
+DeleteQualityAttributeSpecRequest is used to delete a QualityAttributeSpec
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| attribute_spec_id | [string](#string) |  |  |
+| product_type_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-DeleteQualityAttributeSpecResponse"></a>
+
+### DeleteQualityAttributeSpecResponse
+DeleteQualityAttributeSpecResponse is returned after deleting a
+QualityAttributeSpec
+
+
+
+
+
+
+<a name="listing_api-ListCategoriesRequest"></a>
+
+### ListCategoriesRequest
+ListCategoriesRequest is used to request a list of categories
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| parent_category_id | [string](#string) |  | Optional - The category ID to search under, if null will return only top-level categories. |
+
+
+
+
+
+
+<a name="listing_api-ListCategoriesResponse"></a>
+
+### ListCategoriesResponse
+ListCategoriesResponse contains the list of categories
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| categories | [Category](#listing_api-Category) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-ListProductTypesRequest"></a>
+
+### ListProductTypesRequest
+ListProductTypesRequest is used to send the ListProductTypes request
+
+
+
+
+
+
+<a name="listing_api-ListProductTypesResponse"></a>
+
+### ListProductTypesResponse
+ListProductTypesResponse contains all of the product types returned
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| product_types | [ProductType](#listing_api-ProductType) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-ListQualityAttributeSpecsRequest"></a>
+
+### ListQualityAttributeSpecsRequest
+ListQualityAttributeSpecsRequest is used to request all of the quality
+attribute specs in the given ProductType
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| product_type_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-ListQualityAttributeSpecsResponse"></a>
+
+### ListQualityAttributeSpecsResponse
+ListQualityAttributeSpecsResponse contains all of the quality attribute specs
+in the requested ProductType
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| quality_attribute_specs | [QualityAttributeSpec](#listing_api-QualityAttributeSpec) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-UpdateAttributeSpecRequest"></a>
+
+### UpdateAttributeSpecRequest
+UpdateAttributeSpecRequest is used to update an existing AttributeSpec
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category_id | [string](#string) |  |  |
+| attribute_spec | [AttributeSpec](#listing_api-AttributeSpec) |  |  |
+
+
+
+
+
+
+<a name="listing_api-UpdateCategoryRequest"></a>
+
+### UpdateCategoryRequest
+UpdateCategoryRequest will update the category with the matching
+channel_category_id and parent_category_id
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category | [Category](#listing_api-Category) |  |  |
+
+
+
+
+
+
+<a name="listing_api-UpdateCategoryResponse"></a>
+
+### UpdateCategoryResponse
+UpdateCategoryResponse will return the updated category
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category | [Category](#listing_api-Category) |  |  |
+
+
+
+
+
+
+<a name="listing_api-UpdateQualityAttributeSpecRequest"></a>
+
+### UpdateQualityAttributeSpecRequest
+UpdateQualityAttributeSpecRequest will update the QualityAttributeSpec
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| product_type_id | [string](#string) |  |  |
+| category_id | [string](#string) |  |  |
+| quality_attribute_spec | [QualityAttributeSpec](#listing_api-QualityAttributeSpec) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="listing_api-TaxonomyService"></a>
+
+### TaxonomyService
+TaxonomyService provides a service for managing the Taxonomy data
+for a Listing integration.
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| ListCategories | [ListCategoriesRequest](#listing_api-ListCategoriesRequest) | [ListCategoriesResponse](#listing_api-ListCategoriesResponse) | ListCategories will return a list of all categories. If a parent_category_id is provided, only categories under that parent will be returned |
+| CreateCategory | [CreateCategoryRequest](#listing_api-CreateCategoryRequest) | [CreateCategoryResponse](#listing_api-CreateCategoryResponse) | CreateCategory will create a new Category |
+| UpdateCategory | [UpdateCategoryRequest](#listing_api-UpdateCategoryRequest) | [UpdateCategoryResponse](#listing_api-UpdateCategoryResponse) | UpdateCategory will update the Category with the given ID |
+| ListProductTypes | [ListProductTypesRequest](#listing_api-ListProductTypesRequest) | [ListProductTypesResponse](#listing_api-ListProductTypesResponse) | ListProductTypes will return all product types |
+| CreateProductType | [CreateProductTypeRequest](#listing_api-CreateProductTypeRequest) | [CreateProductTypeResponse](#listing_api-CreateProductTypeResponse) | CreateProductType will create a new ProductType |
+| DeleteProductType | [DeleteProductTypeRequest](#listing_api-DeleteProductTypeRequest) | [DeleteProductTypeResponse](#listing_api-DeleteProductTypeResponse) | DeleteProductType will delete the ProductType with the given ID |
+| AttributeSpec | [AttributeSpecRequest](#listing_api-AttributeSpecRequest) | [AttributeSpec](#listing_api-AttributeSpec) | AttributeSpec can be used to retrieve a single AttributeSpec |
+| CreateAttributeSpec | [CreateAttributeSpecRequest](#listing_api-CreateAttributeSpecRequest) | [AttributeSpec](#listing_api-AttributeSpec) | CreateAttributeSpec will create a new AttributeSpec |
+| UpdateAttributeSpec | [UpdateAttributeSpecRequest](#listing_api-UpdateAttributeSpecRequest) | [AttributeSpec](#listing_api-AttributeSpec) | UpdateAttributeSpec will update the AttributeSpec with the given category_id and attribute_spec_id |
+| DeleteAttributeSpec | [DeleteAttributeSpecRequest](#listing_api-DeleteAttributeSpecRequest) | [DeleteAttributeSpecResponse](#listing_api-DeleteAttributeSpecResponse) | DeleteAttributeSpec will delete the AttributeSpec with the given category_id and attribute_spec_id |
+| ListQualityAttributeSpecs | [ListQualityAttributeSpecsRequest](#listing_api-ListQualityAttributeSpecsRequest) | [ListQualityAttributeSpecsResponse](#listing_api-ListQualityAttributeSpecsResponse) | ListQualityAttributeSpecs will return all quality attribute specs |
+| CreateQualityAttributeSpec | [CreateQualityAttributeSpecRequest](#listing_api-CreateQualityAttributeSpecRequest) | [QualityAttributeSpec](#listing_api-QualityAttributeSpec) | CreateQualityAttributeSpec will create a new QualityAttributeSpec |
+| UpdateQualityAttributeSpec | [UpdateQualityAttributeSpecRequest](#listing_api-UpdateQualityAttributeSpecRequest) | [QualityAttributeSpec](#listing_api-QualityAttributeSpec) | UpdateQualityAttributeSpec will update the QualityAttributeSpec with the given product_type_id, category_id, and attribute_spec_id |
+| DeleteQualityAttributeSpec | [DeleteQualityAttributeSpecRequest](#listing_api-DeleteQualityAttributeSpecRequest) | [DeleteQualityAttributeSpecResponse](#listing_api-DeleteQualityAttributeSpecResponse) | DeleteQualityAttributeSpec will delete the QualityAttributeSpec with the given product_type_id and attribute_spec_id |
 
  
 
