@@ -1,0 +1,454 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/listing/taxonomy_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "TaxonomyService",
+      "description": "Listing Taxonomy Service provides a service for managing the taxonomy data for a listing integration."
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v2/storefront/taxonomy/attribute_spec/{productTypeId}": {
+      "post": {
+        "summary": "CreateAttributeSpec will create a new AttributeSpec",
+        "operationId": "TaxonomyService_CreateAttributeSpec",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiAttributeSpec"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "productTypeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "attributeSpec": {
+                  "$ref": "#/definitions/listing_apiAttributeSpec"
+                }
+              },
+              "title": "CreateAttributeSpecRequest is used to create a new AttributeSpec"
+            }
+          }
+        ],
+        "tags": [
+          "TaxonomyService"
+        ]
+      },
+      "put": {
+        "summary": "UpdateAttributeSpec will update the AttributeSpec with the given\nproduct_type_id and attribute_spec_id",
+        "operationId": "TaxonomyService_UpdateAttributeSpec",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiAttributeSpec"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "productTypeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "attributeSpec": {
+                  "$ref": "#/definitions/listing_apiAttributeSpec"
+                }
+              },
+              "title": "UpdateAttributeSpecRequest is used to update an existing AttributeSpec"
+            }
+          }
+        ],
+        "tags": [
+          "TaxonomyService"
+        ]
+      }
+    },
+    "/v2/storefront/taxonomy/attribute_spec/{productTypeId}/{attributeSpecId}": {
+      "get": {
+        "summary": "AttributeSpec can be used to retrieve a single AttributeSpec",
+        "operationId": "TaxonomyService_AttributeSpec",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiAttributeSpec"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "productTypeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "attributeSpecId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TaxonomyService"
+        ]
+      },
+      "delete": {
+        "summary": "DeleteAttributeSpec will delete the AttributeSpec with the given\nproduct_type_id and attribute_spec_id",
+        "operationId": "TaxonomyService_DeleteAttributeSpec",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiDeleteAttributeSpecResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "productTypeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "attributeSpecId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TaxonomyService"
+        ]
+      }
+    },
+    "/v2/storefront/taxonomy/product_type": {
+      "get": {
+        "summary": "ListProductTypes will return all product types",
+        "operationId": "TaxonomyService_ListProductTypes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListProductTypesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "TaxonomyService"
+        ]
+      },
+      "post": {
+        "summary": "CreateProductType will create a new ProductType",
+        "operationId": "TaxonomyService_CreateProductType",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiCreateProductTypeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/listing_apiCreateProductTypeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TaxonomyService"
+        ]
+      }
+    },
+    "/v2/storefront/taxonomy/product_type/{productTypeId}": {
+      "delete": {
+        "summary": "DeleteProductType will delete the ProductType with the given ID",
+        "operationId": "TaxonomyService_DeleteProductType",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiDeleteProductTypeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "productTypeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TaxonomyService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AttributeSpecClassification": {
+      "type": "string",
+      "enum": [
+        "CLASSIFICATION_UNSPECIFIED",
+        "CLASSIFICATION_PRODUCT",
+        "CLASSIFICATION_INVENTORY",
+        "CLASSIFICATION_PRICING",
+        "CLASSIFICATION_LOGISTICS",
+        "CLASSIFICATION_IDENTIFIER"
+      ],
+      "default": "CLASSIFICATION_UNSPECIFIED",
+      "title": "Classification specifies whether this AttributeSpec relates to\nProduct, Inventory, or Pricing data"
+    },
+    "AttributeSpecLevel": {
+      "type": "string",
+      "enum": [
+        "LEVEL_UNSPECIFIED",
+        "LEVEL_LISTING",
+        "LEVEL_VARIANT"
+      ],
+      "default": "LEVEL_UNSPECIFIED",
+      "title": "Level specifies whether this AttributeSpec should be rendered\non the Listing-level or the Variant-level"
+    },
+    "AttributeSpecUsage": {
+      "type": "string",
+      "enum": [
+        "USAGE_UNSPECIFIED",
+        "USAGE_AVAILABLE",
+        "USAGE_REQUIRED",
+        "USAGE_RECOMMENDED"
+      ],
+      "default": "USAGE_UNSPECIFIED",
+      "title": "Usage indicates if the spec is required or just recommended"
+    },
+    "listing_apiAttributeSpec": {
+      "type": "object",
+      "properties": {
+        "attributeSpecId": {
+          "type": "string",
+          "title": "This is the ID that will be used when retrieving listing data or submitting\nerror to Zentail. It should reflect whatever meaningful identifier can be\nused to ingest this attribute into your system. In the past we have seen it\nbe a numeric identifier or an xpath/jsonpath string"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Human-readable name for the attribute. Used for display purposes only."
+        },
+        "type": {
+          "$ref": "#/definitions/listing_apiAttributeSpecType"
+        },
+        "validValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "If the type is SELECT or MULTI_SELECT, provide the valid values here"
+        },
+        "validUnits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "If the type is NUMERIC_WITH_UNITS, provide the valid units here"
+        },
+        "unit": {
+          "type": "string",
+          "title": "Optional, used to specify the unit of the numeric value when the type is\nTYPE_NUMERIC This will allow Zentail to convert values with units in\nZentail to a single numeric value if your channel does not support units"
+        },
+        "level": {
+          "$ref": "#/definitions/AttributeSpecLevel"
+        },
+        "classification": {
+          "$ref": "#/definitions/AttributeSpecClassification"
+        },
+        "usage": {
+          "$ref": "#/definitions/AttributeSpecUsage"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "AttributeSpec is the specification of an attribute within a Product Type on\nyour channel."
+    },
+    "listing_apiAttributeSpecType": {
+      "type": "string",
+      "enum": [
+        "TYPE_UNSPECIFIED",
+        "TYPE_TEXT",
+        "TYPE_SELECT",
+        "TYPE_NUMERIC",
+        "TYPE_NUMERIC_WITH_UNITS",
+        "TYPE_MULTI_TEXT",
+        "TYPE_MULTI_SELECT",
+        "TYPE_MONEY"
+      ],
+      "default": "TYPE_UNSPECIFIED",
+      "title": "Type specifies what form the related attribute should be rendered into"
+    },
+    "listing_apiCreateProductTypeRequest": {
+      "type": "object",
+      "properties": {
+        "productType": {
+          "$ref": "#/definitions/listing_apiProductType"
+        }
+      },
+      "title": "CreateProductTypeRequest is used to create a new ProductType"
+    },
+    "listing_apiCreateProductTypeResponse": {
+      "type": "object",
+      "properties": {
+        "productType": {
+          "$ref": "#/definitions/listing_apiProductType"
+        }
+      },
+      "title": "CreateProductTypeResponse returns the newly created ProductType"
+    },
+    "listing_apiDeleteAttributeSpecResponse": {
+      "type": "object",
+      "title": "DeleteAttributeSpecResponse is returned after deleting an AttributeSpec"
+    },
+    "listing_apiDeleteProductTypeResponse": {
+      "type": "object",
+      "title": "DeleteProductTypeResponse is returned by the DeleteProduct type action"
+    },
+    "listing_apiListProductTypesResponse": {
+      "type": "object",
+      "properties": {
+        "productTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiProductType"
+          }
+        }
+      },
+      "title": "ListProductTypesResponse contains all of the product types returned"
+    },
+    "listing_apiProductType": {
+      "type": "object",
+      "properties": {
+        "productTypeId": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "ProductType are detailed classifications dictated by the channel.\nThey should be at least as specific as the Category.\nGenerally they should be more specific than the Category.\nProduct Types are used to specify which attributes are required and\nrecommended for a given Listing.\nIf this is not a concept in your system, you should create a product type for\neach category."
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

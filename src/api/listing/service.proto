@@ -29,7 +29,7 @@ service ListingService {
   // Get retrieves a single listing by its ID
   rpc Get(GetRequest) returns (Listing) {
     option (google.api.http) = {
-      get: "/storefront/v2/listing/{listing_id}"
+      get: "/v2/storefront/listing/{listing_id}"
     };
   }
 
@@ -37,14 +37,14 @@ service ListingService {
   // SKU
   rpc GetBySKU(GetBySKURequest) returns (Listing) {
     option (google.api.http) = {
-      get: "/storefront/v2/listing/sku/{sku}"
+      get: "/v2/storefront/listing/sku/{sku}"
     };
   }
 
   // GetVariant retrieves a single variant by its SKU
   rpc GetVariant(GetVariantRequest) returns (Variant) {
     option (google.api.http) = {
-      get: "/storefront/v2/listing/variant/{sku}"
+      get: "/v2/storefront/listing/variant/{sku}"
     };
   }
 
@@ -56,7 +56,7 @@ service ListingService {
   // 2. No variants have a channel ID
   rpc ListNewListings(ListSinceRequest) returns (ListListingsResponse) {
     option (google.api.http) = {
-      get: "/storefront/v2/listing/new"
+      get: "/v2/storefront/listing/new"
     };
   }
 
@@ -69,7 +69,7 @@ service ListingService {
   // 3. Product Data is enabled for the Listing
   rpc ListUpdatedListings(ListSinceRequest) returns (ListListingsResponse) {
     option (google.api.http) = {
-      get: "/storefront/v2/listing/product_data/updated"
+      get: "/v2/storefront/listing/product_data/updated"
     };
   }
 
@@ -81,7 +81,7 @@ service ListingService {
   rpc ListVariantsWithUpdatedInventory(ListInventorySinceRequest)
       returns (ListVariantsResponse) {
     option (google.api.http) = {
-      get: "/storefront/v2/listing/variant/inventory/updated"
+      get: "/v2/storefront/listing/variant/inventory/updated"
     };
   }
 
@@ -93,7 +93,7 @@ service ListingService {
   rpc ListVariantsWithUpdatedPricing(ListSinceRequest)
       returns (ListVariantsResponse) {
     option (google.api.http) = {
-      get: "/storefront/v2/listing/variant/pricing/updated"
+      get: "/v2/storefront/listing/variant/pricing/updated"
     };
   }
 

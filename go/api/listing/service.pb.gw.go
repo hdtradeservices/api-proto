@@ -649,7 +649,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/Get", runtime.WithHTTPPathPattern("/storefront/v2/listing/{listing_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/Get", runtime.WithHTTPPathPattern("/v2/storefront/listing/{listing_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -672,7 +672,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/GetBySKU", runtime.WithHTTPPathPattern("/storefront/v2/listing/sku/{sku}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/GetBySKU", runtime.WithHTTPPathPattern("/v2/storefront/listing/sku/{sku}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -695,7 +695,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/GetVariant", runtime.WithHTTPPathPattern("/storefront/v2/listing/variant/{sku}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/GetVariant", runtime.WithHTTPPathPattern("/v2/storefront/listing/variant/{sku}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -718,7 +718,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/ListNewListings", runtime.WithHTTPPathPattern("/storefront/v2/listing/new"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/ListNewListings", runtime.WithHTTPPathPattern("/v2/storefront/listing/new"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -741,7 +741,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/ListUpdatedListings", runtime.WithHTTPPathPattern("/storefront/v2/listing/product_data/updated"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/ListUpdatedListings", runtime.WithHTTPPathPattern("/v2/storefront/listing/product_data/updated"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -764,7 +764,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/ListVariantsWithUpdatedInventory", runtime.WithHTTPPathPattern("/storefront/v2/listing/variant/inventory/updated"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/ListVariantsWithUpdatedInventory", runtime.WithHTTPPathPattern("/v2/storefront/listing/variant/inventory/updated"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -787,7 +787,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/ListVariantsWithUpdatedPricing", runtime.WithHTTPPathPattern("/storefront/v2/listing/variant/pricing/updated"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/ListVariantsWithUpdatedPricing", runtime.WithHTTPPathPattern("/v2/storefront/listing/variant/pricing/updated"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -964,7 +964,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/Get", runtime.WithHTTPPathPattern("/storefront/v2/listing/{listing_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/Get", runtime.WithHTTPPathPattern("/v2/storefront/listing/{listing_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -984,7 +984,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/GetBySKU", runtime.WithHTTPPathPattern("/storefront/v2/listing/sku/{sku}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/GetBySKU", runtime.WithHTTPPathPattern("/v2/storefront/listing/sku/{sku}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1004,7 +1004,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/GetVariant", runtime.WithHTTPPathPattern("/storefront/v2/listing/variant/{sku}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/GetVariant", runtime.WithHTTPPathPattern("/v2/storefront/listing/variant/{sku}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1024,7 +1024,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/ListNewListings", runtime.WithHTTPPathPattern("/storefront/v2/listing/new"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/ListNewListings", runtime.WithHTTPPathPattern("/v2/storefront/listing/new"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1044,7 +1044,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/ListUpdatedListings", runtime.WithHTTPPathPattern("/storefront/v2/listing/product_data/updated"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/ListUpdatedListings", runtime.WithHTTPPathPattern("/v2/storefront/listing/product_data/updated"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1064,7 +1064,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/ListVariantsWithUpdatedInventory", runtime.WithHTTPPathPattern("/storefront/v2/listing/variant/inventory/updated"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/ListVariantsWithUpdatedInventory", runtime.WithHTTPPathPattern("/v2/storefront/listing/variant/inventory/updated"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1084,7 +1084,7 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/ListVariantsWithUpdatedPricing", runtime.WithHTTPPathPattern("/storefront/v2/listing/variant/pricing/updated"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/ListVariantsWithUpdatedPricing", runtime.WithHTTPPathPattern("/v2/storefront/listing/variant/pricing/updated"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1204,19 +1204,19 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 }
 
 var (
-	pattern_ListingService_Get_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"storefront", "v2", "listing", "listing_id"}, ""))
+	pattern_ListingService_Get_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "storefront", "listing", "listing_id"}, ""))
 
-	pattern_ListingService_GetBySKU_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3}, []string{"storefront", "v2", "listing", "sku"}, ""))
+	pattern_ListingService_GetBySKU_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3}, []string{"v2", "storefront", "listing", "sku"}, ""))
 
-	pattern_ListingService_GetVariant_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"storefront", "v2", "listing", "variant", "sku"}, ""))
+	pattern_ListingService_GetVariant_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v2", "storefront", "listing", "variant", "sku"}, ""))
 
-	pattern_ListingService_ListNewListings_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"storefront", "v2", "listing", "new"}, ""))
+	pattern_ListingService_ListNewListings_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v2", "storefront", "listing", "new"}, ""))
 
-	pattern_ListingService_ListUpdatedListings_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"storefront", "v2", "listing", "product_data", "updated"}, ""))
+	pattern_ListingService_ListUpdatedListings_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"v2", "storefront", "listing", "product_data", "updated"}, ""))
 
-	pattern_ListingService_ListVariantsWithUpdatedInventory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"storefront", "v2", "listing", "variant", "inventory", "updated"}, ""))
+	pattern_ListingService_ListVariantsWithUpdatedInventory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"v2", "storefront", "listing", "variant", "inventory", "updated"}, ""))
 
-	pattern_ListingService_ListVariantsWithUpdatedPricing_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"storefront", "v2", "listing", "variant", "pricing", "updated"}, ""))
+	pattern_ListingService_ListVariantsWithUpdatedPricing_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"v2", "storefront", "listing", "variant", "pricing", "updated"}, ""))
 
 	pattern_ListingService_UpdateStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"v2", "storefront", "listing", "variant", "sku", "status"}, ""))
 

@@ -1,0 +1,133 @@
+syntax = "proto3";
+package listing_api;
+
+import "api/listing/taxonomy.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
+option php_generic_services = true;
+
+// TaxonomyService provides a service for managing the Taxonomy data
+// for a Listing integration.
+service TaxonomyService {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    name: "Listing Taxonomy Service",
+    // protolint:disable:next MAX_LINE_LENGTH
+    description: "Listing Taxonomy Service provides a service for managing the taxonomy data for a listing integration."
+  };
+
+  // ListProductTypes will return all product types
+  rpc ListProductTypes(ListProductTypesRequest)
+      returns (ListProductTypesResponse) {
+    option (google.api.http) = {
+      get: "/v2/storefront/taxonomy/product_type"
+    };
+  }
+
+  // CreateProductType will create a new ProductType
+  rpc CreateProductType(CreateProductTypeRequest)
+      returns (CreateProductTypeResponse) {
+    option (google.api.http) = {
+      post: "/v2/storefront/taxonomy/product_type",
+      body: "*"
+    };
+  }
+
+  // DeleteProductType will delete the ProductType with the given ID
+  rpc DeleteProductType(DeleteProductTypeRequest)
+      returns (DeleteProductTypeResponse) {
+    option (google.api.http) = {
+      delete: "/v2/storefront/taxonomy/product_type/{product_type_id}"
+    };
+  }
+
+  // AttributeSpec can be used to retrieve a single AttributeSpec
+  rpc AttributeSpec(AttributeSpecRequest) returns (listing_api.AttributeSpec) {
+    option (google.api.http) = {
+      get: "/v2/storefront/taxonomy/attribute_spec/{product_type_id}/{attribute_spec_id}"
+    };
+  }
+
+  // CreateAttributeSpec will create a new AttributeSpec
+  rpc CreateAttributeSpec(CreateAttributeSpecRequest)
+      returns (listing_api.AttributeSpec) {
+    option (google.api.http) = {
+      post: "/v2/storefront/taxonomy/attribute_spec/{product_type_id}",
+      body: "*"
+    };
+  }
+
+  // UpdateAttributeSpec will update the AttributeSpec with the given
+  // product_type_id and attribute_spec_id
+  rpc UpdateAttributeSpec(UpdateAttributeSpecRequest)
+      returns (listing_api.AttributeSpec) {
+    option (google.api.http) = {
+      put: "/v2/storefront/taxonomy/attribute_spec/{product_type_id}",
+      body: "*"
+    };
+  }
+
+  // DeleteAttributeSpec will delete the AttributeSpec with the given
+  // product_type_id and attribute_spec_id
+  rpc DeleteAttributeSpec(DeleteAttributeSpecRequest)
+      returns (DeleteAttributeSpecResponse) {
+    option (google.api.http) = {
+      delete: "/v2/storefront/taxonomy/attribute_spec/{product_type_id}/{attribute_spec_id}"
+    };
+  }
+}
+
+// ListProductTypesRequest is used to send the ListProductTypes request
+message ListProductTypesRequest {}
+
+// ListProductTypesResponse contains all of the product types returned
+message ListProductTypesResponse {
+  repeated ProductType product_types = 1;
+}
+
+// CreateProductTypeRequest is used to create a new ProductType
+message CreateProductTypeRequest {
+  ProductType product_type = 1;
+}
+
+// CreateProductTypeResponse returns the newly created ProductType
+message CreateProductTypeResponse {
+  ProductType product_type = 1;
+}
+
+// DeleteProductTypeRequest is used to delete an existing ProductType
+message DeleteProductTypeRequest {
+  string product_type_id = 1;
+}
+
+// DeleteProductTypeResponse is returned by the DeleteProduct type action
+message DeleteProductTypeResponse {}
+
+// AttributeSpecRequest is used to retrieve a single Attribute Spec
+message AttributeSpecRequest {
+  string product_type_id   = 1;
+  string attribute_spec_id = 2;
+}
+
+// CreateAttributeSpecRequest is used to create a new AttributeSpec
+message CreateAttributeSpecRequest {
+  string product_type_id       = 1;
+  AttributeSpec attribute_spec = 2;
+}
+
+// UpdateAttributeSpecRequest is used to update an existing AttributeSpec
+message UpdateAttributeSpecRequest {
+  string product_type_id       = 1;
+  AttributeSpec attribute_spec = 2;
+}
+
+// DeleteAttributeSpecRequest is used to Delete an AttributeSpec
+message DeleteAttributeSpecRequest {
+  string product_type_id   = 1;
+  string attribute_spec_id = 2;
+}
+
+// DeleteAttributeSpecResponse is returned after deleting an AttributeSpec
+message DeleteAttributeSpecResponse {}
+
