@@ -229,6 +229,7 @@ message UpdateStatusRequest {
   // Should be more specific than Listing.
   string channel_id  = 4;
   string listing_url = 5;
+  bool buyable       = 6;
 }
 
 // UpdateStatusResponse is empty

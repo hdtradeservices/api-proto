@@ -575,6 +575,7 @@ UpdateStatusRequest provides the status of a SKU
 | channel_status | [string](#string) |  |  |
 | channel_id | [string](#string) |  | The channel&#39;s ID for this particular SKU. Should be more specific than Listing. |
 | listing_url | [string](#string) |  |  |
+| buyable | [bool](#bool) |  |  |
 
 
 

@@ -27,6 +27,7 @@ with the following in the JSON body:
 | `status`  | `StandardStatus` | A standardized status that enables Zentail to take particular actions. See the models for the most up to date set of values |
 | `channelStatus` | `string` | A free-form status that reflects the status of the listing in your terms |
 | `channelId` | `string` | A unique identifier for this listing on your platform |
+| `buyable` | `boolean` | Set to true if the listing is available for purchase. This flag indicates to Zentail sellers that the product is available and sales should be expected. |
 | `listingURL` | `string` | (optional) A URL the seller can click to view the listing on your platform |
 
 When making this call, it will replace the current status for the given SKU.
