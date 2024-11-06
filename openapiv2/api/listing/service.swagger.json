@@ -465,6 +465,9 @@
                 },
                 "listingUrl": {
                   "type": "string"
+                },
+                "buyable": {
+                  "type": "boolean"
                 }
               },
               "title": "UpdateStatusRequest provides the status of a SKU"
