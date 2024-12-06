@@ -15,7 +15,7 @@ To find out about listings Zentail thinks should be created on your channel
 you can use this request:
 
 ```
-GET /storefront/v2/listing/new
+GET /v2/storefront/listing/new
 ```
 
 with the following parameters:
@@ -42,7 +42,7 @@ are not created.
 For updated listings, use this endpoint:
 
 ```
-GET /storefront/v2/listing/product_data/updated
+GET /v2/storefront/listing/product_data/updated
 ```
 
 with the following parameters:
