@@ -1,0 +1,105 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/orders/orders_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "OrdersService",
+      "description": "The Orders Service provides APIs for managing orders in Zentail for a sales channel / listing integration."
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v2/storefront/orders/cancel": {
+      "post": {
+        "summary": "CancelItems cancels items in an order.",
+        "operationId": "OrdersService_CancelItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/orders_apiCancelItemsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/orders_apiCancelItemsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrdersService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "orders_apiCancelItemsRequest": {
+      "type": "object",
+      "properties": {
+        "channelOrderId": {
+          "type": "string",
+          "title": "The order ID used by your channel when creating the order"
+        },
+        "cancelQuantities": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "int64"
+          },
+          "title": "A map of skus to quantities to cancel"
+        }
+      },
+      "description": "CancelItemsRequest is the request to cancel items in an order."
+    },
+    "orders_apiCancelItemsResponse": {
+      "type": "object",
+      "description": "CancelItemsResponse is the response to a CancelItems request."
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
