@@ -74,6 +74,13 @@
   
     - [TaxonomyService](#listing_api-TaxonomyService)
   
+- [api/orders/orders_service.proto](#api_orders_orders_service-proto)
+    - [CancelItemsRequest](#orders_api-CancelItemsRequest)
+    - [CancelItemsRequest.CancelQuantitiesEntry](#orders_api-CancelItemsRequest-CancelQuantitiesEntry)
+    - [CancelItemsResponse](#orders_api-CancelItemsResponse)
+  
+    - [OrdersService](#orders_api-OrdersService)
+  
 - [Scalar Value Types](#scalar-value-types)
 
 
@@ -1086,6 +1093,75 @@ for a Listing integration.
 | CreateAttributeSpec | [CreateAttributeSpecRequest](#listing_api-CreateAttributeSpecRequest) | [AttributeSpec](#listing_api-AttributeSpec) | CreateAttributeSpec will create a new AttributeSpec |
 | UpdateAttributeSpec | [UpdateAttributeSpecRequest](#listing_api-UpdateAttributeSpecRequest) | [AttributeSpec](#listing_api-AttributeSpec) | UpdateAttributeSpec will update the AttributeSpec with the given product_type_id and attribute_spec_id |
 | DeleteAttributeSpec | [DeleteAttributeSpecRequest](#listing_api-DeleteAttributeSpecRequest) | [DeleteAttributeSpecResponse](#listing_api-DeleteAttributeSpecResponse) | DeleteAttributeSpec will delete the AttributeSpec with the given product_type_id and attribute_spec_id |
+
+ 
+
+
+
+<a name="api_orders_orders_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/orders/orders_service.proto
+
+
+
+<a name="orders_api-CancelItemsRequest"></a>
+
+### CancelItemsRequest
+CancelItemsRequest is the request to cancel items in an order.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| channel_order_id | [string](#string) |  | The order ID used by your channel when creating the order |
+| cancel_quantities | [CancelItemsRequest.CancelQuantitiesEntry](#orders_api-CancelItemsRequest-CancelQuantitiesEntry) | repeated | A map of skus to quantities to cancel |
+
+
+
+
+
+
+<a name="orders_api-CancelItemsRequest-CancelQuantitiesEntry"></a>
+
+### CancelItemsRequest.CancelQuantitiesEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [int64](#int64) |  |  |
+
+
+
+
+
+
+<a name="orders_api-CancelItemsResponse"></a>
+
+### CancelItemsResponse
+CancelItemsResponse is the response to a CancelItems request.
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="orders_api-OrdersService"></a>
+
+### OrdersService
+OrdersService provides a service for managing sales order data
+for a Listing integration.
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| CancelItems | [CancelItemsRequest](#orders_api-CancelItemsRequest) | [CancelItemsResponse](#orders_api-CancelItemsResponse) | CancelItems cancels items in an order. |
 
  
 
