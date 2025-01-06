@@ -32,7 +32,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -71,7 +71,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -109,7 +109,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -128,19 +128,19 @@
     },
     "/v2/storefront/listing/submission": {
       "post": {
-        "summary": "ReplaceSubmissions replaces the submissions for a variant",
-        "operationId": "ListingService_ReplaceSubmissions",
+        "summary": "CreateSubmission replaces the submissions for a variant\nThis can be used at any stage, but is most recommended for the intitial\ncreation of a new submission. For updating submissions after creation\nsee UpdateSubmission",
+        "operationId": "ListingService_CreateSubmission",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/listing_apiReplaceSubmissionsResponse"
+              "$ref": "#/definitions/listing_apiCreateSubmissionResponse"
             }
           },
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -150,7 +150,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/listing_apiReplaceSubmissionsRequest"
+              "$ref": "#/definitions/listing_apiCreateSubmissionRequest"
             }
           }
         ],
@@ -173,7 +173,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -209,6 +209,71 @@
         ]
       }
     },
+    "/v2/storefront/listing/submission/{type}/{sku}": {
+      "put": {
+        "summary": "UpdateSubmission is used to move a submission to another status\nthis can be done when its actually submitted for ingestion and/or when the\ningestion is complete.",
+        "operationId": "ListingService_UpdateSubmission",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiSubmission"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "type",
+            "description": "the submission type used when creating the submission",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contentReceived": {
+                  "type": "string"
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "changedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "status": {
+                  "$ref": "#/definitions/listing_apiUpdateSubmissionRequestStatus"
+                }
+              },
+              "title": "UpdateSubmissionRequest is used to move a submission to another status"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/v2/storefront/listing/variant/inventory/updated": {
       "get": {
         "summary": "ListVariantsWithUpdatedInventory will return any variant that:",
@@ -224,7 +289,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -270,7 +335,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -308,7 +373,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -339,7 +404,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -384,7 +449,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -435,7 +500,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -493,7 +558,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
@@ -680,6 +745,24 @@
       },
       "title": "Pricing is a container for a list of pricing attributes as well as\nstructured information about scheduled sales"
     },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
     "listing_apiAttribute": {
       "type": "object",
       "properties": {
@@ -704,6 +787,30 @@
         }
       },
       "title": "Attribute has data that describes a Listing or a Listing's Variants"
+    },
+    "listing_apiCreateSubmissionRequest": {
+      "type": "object",
+      "properties": {
+        "submissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiSubmission"
+          }
+        }
+      },
+      "title": "CreateSubmissionRequest is used to replace all submissions for the given\ntype and sku"
+    },
+    "listing_apiCreateSubmissionResponse": {
+      "type": "object",
+      "properties": {
+        "submissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiSubmission"
+          }
+        }
+      },
+      "title": "CreateSubmissionResponse contains the submissions created"
     },
     "listing_apiError": {
       "type": "object",
@@ -800,30 +907,6 @@
       "type": "object",
       "title": "ReplaceErrorsResponse is empty"
     },
-    "listing_apiReplaceSubmissionsRequest": {
-      "type": "object",
-      "properties": {
-        "submissions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/listing_apiSubmission"
-          }
-        }
-      },
-      "title": "ReplaceSubmissionsRequest is used to replace all submissions for the given\ntype and sku"
-    },
-    "listing_apiReplaceSubmissionsResponse": {
-      "type": "object",
-      "properties": {
-        "submissions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/listing_apiSubmission"
-          }
-        }
-      },
-      "title": "ReplaceSubmissionsResponse contains the submissions created"
-    },
     "listing_apiSetInventorySubmissionDetailsResponse": {
       "type": "object",
       "title": "SetInventorySubmissionDetailsResponse is currently an empty response"
@@ -893,6 +976,16 @@
       "type": "object",
       "title": "UpdateStatusResponse is empty"
     },
+    "listing_apiUpdateSubmissionRequestStatus": {
+      "type": "string",
+      "enum": [
+        "STATUS_UNSPECIFIED",
+        "STATUS_SUBMITTED",
+        "STATUS_ACCEPTED",
+        "STATUS_REJECTED"
+      ],
+      "default": "STATUS_UNSPECIFIED"
+    },
     "listing_apiVariant": {
       "type": "object",
       "properties": {
@@ -936,24 +1029,6 @@
         }
       },
       "additionalProperties": {}
-    },
-    "rpcStatus": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
-          "type": "string"
-        },
-        "details": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/protobufAny"
-          }
-        }
-      }
     }
   }
 }

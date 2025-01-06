@@ -18,6 +18,8 @@
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
 - [api/listing/service.proto](#api_listing_service-proto)
+    - [CreateSubmissionRequest](#listing_api-CreateSubmissionRequest)
+    - [CreateSubmissionResponse](#listing_api-CreateSubmissionResponse)
     - [Error](#listing_api-Error)
     - [GetBySKURequest](#listing_api-GetBySKURequest)
     - [GetRequest](#listing_api-GetRequest)
@@ -28,18 +30,19 @@
     - [ListVariantsResponse](#listing_api-ListVariantsResponse)
     - [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest)
     - [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse)
-    - [ReplaceSubmissionsRequest](#listing_api-ReplaceSubmissionsRequest)
-    - [ReplaceSubmissionsResponse](#listing_api-ReplaceSubmissionsResponse)
     - [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest)
     - [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse)
     - [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest)
     - [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse)
     - [UpdateStatusRequest](#listing_api-UpdateStatusRequest)
     - [UpdateStatusResponse](#listing_api-UpdateStatusResponse)
+    - [UpdateSubmissionRequest](#listing_api-UpdateSubmissionRequest)
+    - [UpdateSubmissionRequest.MetadataEntry](#listing_api-UpdateSubmissionRequest-MetadataEntry)
   
     - [Error.Severity](#listing_api-Error-Severity)
     - [Error.Type](#listing_api-Error-Type)
     - [StandardStatus](#listing_api-StandardStatus)
+    - [UpdateSubmissionRequest.Status](#listing_api-UpdateSubmissionRequest-Status)
   
     - [ListingService](#listing_api-ListingService)
   
@@ -329,6 +332,37 @@ structured information about scheduled sales
 
 
 
+<a name="listing_api-CreateSubmissionRequest"></a>
+
+### CreateSubmissionRequest
+CreateSubmissionRequest is used to replace all submissions for the given
+type and sku
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| submissions | [Submission](#listing_api-Submission) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-CreateSubmissionResponse"></a>
+
+### CreateSubmissionResponse
+CreateSubmissionResponse contains the submissions created
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| submissions | [Submission](#listing_api-Submission) | repeated |  |
+
+
+
+
+
+
 <a name="listing_api-Error"></a>
 
 ### Error
@@ -484,37 +518,6 @@ ReplaceErrorsResponse is empty
 
 
 
-<a name="listing_api-ReplaceSubmissionsRequest"></a>
-
-### ReplaceSubmissionsRequest
-ReplaceSubmissionsRequest is used to replace all submissions for the given
-type and sku
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| submissions | [Submission](#listing_api-Submission) | repeated |  |
-
-
-
-
-
-
-<a name="listing_api-ReplaceSubmissionsResponse"></a>
-
-### ReplaceSubmissionsResponse
-ReplaceSubmissionsResponse contains the submissions created
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| submissions | [Submission](#listing_api-Submission) | repeated |  |
-
-
-
-
-
-
 <a name="listing_api-SetInventorySubmissionDetailsRequest"></a>
 
 ### SetInventorySubmissionDetailsRequest
@@ -598,6 +601,42 @@ UpdateStatusResponse is empty
 
 
 
+
+<a name="listing_api-UpdateSubmissionRequest"></a>
+
+### UpdateSubmissionRequest
+UpdateSubmissionRequest is used to move a submission to another status
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sku | [string](#string) |  |  |
+| type | [string](#string) |  | the submission type used when creating the submission |
+| content_received | [string](#string) |  |  |
+| metadata | [UpdateSubmissionRequest.MetadataEntry](#listing_api-UpdateSubmissionRequest-MetadataEntry) | repeated |  |
+| changed_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| status | [UpdateSubmissionRequest.Status](#listing_api-UpdateSubmissionRequest-Status) |  |  |
+
+
+
+
+
+
+<a name="listing_api-UpdateSubmissionRequest-MetadataEntry"></a>
+
+### UpdateSubmissionRequest.MetadataEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [string](#string) |  |  |
+
+
+
+
+
  
 
 
@@ -644,6 +683,20 @@ StandardStatus is the standardized status of a listing as defined by Zentail
 | STANDARD_STATUS_RETIRED | 4 |  |
 
 
+
+<a name="listing_api-UpdateSubmissionRequest-Status"></a>
+
+### UpdateSubmissionRequest.Status
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| STATUS_UNSPECIFIED | 0 |  |
+| STATUS_SUBMITTED | 1 |  |
+| STATUS_ACCEPTED | 2 |  |
+| STATUS_REJECTED | 3 |  |
+
+
  
 
  
@@ -686,7 +739,8 @@ Zentail.
 | UpdateStatus | [UpdateStatusRequest](#listing_api-UpdateStatusRequest) | [UpdateStatusResponse](#listing_api-UpdateStatusResponse) | UpdateStatus updates the status of a listing |
 | UpdateChannelListingID | [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest) | [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse) | UpdateChannelListingID updates the channel ID for the listing |
 | ReplaceErrors | [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest) | [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse) | ReplaceErrors replaces the errors for a variant |
-| ReplaceSubmissions | [ReplaceSubmissionsRequest](#listing_api-ReplaceSubmissionsRequest) | [ReplaceSubmissionsResponse](#listing_api-ReplaceSubmissionsResponse) | ReplaceSubmissions replaces the submissions for a variant |
+| CreateSubmission | [CreateSubmissionRequest](#listing_api-CreateSubmissionRequest) | [CreateSubmissionResponse](#listing_api-CreateSubmissionResponse) | CreateSubmission replaces the submissions for a variant This can be used at any stage, but is most recommended for the intitial creation of a new submission. For updating submissions after creation see UpdateSubmission |
+| UpdateSubmission | [UpdateSubmissionRequest](#listing_api-UpdateSubmissionRequest) | [Submission](#listing_api-Submission) | UpdateSubmission is used to move a submission to another status this can be done when its actually submitted for ingestion and/or when the ingestion is complete. |
 | SetInventorySubmissionDetails | [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest) | [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse) | SetInventorySubmissionDetails is used to set the inventory details for a given submission |
 
  

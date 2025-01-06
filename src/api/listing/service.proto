@@ -122,11 +122,24 @@ service ListingService {
     };
   }
 
-  // ReplaceSubmissions replaces the submissions for a variant
-  rpc ReplaceSubmissions(ReplaceSubmissionsRequest)
-      returns (ReplaceSubmissionsResponse) {
+  // CreateSubmission replaces the submissions for a variant
+  // This can be used at any stage, but is most recommended for the intitial
+  // creation of a new submission. For updating submissions after creation
+  // see UpdateSubmission
+  rpc CreateSubmission(CreateSubmissionRequest)
+      returns (CreateSubmissionResponse) {
     option (google.api.http) = {
       post: "/v2/storefront/listing/submission"
+      body: "*"
+    };
+  }
+
+  // UpdateSubmission is used to move a submission to another status
+  // this can be done when its actually submitted for ingestion and/or when the
+  // ingestion is complete.
+  rpc UpdateSubmission(UpdateSubmissionRequest) returns (Submission) {
+    option (google.api.http) = {
+      put: "/v2/storefront/listing/submission/{type}/{sku}"
       body: "*"
     };
   }
@@ -142,15 +155,34 @@ service ListingService {
   }
 }
 
-// ReplaceSubmissionsRequest is used to replace all submissions for the given
+// CreateSubmissionRequest is used to replace all submissions for the given
 // type and sku
-message ReplaceSubmissionsRequest {
+message CreateSubmissionRequest {
   repeated Submission submissions = 1;
 }
 
-// ReplaceSubmissionsResponse contains the submissions created
-message ReplaceSubmissionsResponse {
+// CreateSubmissionResponse contains the submissions created
+message CreateSubmissionResponse {
   repeated Submission submissions = 1;
+}
+
+// UpdateSubmissionRequest is used to move a submission to another status
+message UpdateSubmissionRequest {
+  string sku = 1;
+  // the submission type used when creating the submission
+  string type                          = 2;
+  string content_received              = 3;
+  map<string, string> metadata         = 4;
+  google.protobuf.Timestamp changed_at = 5;
+
+  enum Status {
+    STATUS_UNSPECIFIED = 0;
+    STATUS_SUBMITTED   = 1;
+    STATUS_ACCEPTED    = 2;
+    STATUS_REJECTED    = 3;
+  }
+
+  Status status = 6;
 }
 
 // SetInventorySubmissionDetailsRequest is used to create inventory submission
