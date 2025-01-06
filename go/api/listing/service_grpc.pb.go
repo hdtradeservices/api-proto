@@ -58,11 +58,11 @@ type ListingServiceClient interface {
 	UpdateChannelListingID(ctx context.Context, in *UpdateChannelListingIDRequest, opts ...grpc.CallOption) (*UpdateChannelListingIDResponse, error)
 	// ReplaceErrors replaces the errors for a variant
 	ReplaceErrors(ctx context.Context, in *ReplaceErrorsRequest, opts ...grpc.CallOption) (*ReplaceErrorsResponse, error)
-	// CreateSubmission replaces the submissions for a variant
+	// CreateSubmissions replaces the submissions for a variant
 	// This can be used at any stage, but is most recommended for the intitial
 	// creation of a new submission. For updating submissions after creation
 	// see UpdateSubmission
-	CreateSubmission(ctx context.Context, in *CreateSubmissionRequest, opts ...grpc.CallOption) (*CreateSubmissionResponse, error)
+	CreateSubmissions(ctx context.Context, in *CreateSubmissionsRequest, opts ...grpc.CallOption) (*CreateSubmissionsResponse, error)
 	// UpdateSubmission is used to move a submission to another status
 	// this can be done when its actually submitted for ingestion and/or when the
 	// ingestion is complete.
@@ -170,9 +170,9 @@ func (c *listingServiceClient) ReplaceErrors(ctx context.Context, in *ReplaceErr
 	return out, nil
 }
 
-func (c *listingServiceClient) CreateSubmission(ctx context.Context, in *CreateSubmissionRequest, opts ...grpc.CallOption) (*CreateSubmissionResponse, error) {
-	out := new(CreateSubmissionResponse)
-	err := c.cc.Invoke(ctx, "/listing_api.ListingService/CreateSubmission", in, out, opts...)
+func (c *listingServiceClient) CreateSubmissions(ctx context.Context, in *CreateSubmissionsRequest, opts ...grpc.CallOption) (*CreateSubmissionsResponse, error) {
+	out := new(CreateSubmissionsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/CreateSubmissions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -241,11 +241,11 @@ type ListingServiceServer interface {
 	UpdateChannelListingID(context.Context, *UpdateChannelListingIDRequest) (*UpdateChannelListingIDResponse, error)
 	// ReplaceErrors replaces the errors for a variant
 	ReplaceErrors(context.Context, *ReplaceErrorsRequest) (*ReplaceErrorsResponse, error)
-	// CreateSubmission replaces the submissions for a variant
+	// CreateSubmissions replaces the submissions for a variant
 	// This can be used at any stage, but is most recommended for the intitial
 	// creation of a new submission. For updating submissions after creation
 	// see UpdateSubmission
-	CreateSubmission(context.Context, *CreateSubmissionRequest) (*CreateSubmissionResponse, error)
+	CreateSubmissions(context.Context, *CreateSubmissionsRequest) (*CreateSubmissionsResponse, error)
 	// UpdateSubmission is used to move a submission to another status
 	// this can be done when its actually submitted for ingestion and/or when the
 	// ingestion is complete.
@@ -289,8 +289,8 @@ func (UnimplementedListingServiceServer) UpdateChannelListingID(context.Context,
 func (UnimplementedListingServiceServer) ReplaceErrors(context.Context, *ReplaceErrorsRequest) (*ReplaceErrorsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReplaceErrors not implemented")
 }
-func (UnimplementedListingServiceServer) CreateSubmission(context.Context, *CreateSubmissionRequest) (*CreateSubmissionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateSubmission not implemented")
+func (UnimplementedListingServiceServer) CreateSubmissions(context.Context, *CreateSubmissionsRequest) (*CreateSubmissionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSubmissions not implemented")
 }
 func (UnimplementedListingServiceServer) UpdateSubmission(context.Context, *UpdateSubmissionRequest) (*Submission, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateSubmission not implemented")
@@ -490,20 +490,20 @@ func _ListingService_ReplaceErrors_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ListingService_CreateSubmission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateSubmissionRequest)
+func _ListingService_CreateSubmissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSubmissionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ListingServiceServer).CreateSubmission(ctx, in)
+		return srv.(ListingServiceServer).CreateSubmissions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/listing_api.ListingService/CreateSubmission",
+		FullMethod: "/listing_api.ListingService/CreateSubmissions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ListingServiceServer).CreateSubmission(ctx, req.(*CreateSubmissionRequest))
+		return srv.(ListingServiceServer).CreateSubmissions(ctx, req.(*CreateSubmissionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -592,8 +592,8 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ListingService_ReplaceErrors_Handler,
 		},
 		{
-			MethodName: "CreateSubmission",
-			Handler:    _ListingService_CreateSubmission_Handler,
+			MethodName: "CreateSubmissions",
+			Handler:    _ListingService_CreateSubmissions_Handler,
 		},
 		{
 			MethodName: "UpdateSubmission",

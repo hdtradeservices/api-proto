@@ -122,12 +122,12 @@ service ListingService {
     };
   }
 
-  // CreateSubmission replaces the submissions for a variant
+  // CreateSubmissions replaces the submissions for a variant
   // This can be used at any stage, but is most recommended for the intitial
   // creation of a new submission. For updating submissions after creation
   // see UpdateSubmission
-  rpc CreateSubmission(CreateSubmissionRequest)
-      returns (CreateSubmissionResponse) {
+  rpc CreateSubmissions(CreateSubmissionsRequest)
+      returns (CreateSubmissionsResponse) {
     option (google.api.http) = {
       post: "/v2/storefront/listing/submission"
       body: "*"
@@ -155,14 +155,14 @@ service ListingService {
   }
 }
 
-// CreateSubmissionRequest is used to replace all submissions for the given
+// CreateSubmissionsRequest is used to replace all submissions for the given
 // type and sku
-message CreateSubmissionRequest {
+message CreateSubmissionsRequest {
   repeated Submission submissions = 1;
 }
 
-// CreateSubmissionResponse contains the submissions created
-message CreateSubmissionResponse {
+// CreateSubmissionsResponse contains the submissions created
+message CreateSubmissionsResponse {
   repeated Submission submissions = 1;
 }
 
