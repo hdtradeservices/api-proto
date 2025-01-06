@@ -7,6 +7,13 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 option go_package = "github.com/hdtradeservices/api-proto/go/api/orders";
 option php_generic_services = true;
 
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: { title: "Orders API";
+version: "v2";
+}
+}
+;
+
 // OrdersService provides a service for managing sales order data
 // for a Listing integration.
 service OrdersService {
