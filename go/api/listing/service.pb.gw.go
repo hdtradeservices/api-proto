@@ -535,8 +535,8 @@ func local_request_ListingService_ReplaceErrors_0(ctx context.Context, marshaler
 
 }
 
-func request_ListingService_CreateSubmission_0(ctx context.Context, marshaler runtime.Marshaler, client ListingServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateSubmissionRequest
+func request_ListingService_CreateSubmissions_0(ctx context.Context, marshaler runtime.Marshaler, client ListingServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq CreateSubmissionsRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -547,13 +547,13 @@ func request_ListingService_CreateSubmission_0(ctx context.Context, marshaler ru
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.CreateSubmission(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.CreateSubmissions(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_ListingService_CreateSubmission_0(ctx context.Context, marshaler runtime.Marshaler, server ListingServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateSubmissionRequest
+func local_request_ListingService_CreateSubmissions_0(ctx context.Context, marshaler runtime.Marshaler, server ListingServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq CreateSubmissionsRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -564,7 +564,7 @@ func local_request_ListingService_CreateSubmission_0(ctx context.Context, marsha
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.CreateSubmission(ctx, &protoReq)
+	msg, err := server.CreateSubmissions(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -961,18 +961,18 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 
 	})
 
-	mux.Handle("POST", pattern_ListingService_CreateSubmission_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ListingService_CreateSubmissions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/CreateSubmission", runtime.WithHTTPPathPattern("/v2/storefront/listing/submission"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/listing_api.ListingService/CreateSubmissions", runtime.WithHTTPPathPattern("/v2/storefront/listing/submission"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ListingService_CreateSubmission_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ListingService_CreateSubmissions_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -980,7 +980,7 @@ func RegisterListingServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 			return
 		}
 
-		forward_ListingService_CreateSubmission_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ListingService_CreateSubmissions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -1271,23 +1271,23 @@ func RegisterListingServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 
 	})
 
-	mux.Handle("POST", pattern_ListingService_CreateSubmission_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ListingService_CreateSubmissions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/CreateSubmission", runtime.WithHTTPPathPattern("/v2/storefront/listing/submission"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/listing_api.ListingService/CreateSubmissions", runtime.WithHTTPPathPattern("/v2/storefront/listing/submission"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ListingService_CreateSubmission_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ListingService_CreateSubmissions_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ListingService_CreateSubmission_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ListingService_CreateSubmissions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -1355,7 +1355,7 @@ var (
 
 	pattern_ListingService_ReplaceErrors_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"v2", "storefront", "listing", "variant", "sku", "errors"}, ""))
 
-	pattern_ListingService_CreateSubmission_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v2", "storefront", "listing", "submission"}, ""))
+	pattern_ListingService_CreateSubmissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v2", "storefront", "listing", "submission"}, ""))
 
 	pattern_ListingService_UpdateSubmission_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"v2", "storefront", "listing", "submission", "type", "sku"}, ""))
 
@@ -1383,7 +1383,7 @@ var (
 
 	forward_ListingService_ReplaceErrors_0 = runtime.ForwardResponseMessage
 
-	forward_ListingService_CreateSubmission_0 = runtime.ForwardResponseMessage
+	forward_ListingService_CreateSubmissions_0 = runtime.ForwardResponseMessage
 
 	forward_ListingService_UpdateSubmission_0 = runtime.ForwardResponseMessage
 

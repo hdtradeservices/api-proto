@@ -18,8 +18,8 @@
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
 - [api/listing/service.proto](#api_listing_service-proto)
-    - [CreateSubmissionRequest](#listing_api-CreateSubmissionRequest)
-    - [CreateSubmissionResponse](#listing_api-CreateSubmissionResponse)
+    - [CreateSubmissionsRequest](#listing_api-CreateSubmissionsRequest)
+    - [CreateSubmissionsResponse](#listing_api-CreateSubmissionsResponse)
     - [Error](#listing_api-Error)
     - [GetBySKURequest](#listing_api-GetBySKURequest)
     - [GetRequest](#listing_api-GetRequest)
@@ -332,10 +332,10 @@ structured information about scheduled sales
 
 
 
-<a name="listing_api-CreateSubmissionRequest"></a>
+<a name="listing_api-CreateSubmissionsRequest"></a>
 
-### CreateSubmissionRequest
-CreateSubmissionRequest is used to replace all submissions for the given
+### CreateSubmissionsRequest
+CreateSubmissionsRequest is used to replace all submissions for the given
 type and sku
 
 
@@ -348,10 +348,10 @@ type and sku
 
 
 
-<a name="listing_api-CreateSubmissionResponse"></a>
+<a name="listing_api-CreateSubmissionsResponse"></a>
 
-### CreateSubmissionResponse
-CreateSubmissionResponse contains the submissions created
+### CreateSubmissionsResponse
+CreateSubmissionsResponse contains the submissions created
 
 
 | Field | Type | Label | Description |
@@ -739,7 +739,7 @@ Zentail.
 | UpdateStatus | [UpdateStatusRequest](#listing_api-UpdateStatusRequest) | [UpdateStatusResponse](#listing_api-UpdateStatusResponse) | UpdateStatus updates the status of a listing |
 | UpdateChannelListingID | [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest) | [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse) | UpdateChannelListingID updates the channel ID for the listing |
 | ReplaceErrors | [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest) | [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse) | ReplaceErrors replaces the errors for a variant |
-| CreateSubmission | [CreateSubmissionRequest](#listing_api-CreateSubmissionRequest) | [CreateSubmissionResponse](#listing_api-CreateSubmissionResponse) | CreateSubmission replaces the submissions for a variant This can be used at any stage, but is most recommended for the intitial creation of a new submission. For updating submissions after creation see UpdateSubmission |
+| CreateSubmissions | [CreateSubmissionsRequest](#listing_api-CreateSubmissionsRequest) | [CreateSubmissionsResponse](#listing_api-CreateSubmissionsResponse) | CreateSubmissions replaces the submissions for a variant This can be used at any stage, but is most recommended for the intitial creation of a new submission. For updating submissions after creation see UpdateSubmission |
 | UpdateSubmission | [UpdateSubmissionRequest](#listing_api-UpdateSubmissionRequest) | [Submission](#listing_api-Submission) | UpdateSubmission is used to move a submission to another status this can be done when its actually submitted for ingestion and/or when the ingestion is complete. |
 | SetInventorySubmissionDetails | [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest) | [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse) | SetInventorySubmissionDetails is used to set the inventory details for a given submission |
 

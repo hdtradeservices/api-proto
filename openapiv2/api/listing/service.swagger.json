@@ -128,13 +128,13 @@
     },
     "/v2/storefront/listing/submission": {
       "post": {
-        "summary": "CreateSubmission replaces the submissions for a variant\nThis can be used at any stage, but is most recommended for the intitial\ncreation of a new submission. For updating submissions after creation\nsee UpdateSubmission",
-        "operationId": "ListingService_CreateSubmission",
+        "summary": "CreateSubmissions replaces the submissions for a variant\nThis can be used at any stage, but is most recommended for the intitial\ncreation of a new submission. For updating submissions after creation\nsee UpdateSubmission",
+        "operationId": "ListingService_CreateSubmissions",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/listing_apiCreateSubmissionResponse"
+              "$ref": "#/definitions/listing_apiCreateSubmissionsResponse"
             }
           },
           "default": {
@@ -150,7 +150,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/listing_apiCreateSubmissionRequest"
+              "$ref": "#/definitions/listing_apiCreateSubmissionsRequest"
             }
           }
         ],
@@ -788,7 +788,7 @@
       },
       "title": "Attribute has data that describes a Listing or a Listing's Variants"
     },
-    "listing_apiCreateSubmissionRequest": {
+    "listing_apiCreateSubmissionsRequest": {
       "type": "object",
       "properties": {
         "submissions": {
@@ -798,9 +798,9 @@
           }
         }
       },
-      "title": "CreateSubmissionRequest is used to replace all submissions for the given\ntype and sku"
+      "title": "CreateSubmissionsRequest is used to replace all submissions for the given\ntype and sku"
     },
-    "listing_apiCreateSubmissionResponse": {
+    "listing_apiCreateSubmissionsResponse": {
       "type": "object",
       "properties": {
         "submissions": {
@@ -810,7 +810,7 @@
           }
         }
       },
-      "title": "CreateSubmissionResponse contains the submissions created"
+      "title": "CreateSubmissionsResponse contains the submissions created"
     },
     "listing_apiError": {
       "type": "object",
