@@ -30,7 +30,7 @@ type CancelItemsRequest struct {
 
 	// The order ID used by your channel when creating the order
 	ChannelOrderId string `protobuf:"bytes,1,opt,name=channel_order_id,json=channelOrderId,proto3" json:"channel_order_id,omitempty"`
-	// A map of skus to quantities to cancel
+	// A map of line item IDs to quantities to cancel
 	CancelQuantities map[string]int64 `protobuf:"bytes,2,rep,name=cancel_quantities,json=cancelQuantities,proto3" json:"cancel_quantities,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
 }
 

@@ -37,7 +37,7 @@ message CancelItemsRequest {
   // The order ID used by your channel when creating the order
   string channel_order_id = 1;
 
-  // A map of skus to quantities to cancel
+  // A map of line item IDs to quantities to cancel
   map<string, int64> cancel_quantities = 2;
 }
 

@@ -1168,7 +1168,7 @@ CancelItemsRequest is the request to cancel items in an order.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | channel_order_id | [string](#string) |  | The order ID used by your channel when creating the order |
-| cancel_quantities | [CancelItemsRequest.CancelQuantitiesEntry](#orders_api-CancelItemsRequest-CancelQuantitiesEntry) | repeated | A map of skus to quantities to cancel |
+| cancel_quantities | [CancelItemsRequest.CancelQuantitiesEntry](#orders_api-CancelItemsRequest-CancelQuantitiesEntry) | repeated | A map of line item IDs to quantities to cancel |
 
 
 

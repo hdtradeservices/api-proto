@@ -83,7 +83,7 @@
             "type": "string",
             "format": "int64"
           },
-          "title": "A map of skus to quantities to cancel"
+          "title": "A map of line item IDs to quantities to cancel"
         }
       },
       "description": "CancelItemsRequest is the request to cancel items in an order."
