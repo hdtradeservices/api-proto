@@ -71,6 +71,22 @@ message AttributeSpec {
   }
   Usage usage = 9;
 
+  // Description is a human-readable description of the attribute
+  string description = 12;
+
+  // Examples is a string containing examples of valid values for the attribute
+  // these are just for human consumption and are strings not neccessarily
+  // valid attribute values
+  repeated string examples = 13;
+
+  // max unique items indicates the largest number of unique items that can be
+  // set for this attribute.
+  int64 max_unique_items = 14;
+
+  // suggested values is an array of values provided as an optional enumeration
+  // of specific values that are recommended for this attribute.
+  repeated string suggested_values = 15;
+
   google.protobuf.Timestamp updated_at = 10;
   google.protobuf.Timestamp created_at = 11;
 }
