@@ -357,6 +357,29 @@
         "usage": {
           "$ref": "#/definitions/AttributeSpecUsage"
         },
+        "description": {
+          "type": "string",
+          "title": "Description is a human-readable description of the attribute"
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Examples is a string containing examples of valid values for the attribute\nthese are just for human consumption and are strings not neccessarily\nvalid attribute values"
+        },
+        "maxUniqueItems": {
+          "type": "string",
+          "format": "int64",
+          "description": "max unique items indicates the largest number of unique items that can be\nset for this attribute."
+        },
+        "suggestedValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "suggested values is an array of values provided as an optional enumeration\nof specific values that are recommended for this attribute."
+        },
         "updatedAt": {
           "type": "string",
           "format": "date-time"

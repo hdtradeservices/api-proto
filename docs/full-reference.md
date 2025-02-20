@@ -861,6 +861,10 @@ your channel.
 | level | [AttributeSpec.Level](#listing_api-AttributeSpec-Level) |  |  |
 | classification | [AttributeSpec.Classification](#listing_api-AttributeSpec-Classification) |  |  |
 | usage | [AttributeSpec.Usage](#listing_api-AttributeSpec-Usage) |  |  |
+| description | [string](#string) |  | Description is a human-readable description of the attribute |
+| examples | [string](#string) | repeated | Examples is a string containing examples of valid values for the attribute these are just for human consumption and are strings not neccessarily valid attribute values |
+| max_unique_items | [int64](#int64) |  | max unique items indicates the largest number of unique items that can be set for this attribute. |
+| suggested_values | [string](#string) | repeated | suggested values is an array of values provided as an optional enumeration of specific values that are recommended for this attribute. |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
