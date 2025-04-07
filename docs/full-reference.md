@@ -6,8 +6,12 @@
 - [api/listing/listing.proto](#api_listing_listing-proto)
     - [Attribute](#listing_api-Attribute)
     - [Attribute.Money](#listing_api-Attribute-Money)
+    - [Attribute.MultiObject](#listing_api-Attribute-MultiObject)
+    - [Attribute.MultiObject.Item](#listing_api-Attribute-MultiObject-Item)
+    - [Attribute.MultiObject.Item.PropertiesEntry](#listing_api-Attribute-MultiObject-Item-PropertiesEntry)
     - [Attribute.MultiText](#listing_api-Attribute-MultiText)
     - [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits)
+    - [Attribute.Value](#listing_api-Attribute-Value)
     - [Listing](#listing_api-Listing)
     - [Listing.ProductData](#listing_api-Listing-ProductData)
     - [Variant](#listing_api-Variant)
@@ -55,6 +59,7 @@
   
 - [api/listing/taxonomy.proto](#api_listing_taxonomy-proto)
     - [AttributeSpec](#listing_api-AttributeSpec)
+    - [AttributeSpec.ObjectSpecEntry](#listing_api-AttributeSpec-ObjectSpecEntry)
     - [ProductType](#listing_api-ProductType)
   
     - [AttributeSpec.Classification](#listing_api-AttributeSpec-Classification)
@@ -109,6 +114,7 @@ Attribute has data that describes a Listing or a Listing&#39;s Variants
 | numeric_with_units_value | [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits) |  |  |
 | multi_text_value | [Attribute.MultiText](#listing_api-Attribute-MultiText) |  |  |
 | money_value | [Attribute.Money](#listing_api-Attribute-Money) |  |  |
+| multi_object_value | [Attribute.MultiObject](#listing_api-Attribute-MultiObject) |  |  |
 
 
 
@@ -125,6 +131,52 @@ Money supports values like with amount and currency_code
 | ----- | ---- | ----- | ----------- |
 | amount | [string](#string) |  |  |
 | currency_code | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Attribute-MultiObject"></a>
+
+### Attribute.MultiObject
+Object supports a set of keys and values
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| items | [Attribute.MultiObject.Item](#listing_api-Attribute-MultiObject-Item) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-Attribute-MultiObject-Item"></a>
+
+### Attribute.MultiObject.Item
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| properties | [Attribute.MultiObject.Item.PropertiesEntry](#listing_api-Attribute-MultiObject-Item-PropertiesEntry) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-Attribute-MultiObject-Item-PropertiesEntry"></a>
+
+### Attribute.MultiObject.Item.PropertiesEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [Attribute.Value](#listing_api-Attribute-Value) |  |  |
 
 
 
@@ -157,6 +209,26 @@ NumericWithUnits supports values like 1 lb
 | ----- | ---- | ----- | ----------- |
 | numeric | [double](#double) |  |  |
 | units | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Attribute-Value"></a>
+
+### Attribute.Value
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| text_value | [string](#string) |  |  |
+| numeric_value | [double](#double) |  |  |
+| numeric_with_units_value | [Attribute.NumericWithUnits](#listing_api-Attribute-NumericWithUnits) |  |  |
+| multi_text_value | [Attribute.MultiText](#listing_api-Attribute-MultiText) |  |  |
+| money_value | [Attribute.Money](#listing_api-Attribute-Money) |  |  |
+| multi_object_value | [Attribute.MultiObject](#listing_api-Attribute-MultiObject) |  |  |
 
 
 
@@ -857,6 +929,7 @@ your channel.
 | type | [AttributeSpec.Type](#listing_api-AttributeSpec-Type) |  |  |
 | valid_values | [string](#string) | repeated | If the type is SELECT or MULTI_SELECT, provide the valid values here |
 | valid_units | [string](#string) | repeated | If the type is NUMERIC_WITH_UNITS, provide the valid units here |
+| object_spec | [AttributeSpec.ObjectSpecEntry](#listing_api-AttributeSpec-ObjectSpecEntry) | repeated | The object_spec is used to specify the structure of an object. This is only used when the type is TYPE_MULTI_OBJECT. |
 | unit | [string](#string) |  | Optional, used to specify the unit of the numeric value when the type is TYPE_NUMERIC This will allow Zentail to convert values with units in Zentail to a single numeric value if your channel does not support units |
 | level | [AttributeSpec.Level](#listing_api-AttributeSpec-Level) |  |  |
 | classification | [AttributeSpec.Classification](#listing_api-AttributeSpec-Classification) |  |  |
@@ -867,6 +940,22 @@ your channel.
 | suggested_values | [string](#string) | repeated | suggested values is an array of values provided as an optional enumeration of specific values that are recommended for this attribute. |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-AttributeSpec-ObjectSpecEntry"></a>
+
+### AttributeSpec.ObjectSpecEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [AttributeSpec.Type](#listing_api-AttributeSpec-Type) |  |  |
 
 
 
@@ -945,6 +1034,7 @@ Type specifies what form the related attribute should be rendered into
 | TYPE_MULTI_TEXT | 5 |  |
 | TYPE_MULTI_SELECT | 6 |  |
 | TYPE_MONEY | 7 |  |
+| TYPE_MULTI_OBJECT | 8 |  |
 
 
 

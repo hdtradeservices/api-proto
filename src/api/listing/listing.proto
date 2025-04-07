@@ -8,51 +8,51 @@ option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
 // Variant is a representation of a specific SKU in a listing
 // LATER: comment this more
 message Variant {
-  string sku        = 1;
+  string sku = 1;
   string channel_id = 2;
 
   // Any Integration-level Settings will be merged
   // with Variant-level Settings to produce these Settings.
   map<string, string> settings = 3;
   // LATER: do we need desired_status / intended action?
-  Inventory inventory     = 4;
-  Attributes identifiers  = 8;
+  Inventory inventory = 4;
+  Attributes identifiers = 8;
   Attributes product_data = 5;
-  Pricing pricing         = 6;
-  Attributes logistics    = 7;
+  Pricing pricing = 6;
+  Attributes logistics = 7;
 
   // Inventory contains information about the availability of this variant
   message Inventory {
     bool enabled = 1;
     // total_quantity should be the sum of merchant_fulfillable_inventory
     // and storefront_fulfillable_quantity
-    int64 total_quantity                            = 2;
-    int64 merchant_fulfillable_quantity             = 3;
-    int64 storefront_fulfillable_quantity           = 4;
-    google.protobuf.Timestamp updated_at            = 5;
+    int64 total_quantity = 2;
+    int64 merchant_fulfillable_quantity = 3;
+    int64 storefront_fulfillable_quantity = 4;
+    google.protobuf.Timestamp updated_at = 5;
     google.protobuf.Timestamp updated_externally_at = 6;
   }
 
   // Attributes is a container for a list of attributes of a similar
   // classification
   message Attributes {
-    bool enabled                         = 1;
-    repeated Attribute attributes        = 2;
+    bool enabled = 1;
+    repeated Attribute attributes = 2;
     google.protobuf.Timestamp updated_at = 3;
   }
 
   // Pricing is a container for a list of pricing attributes as well as
   // structured information about scheduled sales
   message Pricing {
-    bool enabled                         = 1;
-    repeated Attribute attributes        = 2;
+    bool enabled = 1;
+    repeated Attribute attributes = 2;
     google.protobuf.Timestamp updated_at = 3;
-    repeated ScheduledSale sales         = 4;
+    repeated ScheduledSale sales = 4;
     message ScheduledSale {
-      double strike_through_price        = 1;
-      double sale_price                  = 2;
+      double strike_through_price = 1;
+      double sale_price = 2;
       google.protobuf.Timestamp start_at = 3;
-      google.protobuf.Timestamp end_at   = 4;
+      google.protobuf.Timestamp end_at = 4;
     }
   }
 }
@@ -60,18 +60,18 @@ message Variant {
 // Listing is a representation of a product to be sold on a Channel
 // LATER: comment this more
 message Listing {
-  string id                            = 1;
-  ProductData product_data             = 2;
-  repeated Variant variants            = 3;
+  string id = 1;
+  ProductData product_data = 2;
+  repeated Variant variants = 3;
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
 
   message ProductData {
-    bool enabled                     = 1;
-    string category_id               = 2;
-    string product_type_id           = 3;
+    bool enabled = 1;
+    string category_id = 2;
+    string product_type_id = 3;
     repeated string pivot_attributes = 4;
-    repeated Attribute attributes    = 5;
+    repeated Attribute attributes = 5;
   }
 }
 
@@ -82,26 +82,42 @@ message Attribute {
   // NumericWithUnits supports values like 1 lb
   message NumericWithUnits {
     double numeric = 1;
-    string units   = 2;
+    string units = 2;
   }
 
   // MultiText supports a value that has multiple sub-values
   // (e.g. bullet points)
-  message MultiText {
-    repeated string values = 1;
-  }
+  message MultiText { repeated string values = 1; }
 
   // Money supports values like with amount and currency_code
   message Money {
-    string amount        = 1;
+    string amount = 1;
     string currency_code = 2;
   }
 
+  // Object supports a set of keys and values
+  message MultiObject {
+    message Item { map<string, Value> properties = 1; }
+    repeated Item items = 1;
+  }
+
+  message Value {
+    oneof value {
+      string text_value = 1;
+      double numeric_value = 2;
+      NumericWithUnits numeric_with_units_value = 3;
+      MultiText multi_text_value = 4;
+      Money money_value = 5;
+      MultiObject multi_object_value = 6;
+    }
+  }
+
   oneof value {
-    string text_value                         = 2;
-    double numeric_value                      = 3;
+    string text_value = 2;
+    double numeric_value = 3;
     NumericWithUnits numeric_with_units_value = 4;
-    MultiText multi_text_value                = 5;
-    Money money_value                         = 6;
+    MultiText multi_text_value = 5;
+    Money money_value = 6;
+    MultiObject multi_object_value = 7;
   }
 }

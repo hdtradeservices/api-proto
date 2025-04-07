@@ -589,6 +589,18 @@
       },
       "title": "Money supports values like with amount and currency_code"
     },
+    "AttributeMultiObject": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MultiObjectItem"
+          }
+        }
+      },
+      "title": "Object supports a set of keys and values"
+    },
     "AttributeMultiText": {
       "type": "object",
       "properties": {
@@ -646,6 +658,17 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/listing_apiAttribute"
+          }
+        }
+      }
+    },
+    "MultiObjectItem": {
+      "type": "object",
+      "properties": {
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/listing_apiAttributeValue"
           }
         }
       }
@@ -784,9 +807,36 @@
         },
         "moneyValue": {
           "$ref": "#/definitions/AttributeMoney"
+        },
+        "multiObjectValue": {
+          "$ref": "#/definitions/AttributeMultiObject"
         }
       },
       "title": "Attribute has data that describes a Listing or a Listing's Variants"
+    },
+    "listing_apiAttributeValue": {
+      "type": "object",
+      "properties": {
+        "textValue": {
+          "type": "string"
+        },
+        "numericValue": {
+          "type": "number",
+          "format": "double"
+        },
+        "numericWithUnitsValue": {
+          "$ref": "#/definitions/AttributeNumericWithUnits"
+        },
+        "multiTextValue": {
+          "$ref": "#/definitions/AttributeMultiText"
+        },
+        "moneyValue": {
+          "$ref": "#/definitions/AttributeMoney"
+        },
+        "multiObjectValue": {
+          "$ref": "#/definitions/AttributeMultiObject"
+        }
+      }
     },
     "listing_apiCreateSubmissionsRequest": {
       "type": "object",
