@@ -344,6 +344,13 @@
           },
           "title": "If the type is NUMERIC_WITH_UNITS, provide the valid units here"
         },
+        "objectSpec": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/listing_apiAttributeSpecType"
+          },
+          "description": "The object_spec is used to specify the structure of an object.\nThis is only used when the type is TYPE_MULTI_OBJECT."
+        },
         "unit": {
           "type": "string",
           "title": "Optional, used to specify the unit of the numeric value when the type is\nTYPE_NUMERIC This will allow Zentail to convert values with units in\nZentail to a single numeric value if your channel does not support units"
@@ -401,7 +408,8 @@
         "TYPE_NUMERIC_WITH_UNITS",
         "TYPE_MULTI_TEXT",
         "TYPE_MULTI_SELECT",
-        "TYPE_MONEY"
+        "TYPE_MONEY",
+        "TYPE_MULTI_OBJECT"
       ],
       "default": "TYPE_UNSPECIFIED",
       "title": "Type specifies what form the related attribute should be rendered into"

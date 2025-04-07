@@ -19,14 +19,15 @@ message AttributeSpec {
 
   // Type specifies what form the related attribute should be rendered into
   enum Type {
-    TYPE_UNSPECIFIED        = 0;
-    TYPE_TEXT               = 1;
-    TYPE_SELECT             = 2;
-    TYPE_NUMERIC            = 3;
+    TYPE_UNSPECIFIED = 0;
+    TYPE_TEXT = 1;
+    TYPE_SELECT = 2;
+    TYPE_NUMERIC = 3;
     TYPE_NUMERIC_WITH_UNITS = 4;
-    TYPE_MULTI_TEXT         = 5;
-    TYPE_MULTI_SELECT       = 6;
-    TYPE_MONEY              = 7;
+    TYPE_MULTI_TEXT = 5;
+    TYPE_MULTI_SELECT = 6;
+    TYPE_MONEY = 7;
+    TYPE_MULTI_OBJECT = 8;
   }
   Type type = 3;
 
@@ -35,6 +36,10 @@ message AttributeSpec {
 
   // If the type is NUMERIC_WITH_UNITS, provide the valid units here
   repeated string valid_units = 5;
+
+  // The object_spec is used to specify the structure of an object.
+  // This is only used when the type is TYPE_MULTI_OBJECT.
+  map<string, Type> object_spec = 16;
 
   // Optional, used to specify the unit of the numeric value when the type is
   // TYPE_NUMERIC This will allow Zentail to convert values with units in
@@ -45,8 +50,8 @@ message AttributeSpec {
   // on the Listing-level or the Variant-level
   enum Level {
     LEVEL_UNSPECIFIED = 0;
-    LEVEL_LISTING     = 1;
-    LEVEL_VARIANT     = 2;
+    LEVEL_LISTING = 1;
+    LEVEL_VARIANT = 2;
   }
   Level level = 7;
 
@@ -54,19 +59,19 @@ message AttributeSpec {
   // Product, Inventory, or Pricing data
   enum Classification {
     CLASSIFICATION_UNSPECIFIED = 0;
-    CLASSIFICATION_PRODUCT     = 1;
-    CLASSIFICATION_INVENTORY   = 2;
-    CLASSIFICATION_PRICING     = 3;
-    CLASSIFICATION_LOGISTICS   = 4;
-    CLASSIFICATION_IDENTIFIER  = 5;
+    CLASSIFICATION_PRODUCT = 1;
+    CLASSIFICATION_INVENTORY = 2;
+    CLASSIFICATION_PRICING = 3;
+    CLASSIFICATION_LOGISTICS = 4;
+    CLASSIFICATION_IDENTIFIER = 5;
   }
   Classification classification = 8;
 
   // Usage indicates if the spec is required or just recommended
   enum Usage {
     USAGE_UNSPECIFIED = 0;
-    USAGE_AVAILABLE   = 1;
-    USAGE_REQUIRED    = 2;
+    USAGE_AVAILABLE = 1;
+    USAGE_REQUIRED = 2;
     USAGE_RECOMMENDED = 3;
   }
   Usage usage = 9;
@@ -99,8 +104,8 @@ message AttributeSpec {
 // If this is not a concept in your system, you should create a product type for
 // each category.
 message ProductType {
-  string product_type_id               = 1;
-  string display_name                  = 2;
+  string product_type_id = 1;
+  string display_name = 2;
   google.protobuf.Timestamp updated_at = 3;
   google.protobuf.Timestamp created_at = 4;
 }
