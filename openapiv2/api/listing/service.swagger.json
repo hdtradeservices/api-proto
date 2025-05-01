@@ -126,6 +126,37 @@
         ]
       }
     },
+    "/v2/storefront/listing/sku/{sku}/category": {
+      "get": {
+        "summary": "CategoryForSKU retusns the category for a given SKU\nSince the category is only available on the listing level, this will return\nthe category and potentially save a call to GetBySKU if only the variant is\nneeded",
+        "operationId": "ListingService_CategoryForSKU",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiCategoryForSKUResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/v2/storefront/listing/submission": {
       "post": {
         "summary": "CreateSubmissions replaces the submissions for a variant\nThis can be used at any stage, but is most recommended for the intitial\ncreation of a new submission. For updating submissions after creation\nsee UpdateSubmission",
@@ -835,6 +866,14 @@
         },
         "multiObjectValue": {
           "$ref": "#/definitions/AttributeMultiObject"
+        }
+      }
+    },
+    "listing_apiCategoryForSKUResponse": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "string"
         }
       }
     },
