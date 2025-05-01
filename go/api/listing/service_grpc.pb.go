@@ -23,6 +23,11 @@ type ListingServiceClient interface {
 	// GetBySKU retrieves a single listing which contains a variant with the given
 	// SKU
 	GetBySKU(ctx context.Context, in *GetBySKURequest, opts ...grpc.CallOption) (*Listing, error)
+	// CategoryForSKU retusns the category for a given SKU
+	// Since the category is only available on the listing level, this will return
+	// the category and potentially save a call to GetBySKU if only the variant is
+	// needed
+	CategoryForSKU(ctx context.Context, in *CategoryForSKURequest, opts ...grpc.CallOption) (*CategoryForSKUResponse, error)
 	// GetVariant retrieves a single variant by its SKU
 	GetVariant(ctx context.Context, in *GetVariantRequest, opts ...grpc.CallOption) (*Variant, error)
 	// ListNewListings will list any listing created or updated
@@ -92,6 +97,15 @@ func (c *listingServiceClient) Get(ctx context.Context, in *GetRequest, opts ...
 func (c *listingServiceClient) GetBySKU(ctx context.Context, in *GetBySKURequest, opts ...grpc.CallOption) (*Listing, error) {
 	out := new(Listing)
 	err := c.cc.Invoke(ctx, "/listing_api.ListingService/GetBySKU", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) CategoryForSKU(ctx context.Context, in *CategoryForSKURequest, opts ...grpc.CallOption) (*CategoryForSKUResponse, error) {
+	out := new(CategoryForSKUResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/CategoryForSKU", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -206,6 +220,11 @@ type ListingServiceServer interface {
 	// GetBySKU retrieves a single listing which contains a variant with the given
 	// SKU
 	GetBySKU(context.Context, *GetBySKURequest) (*Listing, error)
+	// CategoryForSKU retusns the category for a given SKU
+	// Since the category is only available on the listing level, this will return
+	// the category and potentially save a call to GetBySKU if only the variant is
+	// needed
+	CategoryForSKU(context.Context, *CategoryForSKURequest) (*CategoryForSKUResponse, error)
 	// GetVariant retrieves a single variant by its SKU
 	GetVariant(context.Context, *GetVariantRequest) (*Variant, error)
 	// ListNewListings will list any listing created or updated
@@ -264,6 +283,9 @@ func (UnimplementedListingServiceServer) Get(context.Context, *GetRequest) (*Lis
 }
 func (UnimplementedListingServiceServer) GetBySKU(context.Context, *GetBySKURequest) (*Listing, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBySKU not implemented")
+}
+func (UnimplementedListingServiceServer) CategoryForSKU(context.Context, *CategoryForSKURequest) (*CategoryForSKUResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CategoryForSKU not implemented")
 }
 func (UnimplementedListingServiceServer) GetVariant(context.Context, *GetVariantRequest) (*Variant, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVariant not implemented")
@@ -342,6 +364,24 @@ func _ListingService_GetBySKU_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ListingServiceServer).GetBySKU(ctx, req.(*GetBySKURequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_CategoryForSKU_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CategoryForSKURequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).CategoryForSKU(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/CategoryForSKU",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).CategoryForSKU(ctx, req.(*CategoryForSKURequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -558,6 +598,10 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetBySKU",
 			Handler:    _ListingService_GetBySKU_Handler,
+		},
+		{
+			MethodName: "CategoryForSKU",
+			Handler:    _ListingService_CategoryForSKU_Handler,
 		},
 		{
 			MethodName: "GetVariant",

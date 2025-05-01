@@ -10,8 +10,8 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-  info: { title: "Listings API";
-version: "v2";
+  info : {title : "Listings API";
+version : "v2";
 }
 }
 ;
@@ -21,15 +21,17 @@ version: "v2";
 // Zentail.
 service ListingService {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
-    name: "Listings Service",
+    name : "Listings Service",
     // protolint:disable:next MAX_LINE_LENGTH
-    description: "Listings Service provides a service for listing related operations\nThis includes retrieving listings as well as sending back statuses to Zentail"
+    description : "Listings Service provides a service for listing related "
+                  "operations\nThis includes retrieving listings as well as "
+                  "sending back statuses to Zentail"
   };
 
   // Get retrieves a single listing by its ID
   rpc Get(GetRequest) returns (Listing) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing/{listing_id}"
+      get : "/v2/storefront/listing/{listing_id}"
     };
   }
 
@@ -37,14 +39,24 @@ service ListingService {
   // SKU
   rpc GetBySKU(GetBySKURequest) returns (Listing) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing/sku/{sku}"
+      get : "/v2/storefront/listing/sku/{sku}"
+    };
+  }
+
+  // CategoryForSKU retusns the category for a given SKU
+  // Since the category is only available on the listing level, this will return
+  // the category and potentially save a call to GetBySKU if only the variant is
+  // needed
+  rpc CategoryForSKU(CategoryForSKURequest) returns (CategoryForSKUResponse) {
+    option (google.api.http) = {
+      get : "/v2/storefront/listing/sku/{sku}/category"
     };
   }
 
   // GetVariant retrieves a single variant by its SKU
   rpc GetVariant(GetVariantRequest) returns (Variant) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing/variant/{sku}"
+      get : "/v2/storefront/listing/variant/{sku}"
     };
   }
 
@@ -56,7 +68,7 @@ service ListingService {
   // 2. No variants have a channel ID
   rpc ListNewListings(ListSinceRequest) returns (ListListingsResponse) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing/new"
+      get : "/v2/storefront/listing/new"
     };
   }
 
@@ -69,7 +81,7 @@ service ListingService {
   // 3. Product Data is enabled for the Listing
   rpc ListUpdatedListings(ListSinceRequest) returns (ListListingsResponse) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing/product_data/updated"
+      get : "/v2/storefront/listing/product_data/updated"
     };
   }
 
@@ -81,7 +93,7 @@ service ListingService {
   rpc ListVariantsWithUpdatedInventory(ListInventorySinceRequest)
       returns (ListVariantsResponse) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing/variant/inventory/updated"
+      get : "/v2/storefront/listing/variant/inventory/updated"
     };
   }
 
@@ -93,15 +105,15 @@ service ListingService {
   rpc ListVariantsWithUpdatedPricing(ListSinceRequest)
       returns (ListVariantsResponse) {
     option (google.api.http) = {
-      get: "/v2/storefront/listing/variant/pricing/updated"
+      get : "/v2/storefront/listing/variant/pricing/updated"
     };
   }
 
   // UpdateStatus updates the status of a listing
   rpc UpdateStatus(UpdateStatusRequest) returns (UpdateStatusResponse) {
     option (google.api.http) = {
-      post: "/v2/storefront/listing/variant/{sku}/status"
-      body: "*"
+      post : "/v2/storefront/listing/variant/{sku}/status"
+      body : "*"
     };
   }
 
@@ -109,16 +121,16 @@ service ListingService {
   rpc UpdateChannelListingID(UpdateChannelListingIDRequest)
       returns (UpdateChannelListingIDResponse) {
     option (google.api.http) = {
-      post: "/v2/storefront/listing/variant/{sku}/channel_id"
-      body: "*"
+      post : "/v2/storefront/listing/variant/{sku}/channel_id"
+      body : "*"
     };
   }
 
   // ReplaceErrors replaces the errors for a variant
   rpc ReplaceErrors(ReplaceErrorsRequest) returns (ReplaceErrorsResponse) {
     option (google.api.http) = {
-      post: "/v2/storefront/listing/variant/{sku}/errors"
-      body: "*"
+      post : "/v2/storefront/listing/variant/{sku}/errors"
+      body : "*"
     };
   }
 
@@ -129,8 +141,8 @@ service ListingService {
   rpc CreateSubmissions(CreateSubmissionsRequest)
       returns (CreateSubmissionsResponse) {
     option (google.api.http) = {
-      post: "/v2/storefront/listing/submission"
-      body: "*"
+      post : "/v2/storefront/listing/submission"
+      body : "*"
     };
   }
 
@@ -139,8 +151,8 @@ service ListingService {
   // ingestion is complete.
   rpc UpdateSubmission(UpdateSubmissionRequest) returns (Submission) {
     option (google.api.http) = {
-      put: "/v2/storefront/listing/submission/{type}/{sku}"
-      body: "*"
+      put : "/v2/storefront/listing/submission/{type}/{sku}"
+      body : "*"
     };
   }
 
@@ -149,37 +161,37 @@ service ListingService {
   rpc SetInventorySubmissionDetails(SetInventorySubmissionDetailsRequest)
       returns (SetInventorySubmissionDetailsResponse) {
     option (google.api.http) = {
-      post: "/v2/storefront/listing/submission/{submission_id}/inventory"
-      body: "*"
+      post : "/v2/storefront/listing/submission/{submission_id}/inventory"
+      body : "*"
     };
   }
 }
 
+message CategoryForSKURequest { string sku = 1; }
+
+message CategoryForSKUResponse { string category_id = 1; }
+
 // CreateSubmissionsRequest is used to replace all submissions for the given
 // type and sku
-message CreateSubmissionsRequest {
-  repeated Submission submissions = 1;
-}
+message CreateSubmissionsRequest { repeated Submission submissions = 1; }
 
 // CreateSubmissionsResponse contains the submissions created
-message CreateSubmissionsResponse {
-  repeated Submission submissions = 1;
-}
+message CreateSubmissionsResponse { repeated Submission submissions = 1; }
 
 // UpdateSubmissionRequest is used to move a submission to another status
 message UpdateSubmissionRequest {
   string sku = 1;
   // the submission type used when creating the submission
-  string type                          = 2;
-  string content_received              = 3;
-  map<string, string> metadata         = 4;
+  string type = 2;
+  string content_received = 3;
+  map<string, string> metadata = 4;
   google.protobuf.Timestamp changed_at = 5;
 
   enum Status {
     STATUS_UNSPECIFIED = 0;
-    STATUS_SUBMITTED   = 1;
-    STATUS_ACCEPTED    = 2;
-    STATUS_REJECTED    = 3;
+    STATUS_SUBMITTED = 1;
+    STATUS_ACCEPTED = 2;
+    STATUS_REJECTED = 3;
   }
 
   Status status = 6;
@@ -188,9 +200,9 @@ message UpdateSubmissionRequest {
 // SetInventorySubmissionDetailsRequest is used to create inventory submission
 // details
 message SetInventorySubmissionDetailsRequest {
-  int64 submission_id        = 1;
+  int64 submission_id = 1;
   int64 inventory_level_sent = 2;
-  bool successful            = 3;
+  bool successful = 3;
 }
 
 // SetInventorySubmissionDetailsResponse is currently an empty response
@@ -201,13 +213,13 @@ message ListInventorySinceRequest {
   // Only return variants with inventory changes that have happened
   // outside of sales on this channel.
   bool external_changes_only = 2;
-  string cursor              = 3;  // TODO: how to get these in the query params
+  string cursor = 3;
 }
 
 // ListSinceRequestRequest is the request object for the ListSinceRequest method
 message ListSinceRequest {
   google.protobuf.Timestamp since = 1;
-  string cursor = 2;  // TODO: how to get these in the query params
+  string cursor = 2;
 }
 
 // ListListingsResponse is the response object containing a list of Listings
@@ -229,39 +241,33 @@ message ListVariantsResponse {
 }
 
 // GetRequest is the request object for the Get method
-message GetRequest {
-  string listing_id = 1;
-}
+message GetRequest { string listing_id = 1; }
 
 // GetVariantRequest is the request object for the GetVariant method
-message GetVariantRequest {
-  string sku = 1;
-}
+message GetVariantRequest { string sku = 1; }
 
 // GetBySKURequest is the request object for the GetBySKU method
-message GetBySKURequest {
-  string sku = 1;
-}
+message GetBySKURequest { string sku = 1; }
 
 // StandardStatus is the standardized status of a listing as defined by Zentail
 enum StandardStatus {
   STANDARD_STATUS_UNSPECIFIED = 0;
-  STANDARD_STATUS_PUBLISHED   = 1;
+  STANDARD_STATUS_PUBLISHED = 1;
   STANDARD_STATUS_UNPUBLISHED = 2;
-  STANDARD_STATUS_SUPPRESSED  = 3;
-  STANDARD_STATUS_RETIRED     = 4;
+  STANDARD_STATUS_SUPPRESSED = 3;
+  STANDARD_STATUS_RETIRED = 4;
 }
 
 // UpdateStatusRequest provides the status of a SKU
 message UpdateStatusRequest {
-  string sku            = 1;
+  string sku = 1;
   StandardStatus status = 2;
   string channel_status = 3;
   // The channel's ID for this particular SKU.
   // Should be more specific than Listing.
-  string channel_id  = 4;
+  string channel_id = 4;
   string listing_url = 5;
-  bool buyable       = 6;
+  bool buyable = 6;
 }
 
 // UpdateStatusResponse is empty
@@ -269,7 +275,7 @@ message UpdateStatusResponse {}
 
 // UpdateChannelListingIDRequest provides the status of a SKU
 message UpdateChannelListingIDRequest {
-  string sku        = 1;
+  string sku = 1;
   string channel_id = 2;
 }
 
@@ -278,9 +284,9 @@ message UpdateChannelListingIDResponse {}
 
 // ReplaceErrorsRequest provides all the channel-generated errors for a SKU
 message ReplaceErrorsRequest {
-  string sku             = 1;
+  string sku = 1;
   string submission_type = 3;
-  repeated Error errors  = 2;
+  repeated Error errors = 2;
 }
 
 message Error {
@@ -288,17 +294,17 @@ message Error {
   repeated string attribute_ids = 1;
   enum Severity {
     SEVERITY_UNSPECIFIED = 0;
-    SEVERITY_NOTICE      = 1;
-    SEVERITY_WARNING     = 2;
-    SEVERITY_ERROR       = 3;
+    SEVERITY_NOTICE = 1;
+    SEVERITY_WARNING = 2;
+    SEVERITY_ERROR = 3;
   }
   Severity severity = 2;
   enum Type {
-    TYPE_UNSPECIFIED      = 0;
-    TYPE_MISSING_VALUE    = 1;
-    TYPE_INVALID_VALUE    = 2;
+    TYPE_UNSPECIFIED = 0;
+    TYPE_MISSING_VALUE = 1;
+    TYPE_INVALID_VALUE = 2;
     TYPE_RESTRICTED_VALUE = 3;
-    TYPE_OTHER            = 4;
+    TYPE_OTHER = 4;
   }
   Type type = 3;
   // Message is required if Type is TYPE_OTHER
@@ -307,4 +313,3 @@ message Error {
 
 // ReplaceErrorsResponse is empty
 message ReplaceErrorsResponse {}
-

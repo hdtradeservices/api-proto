@@ -22,6 +22,8 @@
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
 - [api/listing/service.proto](#api_listing_service-proto)
+    - [CategoryForSKURequest](#listing_api-CategoryForSKURequest)
+    - [CategoryForSKUResponse](#listing_api-CategoryForSKUResponse)
     - [CreateSubmissionsRequest](#listing_api-CreateSubmissionsRequest)
     - [CreateSubmissionsResponse](#listing_api-CreateSubmissionsResponse)
     - [Error](#listing_api-Error)
@@ -401,6 +403,36 @@ structured information about scheduled sales
 <p align="right"><a href="#top">Top</a></p>
 
 ## api/listing/service.proto
+
+
+
+<a name="listing_api-CategoryForSKURequest"></a>
+
+### CategoryForSKURequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sku | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-CategoryForSKUResponse"></a>
+
+### CategoryForSKUResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| category_id | [string](#string) |  |  |
+
+
+
 
 
 
@@ -785,6 +817,7 @@ Zentail.
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#listing_api-GetRequest) | [Listing](#listing_api-Listing) | Get retrieves a single listing by its ID |
 | GetBySKU | [GetBySKURequest](#listing_api-GetBySKURequest) | [Listing](#listing_api-Listing) | GetBySKU retrieves a single listing which contains a variant with the given SKU |
+| CategoryForSKU | [CategoryForSKURequest](#listing_api-CategoryForSKURequest) | [CategoryForSKUResponse](#listing_api-CategoryForSKUResponse) | CategoryForSKU retusns the category for a given SKU Since the category is only available on the listing level, this will return the category and potentially save a call to GetBySKU if only the variant is needed |
 | GetVariant | [GetVariantRequest](#listing_api-GetVariantRequest) | [Variant](#listing_api-Variant) | GetVariant retrieves a single variant by its SKU |
 | ListNewListings | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListListingsResponse](#listing_api-ListListingsResponse) | ListNewListings will list any listing created or updated since the given timestamp where:
 
