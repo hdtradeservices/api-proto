@@ -18,6 +18,12 @@ message Submission {
   // doing a replace operation
   string type                               = 6;
   bool successful                           = 7;
+  // submitted_attribute_version_ids are the Attribute Version IDs of 
+  // all of the Attributes that were part of this Submission.
+  // This is used to show the user in Zentail when each of the Attributes in the
+  // Listing were submitted. This is also reflected in the Listing and Variant
+  // endpoints via the submitted_at timestamp on each Attribute
+  repeated string submitted_attribute_version_ids     = 11;
   google.protobuf.Timestamp prepared_at     = 8;
   google.protobuf.Timestamp submitted_at    = 9;
   google.protobuf.Timestamp acknowledged_at = 10;
