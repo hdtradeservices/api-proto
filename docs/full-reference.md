@@ -117,6 +117,9 @@ Attribute has data that describes a Listing or a Listing&#39;s Variants
 | multi_text_value | [Attribute.MultiText](#listing_api-Attribute-MultiText) |  |  |
 | money_value | [Attribute.Money](#listing_api-Attribute-Money) |  |  |
 | multi_object_value | [Attribute.MultiObject](#listing_api-Attribute-MultiObject) |  |  |
+| version_id | [string](#string) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| submitted_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 
 
@@ -540,7 +543,7 @@ GetVariantRequest is the request object for the GetVariant method
 | ----- | ---- | ----- | ----------- |
 | since | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | external_changes_only | [bool](#bool) |  | Only return variants with inventory changes that have happened outside of sales on this channel. |
-| cursor | [string](#string) |  | TODO: how to get these in the query params |
+| cursor | [string](#string) |  |  |
 
 
 
@@ -572,7 +575,7 @@ ListSinceRequestRequest is the request object for the ListSinceRequest method
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | since | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| cursor | [string](#string) |  | TODO: how to get these in the query params |
+| cursor | [string](#string) |  |  |
 
 
 
@@ -907,6 +910,7 @@ Submission represents specific data sent to a channel for a particular SKU
 | metadata | [Submission.MetadataEntry](#listing_api-Submission-MetadataEntry) | repeated |  |
 | type | [string](#string) |  | type is a user-specified type which is used to match like submissions when doing a replace operation |
 | successful | [bool](#bool) |  |  |
+| submitted_attribute_version_ids | [string](#string) | repeated | submitted_attribute_version_ids are the Attribute Version IDs of all of the Attributes that were part of this Submission. This is used to show the user in Zentail when each of the Attributes in the Listing were submitted. This is also reflected in the Listing and Variant endpoints via the submitted_at timestamp on each Attribute |
 | prepared_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | submitted_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | acknowledged_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |

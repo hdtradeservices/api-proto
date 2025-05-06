@@ -631,7 +631,7 @@ type ListInventorySinceRequest struct {
 	// Only return variants with inventory changes that have happened
 	// outside of sales on this channel.
 	ExternalChangesOnly bool   `protobuf:"varint,2,opt,name=external_changes_only,json=externalChangesOnly,proto3" json:"external_changes_only,omitempty"`
-	Cursor              string `protobuf:"bytes,3,opt,name=cursor,proto3" json:"cursor,omitempty"` // TODO: how to get these in the query params
+	Cursor              string `protobuf:"bytes,3,opt,name=cursor,proto3" json:"cursor,omitempty"`
 }
 
 func (x *ListInventorySinceRequest) Reset() {
@@ -694,7 +694,7 @@ type ListSinceRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	Since  *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=since,proto3" json:"since,omitempty"`
-	Cursor string                 `protobuf:"bytes,2,opt,name=cursor,proto3" json:"cursor,omitempty"` // TODO: how to get these in the query params
+	Cursor string                 `protobuf:"bytes,2,opt,name=cursor,proto3" json:"cursor,omitempty"`
 }
 
 func (x *ListSinceRequest) Reset() {

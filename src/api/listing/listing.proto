@@ -120,4 +120,7 @@ message Attribute {
     Money money_value = 6;
     MultiObject multi_object_value = 7;
   }
+  string version_id = 8;
+  google.protobuf.Timestamp updated_at = 9;
+  google.protobuf.Timestamp submitted_at = 10;
 }

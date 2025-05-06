@@ -841,6 +841,17 @@
         },
         "multiObjectValue": {
           "$ref": "#/definitions/AttributeMultiObject"
+        },
+        "versionId": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       },
       "title": "Attribute has data that describes a Listing or a Listing's Variants"
@@ -1041,6 +1052,13 @@
         },
         "successful": {
           "type": "boolean"
+        },
+        "submittedAttributeVersionIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "submitted_attribute_version_ids are the Attribute Version IDs of \nall of the Attributes that were part of this Submission.\nThis is used to show the user in Zentail when each of the Attributes in the\nListing were submitted. This is also reflected in the Listing and Variant\nendpoints via the submitted_at timestamp on each Attribute"
         },
         "preparedAt": {
           "type": "string",
