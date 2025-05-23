@@ -17,6 +17,7 @@
     - [Variant](#listing_api-Variant)
     - [Variant.Attributes](#listing_api-Variant-Attributes)
     - [Variant.Inventory](#listing_api-Variant-Inventory)
+    - [Variant.Inventory.WarehouseQuantity](#listing_api-Variant-Inventory-WarehouseQuantity)
     - [Variant.Pricing](#listing_api-Variant-Pricing)
     - [Variant.Pricing.ScheduledSale](#listing_api-Variant-Pricing-ScheduledSale)
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
@@ -331,9 +332,26 @@ Inventory contains information about the availability of this variant
 | enabled | [bool](#bool) |  |  |
 | total_quantity | [int64](#int64) |  | total_quantity should be the sum of merchant_fulfillable_inventory and storefront_fulfillable_quantity |
 | merchant_fulfillable_quantity | [int64](#int64) |  |  |
+| merchant_fulfillable_warehouse_quantities | [Variant.Inventory.WarehouseQuantity](#listing_api-Variant-Inventory-WarehouseQuantity) | repeated |  |
 | storefront_fulfillable_quantity | [int64](#int64) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_externally_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-Variant-Inventory-WarehouseQuantity"></a>
+
+### Variant.Inventory.WarehouseQuantity
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| warehouse_id | [string](#string) |  |  |
+| quantity | [int64](#int64) |  |  |
 
 
 

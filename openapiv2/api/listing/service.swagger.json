@@ -667,6 +667,18 @@
       ],
       "default": "SEVERITY_UNSPECIFIED"
     },
+    "InventoryWarehouseQuantity": {
+      "type": "object",
+      "properties": {
+        "warehouseId": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "ListingProductData": {
       "type": "object",
       "properties": {
@@ -758,6 +770,12 @@
         "merchantFulfillableQuantity": {
           "type": "string",
           "format": "int64"
+        },
+        "merchantFulfillableWarehouseQuantities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InventoryWarehouseQuantity"
+          }
         },
         "storefrontFulfillableQuantity": {
           "type": "string",
