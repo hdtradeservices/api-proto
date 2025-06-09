@@ -165,7 +165,72 @@ service ListingService {
       body : "*"
     };
   }
+
+
+  // BeginIngestion is used to initiate the ingestion of listings
+  // for a given storefront.
+  // Needs to be called before RequestIngestion.
+  rpc BeginIngestion(BeginIngestionRequest)
+      returns (BeginIngestionResponse) {
+    option (google.api.http) = {
+      post : "/v2/storefront/listing/ingestion/begin"
+      body : "*"
+    };
+  }
+
+  // RequestIngestion is used to request ingestion of a listing into Zentail. 
+  // Need to call BeginIngestion before calling this method.
+  rpc RequestIngestion(RequestIngestionRequest)
+      returns (RequestIngestionResponse) {
+    option (google.api.http) = {
+      post : "/v2/storefront/listing/ingestion/request"
+      body : "*"
+    };
+  }
+
+  // EndIngestion is used to end the ingestion of Listings
+  // Needs to be called after all Listings requiring ingestion
+  // have been requested so that the generated Ingestion Plan can be applied.
+  rpc EndIngestion(EndIngestionRequest)
+      returns (EndIngestionResponse) {
+    option (google.api.http) = {
+      post : "/v2/storefront/listing/ingestion/end"
+      body : "*"
+    };
+  }
 }
+
+// BeginIngestionRequest is used to initiate the ingestion of listings
+message BeginIngestionRequest {
+  int64 expected_num_listings = 1;
+}
+
+// BeginIngestionResponse is used to return the response of the BeginIngestion
+message BeginIngestionResponse {}
+
+// RequestIngestionRequest is used to request ingestion of a listing into Zentail
+message RequestIngestionRequest {
+  // The attribute IDs or names that this Listing pivots by (aka variation attributes, variant attributes)
+  repeated string pivot_attributes = 1;
+  // Listing-level Attributes that are not variant-specific
+  repeated Attribute attributes = 2;
+  message Variant {
+    string sku = 1;
+    repeated Attribute attributes = 2;
+  }
+  repeated Variant variants = 3;
+}
+
+// RequestIngestionResponse is used to return the response of the RequestIngestion
+message RequestIngestionResponse {}
+
+// EndIngestionRequest is used to end the ingestion of Listings
+message EndIngestionRequest {
+  int64 actual_num_listings = 1;
+}
+
+// EndIngestionResponse is used to return the response of the EndIngestion
+message EndIngestionResponse {}
 
 message CategoryForSKURequest { string sku = 1; }
 

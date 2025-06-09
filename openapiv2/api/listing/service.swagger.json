@@ -17,6 +17,105 @@
     "application/json"
   ],
   "paths": {
+    "/v2/storefront/listing/ingestion/begin": {
+      "post": {
+        "summary": "BeginIngestion is used to initiate the ingestion of listings\nfor a given storefront.\nNeeds to be called before RequestIngestion.",
+        "operationId": "ListingService_BeginIngestion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiBeginIngestionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/listing_apiBeginIngestionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/ingestion/end": {
+      "post": {
+        "summary": "EndIngestion is used to end the ingestion of Listings\nNeeds to be called after all Listings requiring ingestion\nhave been requested so that the generated Ingestion Plan can be applied.",
+        "operationId": "ListingService_EndIngestion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiEndIngestionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/listing_apiEndIngestionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/ingestion/request": {
+      "post": {
+        "summary": "RequestIngestion is used to request ingestion of a listing into Zentail. \nNeed to call BeginIngestion before calling this method.",
+        "operationId": "ListingService_RequestIngestion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiRequestIngestionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/listing_apiRequestIngestionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/v2/storefront/listing/new": {
       "get": {
         "summary": "ListNewListings will list any listing created or updated\nsince the given timestamp where:",
@@ -898,6 +997,20 @@
         }
       }
     },
+    "listing_apiBeginIngestionRequest": {
+      "type": "object",
+      "properties": {
+        "expectedNumListings": {
+          "type": "string",
+          "format": "int64"
+        }
+      },
+      "title": "BeginIngestionRequest is used to initiate the ingestion of listings"
+    },
+    "listing_apiBeginIngestionResponse": {
+      "type": "object",
+      "title": "BeginIngestionResponse is used to return the response of the BeginIngestion"
+    },
     "listing_apiCategoryForSKUResponse": {
       "type": "object",
       "properties": {
@@ -929,6 +1042,20 @@
         }
       },
       "title": "CreateSubmissionsResponse contains the submissions created"
+    },
+    "listing_apiEndIngestionRequest": {
+      "type": "object",
+      "properties": {
+        "actualNumListings": {
+          "type": "string",
+          "format": "int64"
+        }
+      },
+      "title": "EndIngestionRequest is used to end the ingestion of Listings"
+    },
+    "listing_apiEndIngestionResponse": {
+      "type": "object",
+      "title": "EndIngestionResponse is used to return the response of the EndIngestion"
     },
     "listing_apiError": {
       "type": "object",
@@ -1024,6 +1151,50 @@
     "listing_apiReplaceErrorsResponse": {
       "type": "object",
       "title": "ReplaceErrorsResponse is empty"
+    },
+    "listing_apiRequestIngestionRequest": {
+      "type": "object",
+      "properties": {
+        "pivotAttributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "The attribute IDs or names that this Listing pivots by (aka variation attributes, variant attributes)"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiAttribute"
+          },
+          "title": "Listing-level Attributes that are not variant-specific"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiRequestIngestionRequestVariant"
+          }
+        }
+      },
+      "title": "RequestIngestionRequest is used to request ingestion of a listing into Zentail"
+    },
+    "listing_apiRequestIngestionRequestVariant": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiAttribute"
+          }
+        }
+      }
+    },
+    "listing_apiRequestIngestionResponse": {
+      "type": "object",
+      "title": "RequestIngestionResponse is used to return the response of the RequestIngestion"
     },
     "listing_apiSetInventorySubmissionDetailsResponse": {
       "type": "object",

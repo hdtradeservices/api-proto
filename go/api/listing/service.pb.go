@@ -128,7 +128,7 @@ func (x UpdateSubmissionRequest_Status) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use UpdateSubmissionRequest_Status.Descriptor instead.
 func (UpdateSubmissionRequest_Status) EnumDescriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{4, 0}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{10, 0}
 }
 
 type Error_Severity int32
@@ -180,7 +180,7 @@ func (x Error_Severity) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Error_Severity.Descriptor instead.
 func (Error_Severity) EnumDescriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{19, 0}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{25, 0}
 }
 
 type Error_Type int32
@@ -235,7 +235,286 @@ func (x Error_Type) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Error_Type.Descriptor instead.
 func (Error_Type) EnumDescriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{19, 1}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{25, 1}
+}
+
+// BeginIngestionRequest is used to initiate the ingestion of listings
+type BeginIngestionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ExpectedNumListings int64 `protobuf:"varint,1,opt,name=expected_num_listings,json=expectedNumListings,proto3" json:"expected_num_listings,omitempty"`
+}
+
+func (x *BeginIngestionRequest) Reset() {
+	*x = BeginIngestionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_listing_service_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BeginIngestionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BeginIngestionRequest) ProtoMessage() {}
+
+func (x *BeginIngestionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_listing_service_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BeginIngestionRequest.ProtoReflect.Descriptor instead.
+func (*BeginIngestionRequest) Descriptor() ([]byte, []int) {
+	return file_api_listing_service_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *BeginIngestionRequest) GetExpectedNumListings() int64 {
+	if x != nil {
+		return x.ExpectedNumListings
+	}
+	return 0
+}
+
+// BeginIngestionResponse is used to return the response of the BeginIngestion
+type BeginIngestionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *BeginIngestionResponse) Reset() {
+	*x = BeginIngestionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_listing_service_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BeginIngestionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BeginIngestionResponse) ProtoMessage() {}
+
+func (x *BeginIngestionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_listing_service_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BeginIngestionResponse.ProtoReflect.Descriptor instead.
+func (*BeginIngestionResponse) Descriptor() ([]byte, []int) {
+	return file_api_listing_service_proto_rawDescGZIP(), []int{1}
+}
+
+// RequestIngestionRequest is used to request ingestion of a listing into Zentail
+type RequestIngestionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The attribute IDs or names that this Listing pivots by (aka variation attributes, variant attributes)
+	PivotAttributes []string `protobuf:"bytes,1,rep,name=pivot_attributes,json=pivotAttributes,proto3" json:"pivot_attributes,omitempty"`
+	// Listing-level Attributes that are not variant-specific
+	Attributes []*Attribute                       `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty"`
+	Variants   []*RequestIngestionRequest_Variant `protobuf:"bytes,3,rep,name=variants,proto3" json:"variants,omitempty"`
+}
+
+func (x *RequestIngestionRequest) Reset() {
+	*x = RequestIngestionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_listing_service_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RequestIngestionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RequestIngestionRequest) ProtoMessage() {}
+
+func (x *RequestIngestionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_listing_service_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RequestIngestionRequest.ProtoReflect.Descriptor instead.
+func (*RequestIngestionRequest) Descriptor() ([]byte, []int) {
+	return file_api_listing_service_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *RequestIngestionRequest) GetPivotAttributes() []string {
+	if x != nil {
+		return x.PivotAttributes
+	}
+	return nil
+}
+
+func (x *RequestIngestionRequest) GetAttributes() []*Attribute {
+	if x != nil {
+		return x.Attributes
+	}
+	return nil
+}
+
+func (x *RequestIngestionRequest) GetVariants() []*RequestIngestionRequest_Variant {
+	if x != nil {
+		return x.Variants
+	}
+	return nil
+}
+
+// RequestIngestionResponse is used to return the response of the RequestIngestion
+type RequestIngestionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *RequestIngestionResponse) Reset() {
+	*x = RequestIngestionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_listing_service_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RequestIngestionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RequestIngestionResponse) ProtoMessage() {}
+
+func (x *RequestIngestionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_listing_service_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RequestIngestionResponse.ProtoReflect.Descriptor instead.
+func (*RequestIngestionResponse) Descriptor() ([]byte, []int) {
+	return file_api_listing_service_proto_rawDescGZIP(), []int{3}
+}
+
+// EndIngestionRequest is used to end the ingestion of Listings
+type EndIngestionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ActualNumListings int64 `protobuf:"varint,1,opt,name=actual_num_listings,json=actualNumListings,proto3" json:"actual_num_listings,omitempty"`
+}
+
+func (x *EndIngestionRequest) Reset() {
+	*x = EndIngestionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_listing_service_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EndIngestionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EndIngestionRequest) ProtoMessage() {}
+
+func (x *EndIngestionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_listing_service_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EndIngestionRequest.ProtoReflect.Descriptor instead.
+func (*EndIngestionRequest) Descriptor() ([]byte, []int) {
+	return file_api_listing_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *EndIngestionRequest) GetActualNumListings() int64 {
+	if x != nil {
+		return x.ActualNumListings
+	}
+	return 0
+}
+
+// EndIngestionResponse is used to return the response of the EndIngestion
+type EndIngestionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *EndIngestionResponse) Reset() {
+	*x = EndIngestionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_listing_service_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EndIngestionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EndIngestionResponse) ProtoMessage() {}
+
+func (x *EndIngestionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_listing_service_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EndIngestionResponse.ProtoReflect.Descriptor instead.
+func (*EndIngestionResponse) Descriptor() ([]byte, []int) {
+	return file_api_listing_service_proto_rawDescGZIP(), []int{5}
 }
 
 type CategoryForSKURequest struct {
@@ -249,7 +528,7 @@ type CategoryForSKURequest struct {
 func (x *CategoryForSKURequest) Reset() {
 	*x = CategoryForSKURequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[0]
+		mi := &file_api_listing_service_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -262,7 +541,7 @@ func (x *CategoryForSKURequest) String() string {
 func (*CategoryForSKURequest) ProtoMessage() {}
 
 func (x *CategoryForSKURequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[0]
+	mi := &file_api_listing_service_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -275,7 +554,7 @@ func (x *CategoryForSKURequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CategoryForSKURequest.ProtoReflect.Descriptor instead.
 func (*CategoryForSKURequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{0}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CategoryForSKURequest) GetSku() string {
@@ -296,7 +575,7 @@ type CategoryForSKUResponse struct {
 func (x *CategoryForSKUResponse) Reset() {
 	*x = CategoryForSKUResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[1]
+		mi := &file_api_listing_service_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -309,7 +588,7 @@ func (x *CategoryForSKUResponse) String() string {
 func (*CategoryForSKUResponse) ProtoMessage() {}
 
 func (x *CategoryForSKUResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[1]
+	mi := &file_api_listing_service_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -322,7 +601,7 @@ func (x *CategoryForSKUResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CategoryForSKUResponse.ProtoReflect.Descriptor instead.
 func (*CategoryForSKUResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{1}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CategoryForSKUResponse) GetCategoryId() string {
@@ -345,7 +624,7 @@ type CreateSubmissionsRequest struct {
 func (x *CreateSubmissionsRequest) Reset() {
 	*x = CreateSubmissionsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[2]
+		mi := &file_api_listing_service_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -358,7 +637,7 @@ func (x *CreateSubmissionsRequest) String() string {
 func (*CreateSubmissionsRequest) ProtoMessage() {}
 
 func (x *CreateSubmissionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[2]
+	mi := &file_api_listing_service_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -371,7 +650,7 @@ func (x *CreateSubmissionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubmissionsRequest.ProtoReflect.Descriptor instead.
 func (*CreateSubmissionsRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{2}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CreateSubmissionsRequest) GetSubmissions() []*Submission {
@@ -393,7 +672,7 @@ type CreateSubmissionsResponse struct {
 func (x *CreateSubmissionsResponse) Reset() {
 	*x = CreateSubmissionsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[3]
+		mi := &file_api_listing_service_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -406,7 +685,7 @@ func (x *CreateSubmissionsResponse) String() string {
 func (*CreateSubmissionsResponse) ProtoMessage() {}
 
 func (x *CreateSubmissionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[3]
+	mi := &file_api_listing_service_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -419,7 +698,7 @@ func (x *CreateSubmissionsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubmissionsResponse.ProtoReflect.Descriptor instead.
 func (*CreateSubmissionsResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{3}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CreateSubmissionsResponse) GetSubmissions() []*Submission {
@@ -447,7 +726,7 @@ type UpdateSubmissionRequest struct {
 func (x *UpdateSubmissionRequest) Reset() {
 	*x = UpdateSubmissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[4]
+		mi := &file_api_listing_service_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -460,7 +739,7 @@ func (x *UpdateSubmissionRequest) String() string {
 func (*UpdateSubmissionRequest) ProtoMessage() {}
 
 func (x *UpdateSubmissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[4]
+	mi := &file_api_listing_service_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -473,7 +752,7 @@ func (x *UpdateSubmissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateSubmissionRequest.ProtoReflect.Descriptor instead.
 func (*UpdateSubmissionRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{4}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdateSubmissionRequest) GetSku() string {
@@ -533,7 +812,7 @@ type SetInventorySubmissionDetailsRequest struct {
 func (x *SetInventorySubmissionDetailsRequest) Reset() {
 	*x = SetInventorySubmissionDetailsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[5]
+		mi := &file_api_listing_service_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -546,7 +825,7 @@ func (x *SetInventorySubmissionDetailsRequest) String() string {
 func (*SetInventorySubmissionDetailsRequest) ProtoMessage() {}
 
 func (x *SetInventorySubmissionDetailsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[5]
+	mi := &file_api_listing_service_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -559,7 +838,7 @@ func (x *SetInventorySubmissionDetailsRequest) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use SetInventorySubmissionDetailsRequest.ProtoReflect.Descriptor instead.
 func (*SetInventorySubmissionDetailsRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{5}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *SetInventorySubmissionDetailsRequest) GetSubmissionId() int64 {
@@ -593,7 +872,7 @@ type SetInventorySubmissionDetailsResponse struct {
 func (x *SetInventorySubmissionDetailsResponse) Reset() {
 	*x = SetInventorySubmissionDetailsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[6]
+		mi := &file_api_listing_service_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -606,7 +885,7 @@ func (x *SetInventorySubmissionDetailsResponse) String() string {
 func (*SetInventorySubmissionDetailsResponse) ProtoMessage() {}
 
 func (x *SetInventorySubmissionDetailsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[6]
+	mi := &file_api_listing_service_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -619,7 +898,7 @@ func (x *SetInventorySubmissionDetailsResponse) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use SetInventorySubmissionDetailsResponse.ProtoReflect.Descriptor instead.
 func (*SetInventorySubmissionDetailsResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{6}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{12}
 }
 
 type ListInventorySinceRequest struct {
@@ -637,7 +916,7 @@ type ListInventorySinceRequest struct {
 func (x *ListInventorySinceRequest) Reset() {
 	*x = ListInventorySinceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[7]
+		mi := &file_api_listing_service_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -650,7 +929,7 @@ func (x *ListInventorySinceRequest) String() string {
 func (*ListInventorySinceRequest) ProtoMessage() {}
 
 func (x *ListInventorySinceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[7]
+	mi := &file_api_listing_service_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -663,7 +942,7 @@ func (x *ListInventorySinceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListInventorySinceRequest.ProtoReflect.Descriptor instead.
 func (*ListInventorySinceRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{7}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ListInventorySinceRequest) GetSince() *timestamppb.Timestamp {
@@ -700,7 +979,7 @@ type ListSinceRequest struct {
 func (x *ListSinceRequest) Reset() {
 	*x = ListSinceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[8]
+		mi := &file_api_listing_service_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -713,7 +992,7 @@ func (x *ListSinceRequest) String() string {
 func (*ListSinceRequest) ProtoMessage() {}
 
 func (x *ListSinceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[8]
+	mi := &file_api_listing_service_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -726,7 +1005,7 @@ func (x *ListSinceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSinceRequest.ProtoReflect.Descriptor instead.
 func (*ListSinceRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{8}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ListSinceRequest) GetSince() *timestamppb.Timestamp {
@@ -758,7 +1037,7 @@ type ListListingsResponse struct {
 func (x *ListListingsResponse) Reset() {
 	*x = ListListingsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[9]
+		mi := &file_api_listing_service_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -771,7 +1050,7 @@ func (x *ListListingsResponse) String() string {
 func (*ListListingsResponse) ProtoMessage() {}
 
 func (x *ListListingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[9]
+	mi := &file_api_listing_service_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -784,7 +1063,7 @@ func (x *ListListingsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListListingsResponse.ProtoReflect.Descriptor instead.
 func (*ListListingsResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{9}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ListListingsResponse) GetListings() []*Listing {
@@ -816,7 +1095,7 @@ type ListVariantsResponse struct {
 func (x *ListVariantsResponse) Reset() {
 	*x = ListVariantsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[10]
+		mi := &file_api_listing_service_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -829,7 +1108,7 @@ func (x *ListVariantsResponse) String() string {
 func (*ListVariantsResponse) ProtoMessage() {}
 
 func (x *ListVariantsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[10]
+	mi := &file_api_listing_service_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -842,7 +1121,7 @@ func (x *ListVariantsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListVariantsResponse.ProtoReflect.Descriptor instead.
 func (*ListVariantsResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{10}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ListVariantsResponse) GetVariants() []*Variant {
@@ -871,7 +1150,7 @@ type GetRequest struct {
 func (x *GetRequest) Reset() {
 	*x = GetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[11]
+		mi := &file_api_listing_service_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -884,7 +1163,7 @@ func (x *GetRequest) String() string {
 func (*GetRequest) ProtoMessage() {}
 
 func (x *GetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[11]
+	mi := &file_api_listing_service_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -897,7 +1176,7 @@ func (x *GetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRequest.ProtoReflect.Descriptor instead.
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{11}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GetRequest) GetListingId() string {
@@ -919,7 +1198,7 @@ type GetVariantRequest struct {
 func (x *GetVariantRequest) Reset() {
 	*x = GetVariantRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[12]
+		mi := &file_api_listing_service_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -932,7 +1211,7 @@ func (x *GetVariantRequest) String() string {
 func (*GetVariantRequest) ProtoMessage() {}
 
 func (x *GetVariantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[12]
+	mi := &file_api_listing_service_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -945,7 +1224,7 @@ func (x *GetVariantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVariantRequest.ProtoReflect.Descriptor instead.
 func (*GetVariantRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{12}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetVariantRequest) GetSku() string {
@@ -967,7 +1246,7 @@ type GetBySKURequest struct {
 func (x *GetBySKURequest) Reset() {
 	*x = GetBySKURequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[13]
+		mi := &file_api_listing_service_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -980,7 +1259,7 @@ func (x *GetBySKURequest) String() string {
 func (*GetBySKURequest) ProtoMessage() {}
 
 func (x *GetBySKURequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[13]
+	mi := &file_api_listing_service_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -993,7 +1272,7 @@ func (x *GetBySKURequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBySKURequest.ProtoReflect.Descriptor instead.
 func (*GetBySKURequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{13}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetBySKURequest) GetSku() string {
@@ -1022,7 +1301,7 @@ type UpdateStatusRequest struct {
 func (x *UpdateStatusRequest) Reset() {
 	*x = UpdateStatusRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[14]
+		mi := &file_api_listing_service_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1035,7 +1314,7 @@ func (x *UpdateStatusRequest) String() string {
 func (*UpdateStatusRequest) ProtoMessage() {}
 
 func (x *UpdateStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[14]
+	mi := &file_api_listing_service_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1048,7 +1327,7 @@ func (x *UpdateStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateStatusRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{14}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *UpdateStatusRequest) GetSku() string {
@@ -1103,7 +1382,7 @@ type UpdateStatusResponse struct {
 func (x *UpdateStatusResponse) Reset() {
 	*x = UpdateStatusResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[15]
+		mi := &file_api_listing_service_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1116,7 +1395,7 @@ func (x *UpdateStatusResponse) String() string {
 func (*UpdateStatusResponse) ProtoMessage() {}
 
 func (x *UpdateStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[15]
+	mi := &file_api_listing_service_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1129,7 +1408,7 @@ func (x *UpdateStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatusResponse.ProtoReflect.Descriptor instead.
 func (*UpdateStatusResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{15}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{21}
 }
 
 // UpdateChannelListingIDRequest provides the status of a SKU
@@ -1145,7 +1424,7 @@ type UpdateChannelListingIDRequest struct {
 func (x *UpdateChannelListingIDRequest) Reset() {
 	*x = UpdateChannelListingIDRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[16]
+		mi := &file_api_listing_service_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1158,7 +1437,7 @@ func (x *UpdateChannelListingIDRequest) String() string {
 func (*UpdateChannelListingIDRequest) ProtoMessage() {}
 
 func (x *UpdateChannelListingIDRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[16]
+	mi := &file_api_listing_service_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1171,7 +1450,7 @@ func (x *UpdateChannelListingIDRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateChannelListingIDRequest.ProtoReflect.Descriptor instead.
 func (*UpdateChannelListingIDRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{16}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *UpdateChannelListingIDRequest) GetSku() string {
@@ -1198,7 +1477,7 @@ type UpdateChannelListingIDResponse struct {
 func (x *UpdateChannelListingIDResponse) Reset() {
 	*x = UpdateChannelListingIDResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[17]
+		mi := &file_api_listing_service_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1211,7 +1490,7 @@ func (x *UpdateChannelListingIDResponse) String() string {
 func (*UpdateChannelListingIDResponse) ProtoMessage() {}
 
 func (x *UpdateChannelListingIDResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[17]
+	mi := &file_api_listing_service_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1224,7 +1503,7 @@ func (x *UpdateChannelListingIDResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateChannelListingIDResponse.ProtoReflect.Descriptor instead.
 func (*UpdateChannelListingIDResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{17}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{23}
 }
 
 // ReplaceErrorsRequest provides all the channel-generated errors for a SKU
@@ -1241,7 +1520,7 @@ type ReplaceErrorsRequest struct {
 func (x *ReplaceErrorsRequest) Reset() {
 	*x = ReplaceErrorsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[18]
+		mi := &file_api_listing_service_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1254,7 +1533,7 @@ func (x *ReplaceErrorsRequest) String() string {
 func (*ReplaceErrorsRequest) ProtoMessage() {}
 
 func (x *ReplaceErrorsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[18]
+	mi := &file_api_listing_service_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1267,7 +1546,7 @@ func (x *ReplaceErrorsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReplaceErrorsRequest.ProtoReflect.Descriptor instead.
 func (*ReplaceErrorsRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{18}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *ReplaceErrorsRequest) GetSku() string {
@@ -1307,7 +1586,7 @@ type Error struct {
 func (x *Error) Reset() {
 	*x = Error{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[19]
+		mi := &file_api_listing_service_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1320,7 +1599,7 @@ func (x *Error) String() string {
 func (*Error) ProtoMessage() {}
 
 func (x *Error) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[19]
+	mi := &file_api_listing_service_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1333,7 +1612,7 @@ func (x *Error) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Error.ProtoReflect.Descriptor instead.
 func (*Error) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{19}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *Error) GetAttributeIds() []string {
@@ -1374,7 +1653,7 @@ type ReplaceErrorsResponse struct {
 func (x *ReplaceErrorsResponse) Reset() {
 	*x = ReplaceErrorsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[20]
+		mi := &file_api_listing_service_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1387,7 +1666,7 @@ func (x *ReplaceErrorsResponse) String() string {
 func (*ReplaceErrorsResponse) ProtoMessage() {}
 
 func (x *ReplaceErrorsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[20]
+	mi := &file_api_listing_service_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1400,7 +1679,62 @@ func (x *ReplaceErrorsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReplaceErrorsResponse.ProtoReflect.Descriptor instead.
 func (*ReplaceErrorsResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{20}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{26}
+}
+
+type RequestIngestionRequest_Variant struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Sku        string       `protobuf:"bytes,1,opt,name=sku,proto3" json:"sku,omitempty"`
+	Attributes []*Attribute `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty"`
+}
+
+func (x *RequestIngestionRequest_Variant) Reset() {
+	*x = RequestIngestionRequest_Variant{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_listing_service_proto_msgTypes[27]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RequestIngestionRequest_Variant) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RequestIngestionRequest_Variant) ProtoMessage() {}
+
+func (x *RequestIngestionRequest_Variant) ProtoReflect() protoreflect.Message {
+	mi := &file_api_listing_service_proto_msgTypes[27]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RequestIngestionRequest_Variant.ProtoReflect.Descriptor instead.
+func (*RequestIngestionRequest_Variant) Descriptor() ([]byte, []int) {
+	return file_api_listing_service_proto_rawDescGZIP(), []int{2, 0}
+}
+
+func (x *RequestIngestionRequest_Variant) GetSku() string {
+	if x != nil {
+		return x.Sku
+	}
+	return ""
+}
+
+func (x *RequestIngestionRequest_Variant) GetAttributes() []*Attribute {
+	if x != nil {
+		return x.Attributes
+	}
+	return nil
 }
 
 var File_api_listing_service_proto protoreflect.FileDescriptor
@@ -1419,6 +1753,38 @@ var file_api_listing_service_proto_rawDesc = []byte{
 	0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x2d, 0x67, 0x65, 0x6e, 0x2d, 0x6f, 0x70, 0x65,
 	0x6e, 0x61, 0x70, 0x69, 0x76, 0x32, 0x2f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x61,
 	0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x22, 0x4b, 0x0a, 0x15, 0x42, 0x65, 0x67, 0x69, 0x6e, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x32, 0x0a, 0x15, 0x65, 0x78, 0x70,
+	0x65, 0x63, 0x74, 0x65, 0x64, 0x5f, 0x6e, 0x75, 0x6d, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e,
+	0x67, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x13, 0x65, 0x78, 0x70, 0x65, 0x63, 0x74,
+	0x65, 0x64, 0x4e, 0x75, 0x6d, 0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x22, 0x18, 0x0a,
+	0x16, 0x42, 0x65, 0x67, 0x69, 0x6e, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x9b, 0x02, 0x0a, 0x17, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x12, 0x29, 0x0a, 0x10, 0x70, 0x69, 0x76, 0x6f, 0x74, 0x5f, 0x61, 0x74, 0x74,
+	0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0f, 0x70,
+	0x69, 0x76, 0x6f, 0x74, 0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x12, 0x36,
+	0x0a, 0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x16, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69,
+	0x2e, 0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x52, 0x0a, 0x61, 0x74, 0x74, 0x72,
+	0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x12, 0x48, 0x0a, 0x08, 0x76, 0x61, 0x72, 0x69, 0x61, 0x6e,
+	0x74, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69,
+	0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x49, 0x6e,
+	0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x56,
+	0x61, 0x72, 0x69, 0x61, 0x6e, 0x74, 0x52, 0x08, 0x76, 0x61, 0x72, 0x69, 0x61, 0x6e, 0x74, 0x73,
+	0x1a, 0x53, 0x0a, 0x07, 0x56, 0x61, 0x72, 0x69, 0x61, 0x6e, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x73,
+	0x6b, 0x75, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x73, 0x6b, 0x75, 0x12, 0x36, 0x0a,
+	0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x16, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x2e,
+	0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x52, 0x0a, 0x61, 0x74, 0x74, 0x72, 0x69,
+	0x62, 0x75, 0x74, 0x65, 0x73, 0x22, 0x1a, 0x0a, 0x18, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x45, 0x0a, 0x13, 0x45, 0x6e, 0x64, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f,
+	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2e, 0x0a, 0x13, 0x61, 0x63, 0x74, 0x75,
+	0x61, 0x6c, 0x5f, 0x6e, 0x75, 0x6d, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x11, 0x61, 0x63, 0x74, 0x75, 0x61, 0x6c, 0x4e, 0x75, 0x6d,
+	0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x22, 0x16, 0x0a, 0x14, 0x45, 0x6e, 0x64, 0x49,
+	0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x22, 0x29, 0x0a, 0x15, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x46, 0x6f, 0x72, 0x53,
 	0x4b, 0x55, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x6b, 0x75,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x73, 0x6b, 0x75, 0x22, 0x39, 0x0a, 0x16, 0x43,
@@ -1584,7 +1950,7 @@ var file_api_listing_service_proto_rawDesc = []byte{
 	0x41, 0x4e, 0x44, 0x41, 0x52, 0x44, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x53, 0x55,
 	0x50, 0x50, 0x52, 0x45, 0x53, 0x53, 0x45, 0x44, 0x10, 0x03, 0x12, 0x1b, 0x0a, 0x17, 0x53, 0x54,
 	0x41, 0x4e, 0x44, 0x41, 0x52, 0x44, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x52, 0x45,
-	0x54, 0x49, 0x52, 0x45, 0x44, 0x10, 0x04, 0x32, 0x9b, 0x11, 0x0a, 0x0e, 0x4c, 0x69, 0x73, 0x74,
+	0x54, 0x49, 0x52, 0x45, 0x44, 0x10, 0x04, 0x32, 0xc8, 0x14, 0x0a, 0x0e, 0x4c, 0x69, 0x73, 0x74,
 	0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x61, 0x0a, 0x03, 0x47, 0x65,
 	0x74, 0x12, 0x17, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x2e,
 	0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x6c, 0x69, 0x73,
@@ -1711,23 +2077,50 @@ var file_api_listing_service_proto_rawDesc = []byte{
 	0x74, 0x6f, 0x72, 0x65, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e,
 	0x67, 0x2f, 0x73, 0x75, 0x62, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2f, 0x7b, 0x73, 0x75,
 	0x62, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x69, 0x6e, 0x76,
-	0x65, 0x6e, 0x74, 0x6f, 0x72, 0x79, 0x3a, 0x01, 0x2a, 0x1a, 0xa9, 0x01, 0x92, 0x41, 0xa5, 0x01,
-	0x0a, 0x10, 0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x20, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x12, 0x90, 0x01, 0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x20, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x20, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x73, 0x20, 0x61,
-	0x20, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x20, 0x66, 0x6f, 0x72, 0x20, 0x6c, 0x69, 0x73,
-	0x74, 0x69, 0x6e, 0x67, 0x20, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x20, 0x6f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x0a, 0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x6e, 0x63,
-	0x6c, 0x75, 0x64, 0x65, 0x73, 0x20, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x76, 0x69, 0x6e, 0x67,
-	0x20, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x20, 0x61, 0x73, 0x20, 0x77, 0x65, 0x6c,
-	0x6c, 0x20, 0x61, 0x73, 0x20, 0x73, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x20, 0x62, 0x61, 0x63,
-	0x6b, 0x20, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x65, 0x73, 0x20, 0x74, 0x6f, 0x20, 0x5a, 0x65,
-	0x6e, 0x74, 0x61, 0x69, 0x6c, 0x42, 0x4c, 0x5a, 0x33, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x68, 0x64, 0x74, 0x72, 0x61, 0x64, 0x65, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x73, 0x2f, 0x61, 0x70, 0x69, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x92, 0x41, 0x14, 0x12,
-	0x12, 0x0a, 0x0c, 0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x20, 0x41, 0x50, 0x49, 0x32,
-	0x02, 0x76, 0x32, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x6e, 0x74, 0x6f, 0x72, 0x79, 0x3a, 0x01, 0x2a, 0x12, 0x8c, 0x01, 0x0a, 0x0e, 0x42, 0x65,
+	0x67, 0x69, 0x6e, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x22, 0x2e, 0x6c,
+	0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x42, 0x65, 0x67, 0x69, 0x6e,
+	0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x23, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x42,
+	0x65, 0x67, 0x69, 0x6e, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x31, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2b, 0x22, 0x26, 0x2f,
+	0x76, 0x32, 0x2f, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x2f, 0x6c, 0x69,
+	0x73, 0x74, 0x69, 0x6e, 0x67, 0x2f, 0x69, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x2f,
+	0x62, 0x65, 0x67, 0x69, 0x6e, 0x3a, 0x01, 0x2a, 0x12, 0x94, 0x01, 0x0a, 0x10, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x24, 0x2e,
+	0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70,
+	0x69, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x33, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x2d, 0x22, 0x28, 0x2f, 0x76, 0x32, 0x2f, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x66, 0x72, 0x6f,
+	0x6e, 0x74, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2f, 0x69, 0x6e, 0x67, 0x65, 0x73,
+	0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x3a, 0x01, 0x2a, 0x12,
+	0x84, 0x01, 0x0a, 0x0c, 0x45, 0x6e, 0x64, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e,
+	0x12, 0x20, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x45,
+	0x6e, 0x64, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x21, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69,
+	0x2e, 0x45, 0x6e, 0x64, 0x49, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2f, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x29, 0x22, 0x24, 0x2f,
+	0x76, 0x32, 0x2f, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x2f, 0x6c, 0x69,
+	0x73, 0x74, 0x69, 0x6e, 0x67, 0x2f, 0x69, 0x6e, 0x67, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x2f,
+	0x65, 0x6e, 0x64, 0x3a, 0x01, 0x2a, 0x1a, 0xa9, 0x01, 0x92, 0x41, 0xa5, 0x01, 0x0a, 0x10, 0x4c,
+	0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x20, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
+	0x90, 0x01, 0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x20, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x20, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x73, 0x20, 0x61, 0x20, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x20, 0x66, 0x6f, 0x72, 0x20, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e,
+	0x67, 0x20, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x20, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x0a, 0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x6e, 0x63, 0x6c, 0x75, 0x64,
+	0x65, 0x73, 0x20, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x76, 0x69, 0x6e, 0x67, 0x20, 0x6c, 0x69,
+	0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x20, 0x61, 0x73, 0x20, 0x77, 0x65, 0x6c, 0x6c, 0x20, 0x61,
+	0x73, 0x20, 0x73, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x20, 0x62, 0x61, 0x63, 0x6b, 0x20, 0x73,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x65, 0x73, 0x20, 0x74, 0x6f, 0x20, 0x5a, 0x65, 0x6e, 0x74, 0x61,
+	0x69, 0x6c, 0x42, 0x4c, 0x5a, 0x33, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x68, 0x64, 0x74, 0x72, 0x61, 0x64, 0x65, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2f, 0x61, 0x70, 0x69, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x92, 0x41, 0x14, 0x12, 0x12, 0x0a, 0x0c,
+	0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x20, 0x41, 0x50, 0x49, 0x32, 0x02, 0x76, 0x32,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1743,86 +2136,103 @@ func file_api_listing_service_proto_rawDescGZIP() []byte {
 }
 
 var file_api_listing_service_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_api_listing_service_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_api_listing_service_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_api_listing_service_proto_goTypes = []interface{}{
 	(StandardStatus)(0),                           // 0: listing_api.StandardStatus
 	(UpdateSubmissionRequest_Status)(0),           // 1: listing_api.UpdateSubmissionRequest.Status
 	(Error_Severity)(0),                           // 2: listing_api.Error.Severity
 	(Error_Type)(0),                               // 3: listing_api.Error.Type
-	(*CategoryForSKURequest)(nil),                 // 4: listing_api.CategoryForSKURequest
-	(*CategoryForSKUResponse)(nil),                // 5: listing_api.CategoryForSKUResponse
-	(*CreateSubmissionsRequest)(nil),              // 6: listing_api.CreateSubmissionsRequest
-	(*CreateSubmissionsResponse)(nil),             // 7: listing_api.CreateSubmissionsResponse
-	(*UpdateSubmissionRequest)(nil),               // 8: listing_api.UpdateSubmissionRequest
-	(*SetInventorySubmissionDetailsRequest)(nil),  // 9: listing_api.SetInventorySubmissionDetailsRequest
-	(*SetInventorySubmissionDetailsResponse)(nil), // 10: listing_api.SetInventorySubmissionDetailsResponse
-	(*ListInventorySinceRequest)(nil),             // 11: listing_api.ListInventorySinceRequest
-	(*ListSinceRequest)(nil),                      // 12: listing_api.ListSinceRequest
-	(*ListListingsResponse)(nil),                  // 13: listing_api.ListListingsResponse
-	(*ListVariantsResponse)(nil),                  // 14: listing_api.ListVariantsResponse
-	(*GetRequest)(nil),                            // 15: listing_api.GetRequest
-	(*GetVariantRequest)(nil),                     // 16: listing_api.GetVariantRequest
-	(*GetBySKURequest)(nil),                       // 17: listing_api.GetBySKURequest
-	(*UpdateStatusRequest)(nil),                   // 18: listing_api.UpdateStatusRequest
-	(*UpdateStatusResponse)(nil),                  // 19: listing_api.UpdateStatusResponse
-	(*UpdateChannelListingIDRequest)(nil),         // 20: listing_api.UpdateChannelListingIDRequest
-	(*UpdateChannelListingIDResponse)(nil),        // 21: listing_api.UpdateChannelListingIDResponse
-	(*ReplaceErrorsRequest)(nil),                  // 22: listing_api.ReplaceErrorsRequest
-	(*Error)(nil),                                 // 23: listing_api.Error
-	(*ReplaceErrorsResponse)(nil),                 // 24: listing_api.ReplaceErrorsResponse
-	nil,                                           // 25: listing_api.UpdateSubmissionRequest.MetadataEntry
-	(*Submission)(nil),                            // 26: listing_api.Submission
-	(*timestamppb.Timestamp)(nil),                 // 27: google.protobuf.Timestamp
-	(*Listing)(nil),                               // 28: listing_api.Listing
-	(*Variant)(nil),                               // 29: listing_api.Variant
+	(*BeginIngestionRequest)(nil),                 // 4: listing_api.BeginIngestionRequest
+	(*BeginIngestionResponse)(nil),                // 5: listing_api.BeginIngestionResponse
+	(*RequestIngestionRequest)(nil),               // 6: listing_api.RequestIngestionRequest
+	(*RequestIngestionResponse)(nil),              // 7: listing_api.RequestIngestionResponse
+	(*EndIngestionRequest)(nil),                   // 8: listing_api.EndIngestionRequest
+	(*EndIngestionResponse)(nil),                  // 9: listing_api.EndIngestionResponse
+	(*CategoryForSKURequest)(nil),                 // 10: listing_api.CategoryForSKURequest
+	(*CategoryForSKUResponse)(nil),                // 11: listing_api.CategoryForSKUResponse
+	(*CreateSubmissionsRequest)(nil),              // 12: listing_api.CreateSubmissionsRequest
+	(*CreateSubmissionsResponse)(nil),             // 13: listing_api.CreateSubmissionsResponse
+	(*UpdateSubmissionRequest)(nil),               // 14: listing_api.UpdateSubmissionRequest
+	(*SetInventorySubmissionDetailsRequest)(nil),  // 15: listing_api.SetInventorySubmissionDetailsRequest
+	(*SetInventorySubmissionDetailsResponse)(nil), // 16: listing_api.SetInventorySubmissionDetailsResponse
+	(*ListInventorySinceRequest)(nil),             // 17: listing_api.ListInventorySinceRequest
+	(*ListSinceRequest)(nil),                      // 18: listing_api.ListSinceRequest
+	(*ListListingsResponse)(nil),                  // 19: listing_api.ListListingsResponse
+	(*ListVariantsResponse)(nil),                  // 20: listing_api.ListVariantsResponse
+	(*GetRequest)(nil),                            // 21: listing_api.GetRequest
+	(*GetVariantRequest)(nil),                     // 22: listing_api.GetVariantRequest
+	(*GetBySKURequest)(nil),                       // 23: listing_api.GetBySKURequest
+	(*UpdateStatusRequest)(nil),                   // 24: listing_api.UpdateStatusRequest
+	(*UpdateStatusResponse)(nil),                  // 25: listing_api.UpdateStatusResponse
+	(*UpdateChannelListingIDRequest)(nil),         // 26: listing_api.UpdateChannelListingIDRequest
+	(*UpdateChannelListingIDResponse)(nil),        // 27: listing_api.UpdateChannelListingIDResponse
+	(*ReplaceErrorsRequest)(nil),                  // 28: listing_api.ReplaceErrorsRequest
+	(*Error)(nil),                                 // 29: listing_api.Error
+	(*ReplaceErrorsResponse)(nil),                 // 30: listing_api.ReplaceErrorsResponse
+	(*RequestIngestionRequest_Variant)(nil),       // 31: listing_api.RequestIngestionRequest.Variant
+	nil,                                           // 32: listing_api.UpdateSubmissionRequest.MetadataEntry
+	(*Attribute)(nil),                             // 33: listing_api.Attribute
+	(*Submission)(nil),                            // 34: listing_api.Submission
+	(*timestamppb.Timestamp)(nil),                 // 35: google.protobuf.Timestamp
+	(*Listing)(nil),                               // 36: listing_api.Listing
+	(*Variant)(nil),                               // 37: listing_api.Variant
 }
 var file_api_listing_service_proto_depIdxs = []int32{
-	26, // 0: listing_api.CreateSubmissionsRequest.submissions:type_name -> listing_api.Submission
-	26, // 1: listing_api.CreateSubmissionsResponse.submissions:type_name -> listing_api.Submission
-	25, // 2: listing_api.UpdateSubmissionRequest.metadata:type_name -> listing_api.UpdateSubmissionRequest.MetadataEntry
-	27, // 3: listing_api.UpdateSubmissionRequest.changed_at:type_name -> google.protobuf.Timestamp
-	1,  // 4: listing_api.UpdateSubmissionRequest.status:type_name -> listing_api.UpdateSubmissionRequest.Status
-	27, // 5: listing_api.ListInventorySinceRequest.since:type_name -> google.protobuf.Timestamp
-	27, // 6: listing_api.ListSinceRequest.since:type_name -> google.protobuf.Timestamp
-	28, // 7: listing_api.ListListingsResponse.listings:type_name -> listing_api.Listing
-	29, // 8: listing_api.ListVariantsResponse.variants:type_name -> listing_api.Variant
-	0,  // 9: listing_api.UpdateStatusRequest.status:type_name -> listing_api.StandardStatus
-	23, // 10: listing_api.ReplaceErrorsRequest.errors:type_name -> listing_api.Error
-	2,  // 11: listing_api.Error.severity:type_name -> listing_api.Error.Severity
-	3,  // 12: listing_api.Error.type:type_name -> listing_api.Error.Type
-	15, // 13: listing_api.ListingService.Get:input_type -> listing_api.GetRequest
-	17, // 14: listing_api.ListingService.GetBySKU:input_type -> listing_api.GetBySKURequest
-	4,  // 15: listing_api.ListingService.CategoryForSKU:input_type -> listing_api.CategoryForSKURequest
-	16, // 16: listing_api.ListingService.GetVariant:input_type -> listing_api.GetVariantRequest
-	12, // 17: listing_api.ListingService.ListNewListings:input_type -> listing_api.ListSinceRequest
-	12, // 18: listing_api.ListingService.ListUpdatedListings:input_type -> listing_api.ListSinceRequest
-	11, // 19: listing_api.ListingService.ListVariantsWithUpdatedInventory:input_type -> listing_api.ListInventorySinceRequest
-	12, // 20: listing_api.ListingService.ListVariantsWithUpdatedPricing:input_type -> listing_api.ListSinceRequest
-	18, // 21: listing_api.ListingService.UpdateStatus:input_type -> listing_api.UpdateStatusRequest
-	20, // 22: listing_api.ListingService.UpdateChannelListingID:input_type -> listing_api.UpdateChannelListingIDRequest
-	22, // 23: listing_api.ListingService.ReplaceErrors:input_type -> listing_api.ReplaceErrorsRequest
-	6,  // 24: listing_api.ListingService.CreateSubmissions:input_type -> listing_api.CreateSubmissionsRequest
-	8,  // 25: listing_api.ListingService.UpdateSubmission:input_type -> listing_api.UpdateSubmissionRequest
-	9,  // 26: listing_api.ListingService.SetInventorySubmissionDetails:input_type -> listing_api.SetInventorySubmissionDetailsRequest
-	28, // 27: listing_api.ListingService.Get:output_type -> listing_api.Listing
-	28, // 28: listing_api.ListingService.GetBySKU:output_type -> listing_api.Listing
-	5,  // 29: listing_api.ListingService.CategoryForSKU:output_type -> listing_api.CategoryForSKUResponse
-	29, // 30: listing_api.ListingService.GetVariant:output_type -> listing_api.Variant
-	13, // 31: listing_api.ListingService.ListNewListings:output_type -> listing_api.ListListingsResponse
-	13, // 32: listing_api.ListingService.ListUpdatedListings:output_type -> listing_api.ListListingsResponse
-	14, // 33: listing_api.ListingService.ListVariantsWithUpdatedInventory:output_type -> listing_api.ListVariantsResponse
-	14, // 34: listing_api.ListingService.ListVariantsWithUpdatedPricing:output_type -> listing_api.ListVariantsResponse
-	19, // 35: listing_api.ListingService.UpdateStatus:output_type -> listing_api.UpdateStatusResponse
-	21, // 36: listing_api.ListingService.UpdateChannelListingID:output_type -> listing_api.UpdateChannelListingIDResponse
-	24, // 37: listing_api.ListingService.ReplaceErrors:output_type -> listing_api.ReplaceErrorsResponse
-	7,  // 38: listing_api.ListingService.CreateSubmissions:output_type -> listing_api.CreateSubmissionsResponse
-	26, // 39: listing_api.ListingService.UpdateSubmission:output_type -> listing_api.Submission
-	10, // 40: listing_api.ListingService.SetInventorySubmissionDetails:output_type -> listing_api.SetInventorySubmissionDetailsResponse
-	27, // [27:41] is the sub-list for method output_type
-	13, // [13:27] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	33, // 0: listing_api.RequestIngestionRequest.attributes:type_name -> listing_api.Attribute
+	31, // 1: listing_api.RequestIngestionRequest.variants:type_name -> listing_api.RequestIngestionRequest.Variant
+	34, // 2: listing_api.CreateSubmissionsRequest.submissions:type_name -> listing_api.Submission
+	34, // 3: listing_api.CreateSubmissionsResponse.submissions:type_name -> listing_api.Submission
+	32, // 4: listing_api.UpdateSubmissionRequest.metadata:type_name -> listing_api.UpdateSubmissionRequest.MetadataEntry
+	35, // 5: listing_api.UpdateSubmissionRequest.changed_at:type_name -> google.protobuf.Timestamp
+	1,  // 6: listing_api.UpdateSubmissionRequest.status:type_name -> listing_api.UpdateSubmissionRequest.Status
+	35, // 7: listing_api.ListInventorySinceRequest.since:type_name -> google.protobuf.Timestamp
+	35, // 8: listing_api.ListSinceRequest.since:type_name -> google.protobuf.Timestamp
+	36, // 9: listing_api.ListListingsResponse.listings:type_name -> listing_api.Listing
+	37, // 10: listing_api.ListVariantsResponse.variants:type_name -> listing_api.Variant
+	0,  // 11: listing_api.UpdateStatusRequest.status:type_name -> listing_api.StandardStatus
+	29, // 12: listing_api.ReplaceErrorsRequest.errors:type_name -> listing_api.Error
+	2,  // 13: listing_api.Error.severity:type_name -> listing_api.Error.Severity
+	3,  // 14: listing_api.Error.type:type_name -> listing_api.Error.Type
+	33, // 15: listing_api.RequestIngestionRequest.Variant.attributes:type_name -> listing_api.Attribute
+	21, // 16: listing_api.ListingService.Get:input_type -> listing_api.GetRequest
+	23, // 17: listing_api.ListingService.GetBySKU:input_type -> listing_api.GetBySKURequest
+	10, // 18: listing_api.ListingService.CategoryForSKU:input_type -> listing_api.CategoryForSKURequest
+	22, // 19: listing_api.ListingService.GetVariant:input_type -> listing_api.GetVariantRequest
+	18, // 20: listing_api.ListingService.ListNewListings:input_type -> listing_api.ListSinceRequest
+	18, // 21: listing_api.ListingService.ListUpdatedListings:input_type -> listing_api.ListSinceRequest
+	17, // 22: listing_api.ListingService.ListVariantsWithUpdatedInventory:input_type -> listing_api.ListInventorySinceRequest
+	18, // 23: listing_api.ListingService.ListVariantsWithUpdatedPricing:input_type -> listing_api.ListSinceRequest
+	24, // 24: listing_api.ListingService.UpdateStatus:input_type -> listing_api.UpdateStatusRequest
+	26, // 25: listing_api.ListingService.UpdateChannelListingID:input_type -> listing_api.UpdateChannelListingIDRequest
+	28, // 26: listing_api.ListingService.ReplaceErrors:input_type -> listing_api.ReplaceErrorsRequest
+	12, // 27: listing_api.ListingService.CreateSubmissions:input_type -> listing_api.CreateSubmissionsRequest
+	14, // 28: listing_api.ListingService.UpdateSubmission:input_type -> listing_api.UpdateSubmissionRequest
+	15, // 29: listing_api.ListingService.SetInventorySubmissionDetails:input_type -> listing_api.SetInventorySubmissionDetailsRequest
+	4,  // 30: listing_api.ListingService.BeginIngestion:input_type -> listing_api.BeginIngestionRequest
+	6,  // 31: listing_api.ListingService.RequestIngestion:input_type -> listing_api.RequestIngestionRequest
+	8,  // 32: listing_api.ListingService.EndIngestion:input_type -> listing_api.EndIngestionRequest
+	36, // 33: listing_api.ListingService.Get:output_type -> listing_api.Listing
+	36, // 34: listing_api.ListingService.GetBySKU:output_type -> listing_api.Listing
+	11, // 35: listing_api.ListingService.CategoryForSKU:output_type -> listing_api.CategoryForSKUResponse
+	37, // 36: listing_api.ListingService.GetVariant:output_type -> listing_api.Variant
+	19, // 37: listing_api.ListingService.ListNewListings:output_type -> listing_api.ListListingsResponse
+	19, // 38: listing_api.ListingService.ListUpdatedListings:output_type -> listing_api.ListListingsResponse
+	20, // 39: listing_api.ListingService.ListVariantsWithUpdatedInventory:output_type -> listing_api.ListVariantsResponse
+	20, // 40: listing_api.ListingService.ListVariantsWithUpdatedPricing:output_type -> listing_api.ListVariantsResponse
+	25, // 41: listing_api.ListingService.UpdateStatus:output_type -> listing_api.UpdateStatusResponse
+	27, // 42: listing_api.ListingService.UpdateChannelListingID:output_type -> listing_api.UpdateChannelListingIDResponse
+	30, // 43: listing_api.ListingService.ReplaceErrors:output_type -> listing_api.ReplaceErrorsResponse
+	13, // 44: listing_api.ListingService.CreateSubmissions:output_type -> listing_api.CreateSubmissionsResponse
+	34, // 45: listing_api.ListingService.UpdateSubmission:output_type -> listing_api.Submission
+	16, // 46: listing_api.ListingService.SetInventorySubmissionDetails:output_type -> listing_api.SetInventorySubmissionDetailsResponse
+	5,  // 47: listing_api.ListingService.BeginIngestion:output_type -> listing_api.BeginIngestionResponse
+	7,  // 48: listing_api.ListingService.RequestIngestion:output_type -> listing_api.RequestIngestionResponse
+	9,  // 49: listing_api.ListingService.EndIngestion:output_type -> listing_api.EndIngestionResponse
+	33, // [33:50] is the sub-list for method output_type
+	16, // [16:33] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_api_listing_service_proto_init() }
@@ -1834,7 +2244,7 @@ func file_api_listing_service_proto_init() {
 	file_api_listing_submission_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_api_listing_service_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CategoryForSKURequest); i {
+			switch v := v.(*BeginIngestionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1846,7 +2256,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CategoryForSKUResponse); i {
+			switch v := v.(*BeginIngestionResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1858,7 +2268,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateSubmissionsRequest); i {
+			switch v := v.(*RequestIngestionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1870,7 +2280,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateSubmissionsResponse); i {
+			switch v := v.(*RequestIngestionResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1882,7 +2292,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateSubmissionRequest); i {
+			switch v := v.(*EndIngestionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1894,7 +2304,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetInventorySubmissionDetailsRequest); i {
+			switch v := v.(*EndIngestionResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1906,7 +2316,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetInventorySubmissionDetailsResponse); i {
+			switch v := v.(*CategoryForSKURequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1918,7 +2328,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListInventorySinceRequest); i {
+			switch v := v.(*CategoryForSKUResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1930,7 +2340,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListSinceRequest); i {
+			switch v := v.(*CreateSubmissionsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1942,7 +2352,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListListingsResponse); i {
+			switch v := v.(*CreateSubmissionsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1954,7 +2364,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListVariantsResponse); i {
+			switch v := v.(*UpdateSubmissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1966,7 +2376,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetRequest); i {
+			switch v := v.(*SetInventorySubmissionDetailsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1978,7 +2388,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetVariantRequest); i {
+			switch v := v.(*SetInventorySubmissionDetailsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1990,7 +2400,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetBySKURequest); i {
+			switch v := v.(*ListInventorySinceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2002,7 +2412,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateStatusRequest); i {
+			switch v := v.(*ListSinceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2014,7 +2424,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateStatusResponse); i {
+			switch v := v.(*ListListingsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2026,7 +2436,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateChannelListingIDRequest); i {
+			switch v := v.(*ListVariantsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2038,7 +2448,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateChannelListingIDResponse); i {
+			switch v := v.(*GetRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2050,7 +2460,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReplaceErrorsRequest); i {
+			switch v := v.(*GetVariantRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2062,7 +2472,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Error); i {
+			switch v := v.(*GetBySKURequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2074,7 +2484,91 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateStatusRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_listing_service_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateStatusResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_listing_service_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateChannelListingIDRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_listing_service_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateChannelListingIDResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_listing_service_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ReplaceErrorsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_listing_service_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Error); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_listing_service_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ReplaceErrorsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_listing_service_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RequestIngestionRequest_Variant); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2092,7 +2586,7 @@ func file_api_listing_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_listing_service_proto_rawDesc,
 			NumEnums:      4,
-			NumMessages:   22,
+			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
