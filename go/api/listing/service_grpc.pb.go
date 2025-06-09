@@ -75,6 +75,17 @@ type ListingServiceClient interface {
 	// SetInventorySubmissionDetails is used to set the inventory details for a
 	// given submission
 	SetInventorySubmissionDetails(ctx context.Context, in *SetInventorySubmissionDetailsRequest, opts ...grpc.CallOption) (*SetInventorySubmissionDetailsResponse, error)
+	// BeginIngestion is used to initiate the ingestion of listings
+	// for a given storefront.
+	// Needs to be called before RequestIngestion.
+	BeginIngestion(ctx context.Context, in *BeginIngestionRequest, opts ...grpc.CallOption) (*BeginIngestionResponse, error)
+	// RequestIngestion is used to request ingestion of a listing into Zentail.
+	// Need to call BeginIngestion before calling this method.
+	RequestIngestion(ctx context.Context, in *RequestIngestionRequest, opts ...grpc.CallOption) (*RequestIngestionResponse, error)
+	// EndIngestion is used to end the ingestion of Listings
+	// Needs to be called after all Listings requiring ingestion
+	// have been requested so that the generated Ingestion Plan can be applied.
+	EndIngestion(ctx context.Context, in *EndIngestionRequest, opts ...grpc.CallOption) (*EndIngestionResponse, error)
 }
 
 type listingServiceClient struct {
@@ -211,6 +222,33 @@ func (c *listingServiceClient) SetInventorySubmissionDetails(ctx context.Context
 	return out, nil
 }
 
+func (c *listingServiceClient) BeginIngestion(ctx context.Context, in *BeginIngestionRequest, opts ...grpc.CallOption) (*BeginIngestionResponse, error) {
+	out := new(BeginIngestionResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/BeginIngestion", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) RequestIngestion(ctx context.Context, in *RequestIngestionRequest, opts ...grpc.CallOption) (*RequestIngestionResponse, error) {
+	out := new(RequestIngestionResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/RequestIngestion", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *listingServiceClient) EndIngestion(ctx context.Context, in *EndIngestionRequest, opts ...grpc.CallOption) (*EndIngestionResponse, error) {
+	out := new(EndIngestionResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/EndIngestion", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ListingServiceServer is the server API for ListingService service.
 // All implementations should embed UnimplementedListingServiceServer
 // for forward compatibility
@@ -272,6 +310,17 @@ type ListingServiceServer interface {
 	// SetInventorySubmissionDetails is used to set the inventory details for a
 	// given submission
 	SetInventorySubmissionDetails(context.Context, *SetInventorySubmissionDetailsRequest) (*SetInventorySubmissionDetailsResponse, error)
+	// BeginIngestion is used to initiate the ingestion of listings
+	// for a given storefront.
+	// Needs to be called before RequestIngestion.
+	BeginIngestion(context.Context, *BeginIngestionRequest) (*BeginIngestionResponse, error)
+	// RequestIngestion is used to request ingestion of a listing into Zentail.
+	// Need to call BeginIngestion before calling this method.
+	RequestIngestion(context.Context, *RequestIngestionRequest) (*RequestIngestionResponse, error)
+	// EndIngestion is used to end the ingestion of Listings
+	// Needs to be called after all Listings requiring ingestion
+	// have been requested so that the generated Ingestion Plan can be applied.
+	EndIngestion(context.Context, *EndIngestionRequest) (*EndIngestionResponse, error)
 }
 
 // UnimplementedListingServiceServer should be embedded to have forward compatible implementations.
@@ -319,6 +368,15 @@ func (UnimplementedListingServiceServer) UpdateSubmission(context.Context, *Upda
 }
 func (UnimplementedListingServiceServer) SetInventorySubmissionDetails(context.Context, *SetInventorySubmissionDetailsRequest) (*SetInventorySubmissionDetailsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetInventorySubmissionDetails not implemented")
+}
+func (UnimplementedListingServiceServer) BeginIngestion(context.Context, *BeginIngestionRequest) (*BeginIngestionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BeginIngestion not implemented")
+}
+func (UnimplementedListingServiceServer) RequestIngestion(context.Context, *RequestIngestionRequest) (*RequestIngestionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequestIngestion not implemented")
+}
+func (UnimplementedListingServiceServer) EndIngestion(context.Context, *EndIngestionRequest) (*EndIngestionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EndIngestion not implemented")
 }
 
 // UnsafeListingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -584,6 +642,60 @@ func _ListingService_SetInventorySubmissionDetails_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ListingService_BeginIngestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BeginIngestionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).BeginIngestion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/BeginIngestion",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).BeginIngestion(ctx, req.(*BeginIngestionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_RequestIngestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RequestIngestionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).RequestIngestion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/RequestIngestion",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).RequestIngestion(ctx, req.(*RequestIngestionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ListingService_EndIngestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndIngestionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).EndIngestion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/EndIngestion",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).EndIngestion(ctx, req.(*EndIngestionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ListingService_ServiceDesc is the grpc.ServiceDesc for ListingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -646,6 +758,18 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetInventorySubmissionDetails",
 			Handler:    _ListingService_SetInventorySubmissionDetails_Handler,
+		},
+		{
+			MethodName: "BeginIngestion",
+			Handler:    _ListingService_BeginIngestion_Handler,
+		},
+		{
+			MethodName: "RequestIngestion",
+			Handler:    _ListingService_RequestIngestion_Handler,
+		},
+		{
+			MethodName: "EndIngestion",
+			Handler:    _ListingService_EndIngestion_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

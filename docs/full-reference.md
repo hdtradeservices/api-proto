@@ -23,10 +23,14 @@
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
 - [api/listing/service.proto](#api_listing_service-proto)
+    - [BeginIngestionRequest](#listing_api-BeginIngestionRequest)
+    - [BeginIngestionResponse](#listing_api-BeginIngestionResponse)
     - [CategoryForSKURequest](#listing_api-CategoryForSKURequest)
     - [CategoryForSKUResponse](#listing_api-CategoryForSKUResponse)
     - [CreateSubmissionsRequest](#listing_api-CreateSubmissionsRequest)
     - [CreateSubmissionsResponse](#listing_api-CreateSubmissionsResponse)
+    - [EndIngestionRequest](#listing_api-EndIngestionRequest)
+    - [EndIngestionResponse](#listing_api-EndIngestionResponse)
     - [Error](#listing_api-Error)
     - [GetBySKURequest](#listing_api-GetBySKURequest)
     - [GetRequest](#listing_api-GetRequest)
@@ -37,6 +41,9 @@
     - [ListVariantsResponse](#listing_api-ListVariantsResponse)
     - [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest)
     - [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse)
+    - [RequestIngestionRequest](#listing_api-RequestIngestionRequest)
+    - [RequestIngestionRequest.Variant](#listing_api-RequestIngestionRequest-Variant)
+    - [RequestIngestionResponse](#listing_api-RequestIngestionResponse)
     - [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest)
     - [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse)
     - [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest)
@@ -427,6 +434,31 @@ structured information about scheduled sales
 
 
 
+<a name="listing_api-BeginIngestionRequest"></a>
+
+### BeginIngestionRequest
+BeginIngestionRequest is used to initiate the ingestion of listings
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| expected_num_listings | [int64](#int64) |  |  |
+
+
+
+
+
+
+<a name="listing_api-BeginIngestionResponse"></a>
+
+### BeginIngestionResponse
+BeginIngestionResponse is used to return the response of the BeginIngestion
+
+
+
+
+
+
 <a name="listing_api-CategoryForSKURequest"></a>
 
 ### CategoryForSKURequest
@@ -482,6 +514,31 @@ CreateSubmissionsResponse contains the submissions created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | submissions | [Submission](#listing_api-Submission) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-EndIngestionRequest"></a>
+
+### EndIngestionRequest
+EndIngestionRequest is used to end the ingestion of Listings
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| actual_num_listings | [int64](#int64) |  |  |
+
+
+
+
+
+
+<a name="listing_api-EndIngestionResponse"></a>
+
+### EndIngestionResponse
+EndIngestionResponse is used to return the response of the EndIngestion
 
 
 
@@ -637,6 +694,49 @@ ReplaceErrorsRequest provides all the channel-generated errors for a SKU
 
 ### ReplaceErrorsResponse
 ReplaceErrorsResponse is empty
+
+
+
+
+
+
+<a name="listing_api-RequestIngestionRequest"></a>
+
+### RequestIngestionRequest
+RequestIngestionRequest is used to request ingestion of a listing into Zentail
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| pivot_attributes | [string](#string) | repeated | The attribute IDs or names that this Listing pivots by (aka variation attributes, variant attributes) |
+| attributes | [Attribute](#listing_api-Attribute) | repeated | Listing-level Attributes that are not variant-specific |
+| variants | [RequestIngestionRequest.Variant](#listing_api-RequestIngestionRequest-Variant) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-RequestIngestionRequest-Variant"></a>
+
+### RequestIngestionRequest.Variant
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sku | [string](#string) |  |  |
+| attributes | [Attribute](#listing_api-Attribute) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-RequestIngestionResponse"></a>
+
+### RequestIngestionResponse
+RequestIngestionResponse is used to return the response of the RequestIngestion
 
 
 
@@ -868,6 +968,9 @@ Zentail.
 | CreateSubmissions | [CreateSubmissionsRequest](#listing_api-CreateSubmissionsRequest) | [CreateSubmissionsResponse](#listing_api-CreateSubmissionsResponse) | CreateSubmissions replaces the submissions for a variant This can be used at any stage, but is most recommended for the intitial creation of a new submission. For updating submissions after creation see UpdateSubmission |
 | UpdateSubmission | [UpdateSubmissionRequest](#listing_api-UpdateSubmissionRequest) | [Submission](#listing_api-Submission) | UpdateSubmission is used to move a submission to another status this can be done when its actually submitted for ingestion and/or when the ingestion is complete. |
 | SetInventorySubmissionDetails | [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest) | [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse) | SetInventorySubmissionDetails is used to set the inventory details for a given submission |
+| BeginIngestion | [BeginIngestionRequest](#listing_api-BeginIngestionRequest) | [BeginIngestionResponse](#listing_api-BeginIngestionResponse) | BeginIngestion is used to initiate the ingestion of listings for a given storefront. Needs to be called before RequestIngestion. |
+| RequestIngestion | [RequestIngestionRequest](#listing_api-RequestIngestionRequest) | [RequestIngestionResponse](#listing_api-RequestIngestionResponse) | RequestIngestion is used to request ingestion of a listing into Zentail. Need to call BeginIngestion before calling this method. |
+| EndIngestion | [EndIngestionRequest](#listing_api-EndIngestionRequest) | [EndIngestionResponse](#listing_api-EndIngestionResponse) | EndIngestion is used to end the ingestion of Listings Needs to be called after all Listings requiring ingestion have been requested so that the generated Ingestion Plan can be applied. |
 
  
 
