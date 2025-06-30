@@ -1155,6 +1155,10 @@
     "listing_apiRequestIngestionRequest": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "title": "An identifier for this listing that will then be used for the Product Group Label"
+        },
         "pivotAttributes": {
           "type": "array",
           "items": {
