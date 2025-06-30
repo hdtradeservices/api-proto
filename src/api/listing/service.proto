@@ -210,6 +210,8 @@ message BeginIngestionResponse {}
 
 // RequestIngestionRequest is used to request ingestion of a listing into Zentail
 message RequestIngestionRequest {
+  // An identifier for this listing that will then be used for the Product Group Label
+  string id = 4;
   // The attribute IDs or names that this Listing pivots by (aka variation attributes, variant attributes)
   repeated string pivot_attributes = 1;
   // Listing-level Attributes that are not variant-specific

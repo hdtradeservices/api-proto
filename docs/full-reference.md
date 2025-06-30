@@ -708,6 +708,7 @@ RequestIngestionRequest is used to request ingestion of a listing into Zentail
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  | An identifier for this listing that will then be used for the Product Group Label |
 | pivot_attributes | [string](#string) | repeated | The attribute IDs or names that this Listing pivots by (aka variation attributes, variant attributes) |
 | attributes | [Attribute](#listing_api-Attribute) | repeated | Listing-level Attributes that are not variant-specific |
 | variants | [RequestIngestionRequest.Variant](#listing_api-RequestIngestionRequest-Variant) | repeated |  |
