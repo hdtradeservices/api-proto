@@ -5,6 +5,7 @@ import "api/listing/listing.proto";
 import "api/listing/submission.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "google/type/money.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
@@ -218,6 +219,7 @@ message RequestIngestionRequest {
   repeated Attribute attributes = 2;
   message Variant {
     string sku = 1;
+    google.type.Money price = 3;
     repeated Attribute attributes = 2;
   }
   repeated Variant variants = 3;

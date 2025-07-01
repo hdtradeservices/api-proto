@@ -707,18 +707,6 @@
     }
   },
   "definitions": {
-    "AttributeMoney": {
-      "type": "object",
-      "properties": {
-        "amount": {
-          "type": "string"
-        },
-        "currencyCode": {
-          "type": "string"
-        }
-      },
-      "title": "Money supports values like with amount and currency_code"
-    },
     "AttributeMultiObject": {
       "type": "object",
       "properties": {
@@ -934,6 +922,26 @@
         }
       }
     },
+    "googletypeMoney": {
+      "type": "object",
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "The three-letter currency code defined in ISO 4217."
+        },
+        "units": {
+          "type": "string",
+          "format": "int64",
+          "description": "The whole units of the amount.\nFor example if `currencyCode` is `\"USD\"`, then 1 unit is one US dollar."
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of nano (10^-9) units of the amount.\nThe value must be between -999,999,999 and +999,999,999 inclusive.\nIf `units` is positive, `nanos` must be positive or zero.\nIf `units` is zero, `nanos` can be positive, zero, or negative.\nIf `units` is negative, `nanos` must be negative or zero.\nFor example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000."
+        }
+      },
+      "description": "Represents an amount of money with its currency type."
+    },
     "listing_apiAttribute": {
       "type": "object",
       "properties": {
@@ -954,7 +962,7 @@
           "$ref": "#/definitions/AttributeMultiText"
         },
         "moneyValue": {
-          "$ref": "#/definitions/AttributeMoney"
+          "$ref": "#/definitions/listing_apiAttributeMoney"
         },
         "multiObjectValue": {
           "$ref": "#/definitions/AttributeMultiObject"
@@ -973,6 +981,18 @@
       },
       "title": "Attribute has data that describes a Listing or a Listing's Variants"
     },
+    "listing_apiAttributeMoney": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        }
+      },
+      "title": "Money supports values like with amount and currency_code"
+    },
     "listing_apiAttributeValue": {
       "type": "object",
       "properties": {
@@ -990,7 +1010,7 @@
           "$ref": "#/definitions/AttributeMultiText"
         },
         "moneyValue": {
-          "$ref": "#/definitions/AttributeMoney"
+          "$ref": "#/definitions/listing_apiAttributeMoney"
         },
         "multiObjectValue": {
           "$ref": "#/definitions/AttributeMultiObject"
@@ -1187,6 +1207,9 @@
       "properties": {
         "sku": {
           "type": "string"
+        },
+        "price": {
+          "$ref": "#/definitions/googletypeMoney"
         },
         "attributes": {
           "type": "array",
