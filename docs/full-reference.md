@@ -727,6 +727,7 @@ RequestIngestionRequest is used to request ingestion of a listing into Zentail
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | sku | [string](#string) |  |  |
+| price | [google.type.Money](#google-type-Money) |  |  |
 | attributes | [Attribute](#listing_api-Attribute) | repeated |  |
 
 
