@@ -66,6 +66,9 @@ message Variant {
 // LATER: comment this more
 message Listing {
   string id = 1;
+  // A SKU to represent the entire listing (this is usually a value that is
+  // different than any of the SKUs of the Variants)
+  string sku = 6;
   ProductData product_data = 2;
   repeated Variant variants = 3;
   google.protobuf.Timestamp created_at = 4;

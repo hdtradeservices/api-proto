@@ -1148,6 +1148,10 @@
         "id": {
           "type": "string"
         },
+        "sku": {
+          "type": "string",
+          "title": "A SKU to represent the entire listing (this is usually a value that is\ndifferent than any of the SKUs of the Variants)"
+        },
         "productData": {
           "$ref": "#/definitions/ListingProductData"
         },

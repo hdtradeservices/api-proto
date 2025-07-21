@@ -258,6 +258,7 @@ LATER: comment this more
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  |  |
+| sku | [string](#string) |  | A SKU to represent the entire listing (this is usually a value that is different than any of the SKUs of the Variants) |
 | product_data | [Listing.ProductData](#listing_api-Listing-ProductData) |  |  |
 | variants | [Variant](#listing_api-Variant) | repeated |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
