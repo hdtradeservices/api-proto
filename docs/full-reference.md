@@ -86,6 +86,8 @@
     - [DeleteAttributeSpecResponse](#listing_api-DeleteAttributeSpecResponse)
     - [DeleteProductTypeRequest](#listing_api-DeleteProductTypeRequest)
     - [DeleteProductTypeResponse](#listing_api-DeleteProductTypeResponse)
+    - [ListAttributeSpecsRequest](#listing_api-ListAttributeSpecsRequest)
+    - [ListAttributeSpecsResponse](#listing_api-ListAttributeSpecsResponse)
     - [ListProductTypesRequest](#listing_api-ListProductTypesRequest)
     - [ListProductTypesResponse](#listing_api-ListProductTypesResponse)
     - [UpdateAttributeSpecRequest](#listing_api-UpdateAttributeSpecRequest)
@@ -1340,6 +1342,36 @@ DeleteProductTypeResponse is returned by the DeleteProduct type action
 
 
 
+<a name="listing_api-ListAttributeSpecsRequest"></a>
+
+### ListAttributeSpecsRequest
+ListAttributeSpecsRequest is used to list all AttributeSpecs for a given product_type_id
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| product_type_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-ListAttributeSpecsResponse"></a>
+
+### ListAttributeSpecsResponse
+ListAttributeSpecsResponse contains all of the AttributeSpecs returned
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| attribute_specs | [AttributeSpec](#listing_api-AttributeSpec) | repeated |  |
+
+
+
+
+
+
 <a name="listing_api-ListProductTypesRequest"></a>
 
 ### ListProductTypesRequest
@@ -1399,6 +1431,7 @@ for a Listing integration.
 | CreateProductType | [CreateProductTypeRequest](#listing_api-CreateProductTypeRequest) | [CreateProductTypeResponse](#listing_api-CreateProductTypeResponse) | CreateProductType will create a new ProductType |
 | DeleteProductType | [DeleteProductTypeRequest](#listing_api-DeleteProductTypeRequest) | [DeleteProductTypeResponse](#listing_api-DeleteProductTypeResponse) | DeleteProductType will delete the ProductType with the given ID |
 | AttributeSpec | [AttributeSpecRequest](#listing_api-AttributeSpecRequest) | [AttributeSpec](#listing_api-AttributeSpec) | AttributeSpec can be used to retrieve a single AttributeSpec |
+| ListAttributeSpecs | [ListAttributeSpecsRequest](#listing_api-ListAttributeSpecsRequest) | [ListAttributeSpecsResponse](#listing_api-ListAttributeSpecsResponse) | ListAttributeSpecs will return all AttributeSpecs for the given product_type_id |
 | CreateAttributeSpec | [CreateAttributeSpecRequest](#listing_api-CreateAttributeSpecRequest) | [AttributeSpec](#listing_api-AttributeSpec) | CreateAttributeSpec will create a new AttributeSpec |
 | UpdateAttributeSpec | [UpdateAttributeSpecRequest](#listing_api-UpdateAttributeSpecRequest) | [AttributeSpec](#listing_api-AttributeSpec) | UpdateAttributeSpec will update the AttributeSpec with the given product_type_id and attribute_spec_id |
 | DeleteAttributeSpec | [DeleteAttributeSpecRequest](#listing_api-DeleteAttributeSpecRequest) | [DeleteAttributeSpecResponse](#listing_api-DeleteAttributeSpecResponse) | DeleteAttributeSpec will delete the AttributeSpec with the given product_type_id and attribute_spec_id |

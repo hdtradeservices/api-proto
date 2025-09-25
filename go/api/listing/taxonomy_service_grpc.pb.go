@@ -26,6 +26,8 @@ type TaxonomyServiceClient interface {
 	DeleteProductType(ctx context.Context, in *DeleteProductTypeRequest, opts ...grpc.CallOption) (*DeleteProductTypeResponse, error)
 	// AttributeSpec can be used to retrieve a single AttributeSpec
 	AttributeSpec(ctx context.Context, in *AttributeSpecRequest, opts ...grpc.CallOption) (*AttributeSpec, error)
+	// ListAttributeSpecs will return all AttributeSpecs for the given product_type_id
+	ListAttributeSpecs(ctx context.Context, in *ListAttributeSpecsRequest, opts ...grpc.CallOption) (*ListAttributeSpecsResponse, error)
 	// CreateAttributeSpec will create a new AttributeSpec
 	CreateAttributeSpec(ctx context.Context, in *CreateAttributeSpecRequest, opts ...grpc.CallOption) (*AttributeSpec, error)
 	// UpdateAttributeSpec will update the AttributeSpec with the given
@@ -80,6 +82,15 @@ func (c *taxonomyServiceClient) AttributeSpec(ctx context.Context, in *Attribute
 	return out, nil
 }
 
+func (c *taxonomyServiceClient) ListAttributeSpecs(ctx context.Context, in *ListAttributeSpecsRequest, opts ...grpc.CallOption) (*ListAttributeSpecsResponse, error) {
+	out := new(ListAttributeSpecsResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.TaxonomyService/ListAttributeSpecs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *taxonomyServiceClient) CreateAttributeSpec(ctx context.Context, in *CreateAttributeSpecRequest, opts ...grpc.CallOption) (*AttributeSpec, error) {
 	out := new(AttributeSpec)
 	err := c.cc.Invoke(ctx, "/listing_api.TaxonomyService/CreateAttributeSpec", in, out, opts...)
@@ -119,6 +130,8 @@ type TaxonomyServiceServer interface {
 	DeleteProductType(context.Context, *DeleteProductTypeRequest) (*DeleteProductTypeResponse, error)
 	// AttributeSpec can be used to retrieve a single AttributeSpec
 	AttributeSpec(context.Context, *AttributeSpecRequest) (*AttributeSpec, error)
+	// ListAttributeSpecs will return all AttributeSpecs for the given product_type_id
+	ListAttributeSpecs(context.Context, *ListAttributeSpecsRequest) (*ListAttributeSpecsResponse, error)
 	// CreateAttributeSpec will create a new AttributeSpec
 	CreateAttributeSpec(context.Context, *CreateAttributeSpecRequest) (*AttributeSpec, error)
 	// UpdateAttributeSpec will update the AttributeSpec with the given
@@ -144,6 +157,9 @@ func (UnimplementedTaxonomyServiceServer) DeleteProductType(context.Context, *De
 }
 func (UnimplementedTaxonomyServiceServer) AttributeSpec(context.Context, *AttributeSpecRequest) (*AttributeSpec, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AttributeSpec not implemented")
+}
+func (UnimplementedTaxonomyServiceServer) ListAttributeSpecs(context.Context, *ListAttributeSpecsRequest) (*ListAttributeSpecsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAttributeSpecs not implemented")
 }
 func (UnimplementedTaxonomyServiceServer) CreateAttributeSpec(context.Context, *CreateAttributeSpecRequest) (*AttributeSpec, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAttributeSpec not implemented")
@@ -238,6 +254,24 @@ func _TaxonomyService_AttributeSpec_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaxonomyService_ListAttributeSpecs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAttributeSpecsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaxonomyServiceServer).ListAttributeSpecs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.TaxonomyService/ListAttributeSpecs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaxonomyServiceServer).ListAttributeSpecs(ctx, req.(*ListAttributeSpecsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _TaxonomyService_CreateAttributeSpec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateAttributeSpecRequest)
 	if err := dec(in); err != nil {
@@ -314,6 +348,10 @@ var TaxonomyService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AttributeSpec",
 			Handler:    _TaxonomyService_AttributeSpec_Handler,
+		},
+		{
+			MethodName: "ListAttributeSpecs",
+			Handler:    _TaxonomyService_ListAttributeSpecs_Handler,
 		},
 		{
 			MethodName: "CreateAttributeSpec",
