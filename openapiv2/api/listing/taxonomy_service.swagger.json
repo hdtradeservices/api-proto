@@ -18,6 +18,35 @@
   ],
   "paths": {
     "/v2/storefront/taxonomy/attribute_spec/{productTypeId}": {
+      "get": {
+        "summary": "ListAttributeSpecs will return all AttributeSpecs for the given product_type_id",
+        "operationId": "TaxonomyService_ListAttributeSpecs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListAttributeSpecsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "productTypeId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TaxonomyService"
+        ]
+      },
       "post": {
         "summary": "CreateAttributeSpec will create a new AttributeSpec",
         "operationId": "TaxonomyService_CreateAttributeSpec",
@@ -439,6 +468,18 @@
     "listing_apiDeleteProductTypeResponse": {
       "type": "object",
       "title": "DeleteProductTypeResponse is returned by the DeleteProduct type action"
+    },
+    "listing_apiListAttributeSpecsResponse": {
+      "type": "object",
+      "properties": {
+        "attributeSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiAttributeSpec"
+          }
+        }
+      },
+      "title": "ListAttributeSpecsResponse contains all of the AttributeSpecs returned"
     },
     "listing_apiListProductTypesResponse": {
       "type": "object",
