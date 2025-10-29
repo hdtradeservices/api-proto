@@ -80,6 +80,7 @@ message Listing {
     string product_type_id = 3;
     repeated string pivot_attributes = 4;
     repeated Attribute attributes = 5;
+    google.protobuf.Timestamp updated_at = 6;
   }
 }
 
