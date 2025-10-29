@@ -284,6 +284,7 @@ LATER: comment this more
 | product_type_id | [string](#string) |  |  |
 | pivot_attributes | [string](#string) | repeated |  |
 | attributes | [Attribute](#listing_api-Attribute) | repeated |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 
 

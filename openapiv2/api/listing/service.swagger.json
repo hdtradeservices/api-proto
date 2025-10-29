@@ -789,6 +789,10 @@
           "items": {
             "$ref": "#/definitions/listing_apiAttribute"
           }
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
