@@ -1187,6 +1187,9 @@
           "type": "string",
           "title": "An identifier for this listing that will then be used for the Product Group Label"
         },
+        "productTypeId": {
+          "type": "string"
+        },
         "pivotAttributes": {
           "type": "array",
           "items": {
