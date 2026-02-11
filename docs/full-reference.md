@@ -22,6 +22,12 @@
     - [Variant.Pricing.ScheduledSale](#listing_api-Variant-Pricing-ScheduledSale)
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
+- [api/listing/sales_channel_service.proto](#api_listing_sales_channel_service-proto)
+    - [InitiateIngestionRequest](#listing_api-InitiateIngestionRequest)
+    - [InitiateIngestionResponse](#listing_api-InitiateIngestionResponse)
+  
+    - [SalesChannelService](#listing_api-SalesChannelService)
+  
 - [api/listing/service.proto](#api_listing_service-proto)
     - [BeginIngestionRequest](#listing_api-BeginIngestionRequest)
     - [BeginIngestionResponse](#listing_api-BeginIngestionResponse)
@@ -426,6 +432,58 @@ structured information about scheduled sales
  
 
  
+
+ 
+
+
+
+<a name="api_listing_sales_channel_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/listing/sales_channel_service.proto
+
+
+
+<a name="listing_api-InitiateIngestionRequest"></a>
+
+### InitiateIngestionRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| storefront_id | [string](#string) |  |  |
+| skus | [string](#string) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-InitiateIngestionResponse"></a>
+
+### InitiateIngestionResponse
+
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="listing_api-SalesChannelService"></a>
+
+### SalesChannelService
+SalesChannelService provides a service for a sales channel integration&#39;s webhook related operations
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| InitiateIngestion | [InitiateIngestionRequest](#listing_api-InitiateIngestionRequest) | [InitiateIngestionResponse](#listing_api-InitiateIngestionResponse) |  |
 
  
 

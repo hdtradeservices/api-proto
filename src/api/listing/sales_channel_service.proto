@@ -1,0 +1,38 @@
+syntax = "proto3";
+package listing_api;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info : {title : "Sales Channel Webhooks API";
+version : "v2";
+}
+}
+;
+
+// SalesChannelService provides a service for a sales channel integration's webhook related operations
+service SalesChannelService {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    name : "Sales Channel Webhooks Service",
+    // protolint:disable:next MAX_LINE_LENGTH
+    description : ""
+  };
+
+  rpc InitiateIngestion(InitiateIngestionRequest) returns (InitiateIngestionResponse) {
+    option (google.api.http) = {
+      post : "/ingestion/initiate"
+      body : "*"
+    };
+  }
+}
+
+message InitiateIngestionRequest {
+    string storefront_id = 1;
+    repeated string skus = 2;
+}
+
+message InitiateIngestionResponse {
+}
