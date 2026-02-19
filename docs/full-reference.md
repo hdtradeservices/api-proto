@@ -454,6 +454,7 @@ structured information about scheduled sales
 | ----- | ---- | ----- | ----------- |
 | storefront_id | [string](#string) |  |  |
 | skus | [string](#string) | repeated |  |
+| auto_apply_ingestion_plan | [bool](#bool) |  |  |
 
 
 
