@@ -506,6 +506,7 @@ BeginIngestionRequest is used to initiate the ingestion of listings
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | expected_num_listings | [int64](#int64) |  |  |
+| auto_apply_ingestion_plan | [bool](#bool) |  |  |
 
 
 
