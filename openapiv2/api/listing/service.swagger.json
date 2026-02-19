@@ -1027,6 +1027,9 @@
         "expectedNumListings": {
           "type": "string",
           "format": "int64"
+        },
+        "autoApplyIngestionPlan": {
+          "type": "boolean"
         }
       },
       "title": "BeginIngestionRequest is used to initiate the ingestion of listings"

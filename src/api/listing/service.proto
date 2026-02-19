@@ -204,6 +204,7 @@ service ListingService {
 // BeginIngestionRequest is used to initiate the ingestion of listings
 message BeginIngestionRequest {
   int64 expected_num_listings = 1;
+  bool auto_apply_ingestion_plan = 2;
 }
 
 // BeginIngestionResponse is used to return the response of the BeginIngestion
