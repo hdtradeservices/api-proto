@@ -79,6 +79,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "autoApplyIngestionPlan": {
+          "type": "boolean"
         }
       }
     },

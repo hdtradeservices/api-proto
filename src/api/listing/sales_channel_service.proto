@@ -32,6 +32,7 @@ service SalesChannelService {
 message InitiateIngestionRequest {
     string storefront_id = 1;
     repeated string skus = 2;
+    bool auto_apply_ingestion_plan = 3;
 }
 
 message InitiateIngestionResponse {
