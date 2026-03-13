@@ -47,9 +47,68 @@
           "SalesChannelService"
         ]
       }
+    },
+    "/v2/storefront/status/{storefrontId}": {
+      "get": {
+        "summary": "StorefrontStatus returns the current status of a storefront\nas a series of diagnostic checks",
+        "operationId": "SalesChannelService_StorefrontStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiStorefrontStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "storefrontId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "SalesChannelService"
+        ]
+      }
     }
   },
   "definitions": {
+    "StorefrontStatusResponseCheck": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/StorefrontStatusResponseCheckState"
+        },
+        "stateShortDescription": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "StorefrontStatusResponseCheckState": {
+      "type": "string",
+      "enum": [
+        "CHECK_STATE_UNSPECIFIED",
+        "CHECK_STATE_PASS",
+        "CHECK_STATE_FAIL",
+        "CHECK_STATE_WARNING"
+      ],
+      "default": "CHECK_STATE_UNSPECIFIED",
+      "title": "CheckState represents the result state of a diagnostic check"
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -83,10 +142,24 @@
         "autoApplyIngestionPlan": {
           "type": "boolean"
         }
-      }
+      },
+      "title": "InitiateIngestionRequest is the request for the InitiateIngestion RPC"
     },
     "listing_apiInitiateIngestionResponse": {
-      "type": "object"
+      "type": "object",
+      "title": "InitiateIngestionResponse is the response for the InitiateIngestion RPC"
+    },
+    "listing_apiStorefrontStatusResponse": {
+      "type": "object",
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StorefrontStatusResponseCheck"
+          }
+        }
+      },
+      "title": "StorefrontStatusResponse contains the results of all diagnostic checks"
     },
     "protobufAny": {
       "type": "object",

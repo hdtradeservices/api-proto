@@ -704,37 +704,6 @@
           "ListingService"
         ]
       }
-    },
-    "/v2/storefront/status/{storefrontId}": {
-      "get": {
-        "summary": "StorefrontStatus returns the current status of a storefront\nas a series of diagnostic checks",
-        "operationId": "ListingService_StorefrontStatus",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/listing_apiStorefrontStatusResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "storefrontId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ListingService"
-        ]
-      }
     }
   },
   "definitions": {
@@ -1077,35 +1046,6 @@
         }
       }
     },
-    "listing_apiCheck": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "state": {
-          "$ref": "#/definitions/listing_apiCheckState"
-        },
-        "stateShortDescription": {
-          "type": "string"
-        },
-        "details": {
-          "type": "string"
-        }
-      },
-      "title": "Check represents a single diagnostic check result for a storefront"
-    },
-    "listing_apiCheckState": {
-      "type": "string",
-      "enum": [
-        "CHECK_STATE_UNSPECIFIED",
-        "CHECK_STATE_PASS",
-        "CHECK_STATE_FAIL",
-        "CHECK_STATE_WARNING"
-      ],
-      "default": "CHECK_STATE_UNSPECIFIED",
-      "title": "CheckState represents the result state of a diagnostic check"
-    },
     "listing_apiCreateSubmissionsRequest": {
       "type": "object",
       "properties": {
@@ -1312,18 +1252,6 @@
       ],
       "default": "STANDARD_STATUS_UNSPECIFIED",
       "title": "StandardStatus is the standardized status of a listing as defined by Zentail"
-    },
-    "listing_apiStorefrontStatusResponse": {
-      "type": "object",
-      "properties": {
-        "checks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/listing_apiCheck"
-          }
-        }
-      },
-      "title": "StorefrontStatusResponse contains the results of all diagnostic checks"
     },
     "listing_apiSubmission": {
       "type": "object",
