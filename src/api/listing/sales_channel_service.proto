@@ -27,13 +27,47 @@ service SalesChannelService {
       body : "*"
     };
   }
+
+  // StorefrontStatus returns the current status of a storefront
+  // as a series of diagnostic checks
+  rpc StorefrontStatus(StorefrontStatusRequest)
+      returns (StorefrontStatusResponse) {
+    option (google.api.http) = {
+      get : "/v2/storefront/status/{storefront_id}"
+    };
+  }
 }
 
+// InitiateIngestionRequest is the request for the InitiateIngestion RPC
 message InitiateIngestionRequest {
     string storefront_id = 1;
     repeated string skus = 2;
     bool auto_apply_ingestion_plan = 3;
 }
 
+// InitiateIngestionResponse is the response for the InitiateIngestion RPC
 message InitiateIngestionResponse {
+}
+
+// StorefrontStatusRequest is the request for the StorefrontStatus RPC
+message StorefrontStatusRequest {
+  string storefront_id = 1;
+}
+
+// StorefrontStatusResponse contains the results of all diagnostic checks
+message StorefrontStatusResponse {
+  // CheckState represents the result state of a diagnostic check
+  enum CheckState {
+    CHECK_STATE_UNSPECIFIED = 0;
+    CHECK_STATE_PASS = 1;
+    CHECK_STATE_FAIL = 2;
+    CHECK_STATE_WARNING = 3;
+  }
+  message Check {
+    string name = 1;
+    CheckState state = 2;
+    string state_short_description = 3;
+    string details = 4;
+  }
+  repeated Check checks = 1;
 }

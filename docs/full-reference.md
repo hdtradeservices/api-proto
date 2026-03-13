@@ -25,6 +25,11 @@
 - [api/listing/sales_channel_service.proto](#api_listing_sales_channel_service-proto)
     - [InitiateIngestionRequest](#listing_api-InitiateIngestionRequest)
     - [InitiateIngestionResponse](#listing_api-InitiateIngestionResponse)
+    - [StorefrontStatusRequest](#listing_api-StorefrontStatusRequest)
+    - [StorefrontStatusResponse](#listing_api-StorefrontStatusResponse)
+    - [StorefrontStatusResponse.Check](#listing_api-StorefrontStatusResponse-Check)
+  
+    - [StorefrontStatusResponse.CheckState](#listing_api-StorefrontStatusResponse-CheckState)
   
     - [SalesChannelService](#listing_api-SalesChannelService)
   
@@ -33,7 +38,6 @@
     - [BeginIngestionResponse](#listing_api-BeginIngestionResponse)
     - [CategoryForSKURequest](#listing_api-CategoryForSKURequest)
     - [CategoryForSKUResponse](#listing_api-CategoryForSKUResponse)
-    - [Check](#listing_api-Check)
     - [CreateSubmissionsRequest](#listing_api-CreateSubmissionsRequest)
     - [CreateSubmissionsResponse](#listing_api-CreateSubmissionsResponse)
     - [EndIngestionRequest](#listing_api-EndIngestionRequest)
@@ -53,8 +57,6 @@
     - [RequestIngestionResponse](#listing_api-RequestIngestionResponse)
     - [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest)
     - [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse)
-    - [StorefrontStatusRequest](#listing_api-StorefrontStatusRequest)
-    - [StorefrontStatusResponse](#listing_api-StorefrontStatusResponse)
     - [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest)
     - [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse)
     - [UpdateStatusRequest](#listing_api-UpdateStatusRequest)
@@ -62,7 +64,6 @@
     - [UpdateSubmissionRequest](#listing_api-UpdateSubmissionRequest)
     - [UpdateSubmissionRequest.MetadataEntry](#listing_api-UpdateSubmissionRequest-MetadataEntry)
   
-    - [CheckState](#listing_api-CheckState)
     - [Error.Severity](#listing_api-Error-Severity)
     - [Error.Type](#listing_api-Error-Type)
     - [StandardStatus](#listing_api-StandardStatus)
@@ -451,7 +452,7 @@ structured information about scheduled sales
 <a name="listing_api-InitiateIngestionRequest"></a>
 
 ### InitiateIngestionRequest
-
+InitiateIngestionRequest is the request for the InitiateIngestion RPC
 
 
 | Field | Type | Label | Description |
@@ -468,13 +469,75 @@ structured information about scheduled sales
 <a name="listing_api-InitiateIngestionResponse"></a>
 
 ### InitiateIngestionResponse
+InitiateIngestionResponse is the response for the InitiateIngestion RPC
 
+
+
+
+
+
+<a name="listing_api-StorefrontStatusRequest"></a>
+
+### StorefrontStatusRequest
+StorefrontStatusRequest is the request for the StorefrontStatus RPC
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| storefront_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-StorefrontStatusResponse"></a>
+
+### StorefrontStatusResponse
+StorefrontStatusResponse contains the results of all diagnostic checks
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| checks | [StorefrontStatusResponse.Check](#listing_api-StorefrontStatusResponse-Check) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-StorefrontStatusResponse-Check"></a>
+
+### StorefrontStatusResponse.Check
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| state | [StorefrontStatusResponse.CheckState](#listing_api-StorefrontStatusResponse-CheckState) |  |  |
+| state_short_description | [string](#string) |  |  |
+| details | [string](#string) |  |  |
 
 
 
 
 
  
+
+
+<a name="listing_api-StorefrontStatusResponse-CheckState"></a>
+
+### StorefrontStatusResponse.CheckState
+CheckState represents the result state of a diagnostic check
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| CHECK_STATE_UNSPECIFIED | 0 |  |
+| CHECK_STATE_PASS | 1 |  |
+| CHECK_STATE_FAIL | 2 |  |
+| CHECK_STATE_WARNING | 3 |  |
+
 
  
 
@@ -489,6 +552,7 @@ SalesChannelService provides a service for a sales channel integration&#39;s web
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | InitiateIngestion | [InitiateIngestionRequest](#listing_api-InitiateIngestionRequest) | [InitiateIngestionResponse](#listing_api-InitiateIngestionResponse) |  |
+| StorefrontStatus | [StorefrontStatusRequest](#listing_api-StorefrontStatusRequest) | [StorefrontStatusResponse](#listing_api-StorefrontStatusResponse) | StorefrontStatus returns the current status of a storefront as a series of diagnostic checks |
 
  
 
@@ -551,24 +615,6 @@ BeginIngestionResponse is used to return the response of the BeginIngestion
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | category_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="listing_api-Check"></a>
-
-### Check
-Check represents a single diagnostic check result for a storefront
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| state | [CheckState](#listing_api-CheckState) |  |  |
-| state_short_description | [string](#string) |  |  |
-| details | [string](#string) |  |  |
 
 
 
@@ -860,36 +906,6 @@ SetInventorySubmissionDetailsResponse is currently an empty response
 
 
 
-<a name="listing_api-StorefrontStatusRequest"></a>
-
-### StorefrontStatusRequest
-StorefrontStatusRequest is the request for the StorefrontStatus RPC
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| storefront_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="listing_api-StorefrontStatusResponse"></a>
-
-### StorefrontStatusResponse
-StorefrontStatusResponse contains the results of all diagnostic checks
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| checks | [Check](#listing_api-Check) | repeated |  |
-
-
-
-
-
-
 <a name="listing_api-UpdateChannelListingIDRequest"></a>
 
 ### UpdateChannelListingIDRequest
@@ -982,20 +998,6 @@ UpdateSubmissionRequest is used to move a submission to another status
 
 
  
-
-
-<a name="listing_api-CheckState"></a>
-
-### CheckState
-CheckState represents the result state of a diagnostic check
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| CHECK_STATE_UNSPECIFIED | 0 |  |
-| CHECK_STATE_PASS | 1 |  |
-| CHECK_STATE_FAIL | 2 |  |
-| CHECK_STATE_WARNING | 3 |  |
-
 
 
 <a name="listing_api-Error-Severity"></a>
@@ -1104,7 +1106,6 @@ Zentail.
 | BeginIngestion | [BeginIngestionRequest](#listing_api-BeginIngestionRequest) | [BeginIngestionResponse](#listing_api-BeginIngestionResponse) | BeginIngestion is used to initiate the ingestion of listings for a given storefront. Needs to be called before RequestIngestion. |
 | RequestIngestion | [RequestIngestionRequest](#listing_api-RequestIngestionRequest) | [RequestIngestionResponse](#listing_api-RequestIngestionResponse) | RequestIngestion is used to request ingestion of a listing into Zentail. Need to call BeginIngestion before calling this method. |
 | EndIngestion | [EndIngestionRequest](#listing_api-EndIngestionRequest) | [EndIngestionResponse](#listing_api-EndIngestionResponse) | EndIngestion is used to end the ingestion of Listings Needs to be called after all Listings requiring ingestion have been requested so that the generated Ingestion Plan can be applied. |
-| StorefrontStatus | [StorefrontStatusRequest](#listing_api-StorefrontStatusRequest) | [StorefrontStatusResponse](#listing_api-StorefrontStatusResponse) | StorefrontStatus returns the current status of a storefront as a series of diagnostic checks |
 
  
 

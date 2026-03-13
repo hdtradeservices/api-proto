@@ -199,15 +199,6 @@ service ListingService {
       body : "*"
     };
   }
-
-  // StorefrontStatus returns the current status of a storefront
-  // as a series of diagnostic checks
-  rpc StorefrontStatus(StorefrontStatusRequest)
-      returns (StorefrontStatusResponse) {
-    option (google.api.http) = {
-      get : "/v2/storefront/status/{storefront_id}"
-    };
-  }
 }
 
 // BeginIngestionRequest is used to initiate the ingestion of listings
@@ -337,28 +328,6 @@ enum StandardStatus {
   STANDARD_STATUS_SUPPRESSED = 3;
   STANDARD_STATUS_RETIRED = 4;
 }
-
-// CheckState represents the result state of a diagnostic check
-enum CheckState {
-  CHECK_STATE_UNSPECIFIED = 0;
-  CHECK_STATE_PASS = 1;
-  CHECK_STATE_FAIL = 2;
-  CHECK_STATE_WARNING = 3;
-}
-
-// Check represents a single diagnostic check result for a storefront
-message Check {
-  string name = 1;
-  CheckState state = 2;
-  string state_short_description = 3;
-  string details = 4;
-}
-
-// StorefrontStatusRequest is the request for the StorefrontStatus RPC
-message StorefrontStatusRequest { string storefront_id = 1; }
-
-// StorefrontStatusResponse contains the results of all diagnostic checks
-message StorefrontStatusResponse { repeated Check checks = 1; }
 
 // UpdateStatusRequest provides the status of a SKU
 message UpdateStatusRequest {
