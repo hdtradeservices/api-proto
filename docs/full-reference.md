@@ -109,6 +109,10 @@
     - [CancelItemsRequest](#orders_api-CancelItemsRequest)
     - [CancelItemsRequest.CancelQuantitiesEntry](#orders_api-CancelItemsRequest-CancelQuantitiesEntry)
     - [CancelItemsResponse](#orders_api-CancelItemsResponse)
+    - [ListShippedOrdersRequest](#orders_api-ListShippedOrdersRequest)
+    - [ListShippedOrdersResponse](#orders_api-ListShippedOrdersResponse)
+    - [ShippedOrder](#orders_api-ShippedOrder)
+    - [ShippedOrderItem](#orders_api-ShippedOrderItem)
   
     - [OrdersService](#orders_api-OrdersService)
   
@@ -1618,6 +1622,81 @@ CancelItemsResponse is the response to a CancelItems request.
 
 
 
+
+<a name="orders_api-ListShippedOrdersRequest"></a>
+
+### ListShippedOrdersRequest
+ListShippedOrdersRequest is the request to list shipped /
+partially-shipped orders for the storefront resolved from the API token.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| last_updated_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | Only return orders whose last update is at or after this time (inclusive). Maps to the channel-order last update timestamp; named to match the existing salesOrder list wording (lastUpdatedTs). |
+| sales_channel_status | [string](#string) |  | Optional additional filter on the sales-channel status (the reseller_status column), e.g. the channel&#39;s own shipped status. The internal SHIPPED / PARTIALLY_SHIPPED filter is always applied regardless of this value. |
+| cursor | [string](#string) |  | Opaque pagination cursor. Empty for the first page; otherwise the next_page_cursor returned by the previous response. |
+| page_size | [int32](#int32) |  | Maximum number of orders to return. Zero or negative uses the server default; the server may clamp to a maximum. |
+
+
+
+
+
+
+<a name="orders_api-ListShippedOrdersResponse"></a>
+
+### ListShippedOrdersResponse
+ListShippedOrdersResponse is a single page of shipped orders.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| orders | [ShippedOrder](#orders_api-ShippedOrder) | repeated |  |
+| next_page_cursor | [string](#string) |  | The cursor token for the next page of results. If empty, there are no more results. |
+
+
+
+
+
+
+<a name="orders_api-ShippedOrder"></a>
+
+### ShippedOrder
+ShippedOrder is a lean view of a shipped / partially-shipped order,
+carrying only the fields a shipment-confirmation poller needs.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| channel_order_id | [string](#string) |  | The order ID used by the channel when the order was created. |
+| status | [string](#string) |  | Internal Zentail order status: SHIPPED or PARTIALLY_SHIPPED. |
+| sales_channel_status | [string](#string) |  | The sales-channel status (reseller_status column). |
+| last_updated_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the order was last updated. |
+| items | [ShippedOrderItem](#orders_api-ShippedOrderItem) | repeated | The order&#39;s line items with shipment / tracking detail. |
+
+
+
+
+
+
+<a name="orders_api-ShippedOrderItem"></a>
+
+### ShippedOrderItem
+ShippedOrderItem is the shipment / tracking detail for one order line.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| reseller_line_item_id | [string](#string) |  | The line item ID used by the channel. |
+| quantity_shipped | [int32](#int32) |  | Quantity shipped for this line. |
+| carrier | [string](#string) |  | Shipping carrier. |
+| tracking | [string](#string) |  | Tracking number. |
+| shipping_method | [string](#string) |  | Shipping method / service level. |
+| shipped_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When this line was shipped. |
+
+
+
+
+
  
 
  
@@ -1634,6 +1713,9 @@ for a Listing integration.
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | CancelItems | [CancelItemsRequest](#orders_api-CancelItemsRequest) | [CancelItemsResponse](#orders_api-CancelItemsResponse) | CancelItems cancels items in an order. |
+| ListShippedOrders | [ListShippedOrdersRequest](#orders_api-ListShippedOrdersRequest) | [ListShippedOrdersResponse](#orders_api-ListShippedOrdersResponse) | ListShippedOrders returns orders whose internal Zentail status is SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
+
+The internal status filter is enforced server-side; callers cannot request other statuses. Results are keyset-paginated: pass the next_page_cursor from the previous response to fetch the next page. An empty next_page_cursor means there are no more results. The storefront / integration is resolved from the API token, not the request. |
 
  
 

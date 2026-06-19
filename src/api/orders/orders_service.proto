@@ -2,6 +2,7 @@ syntax = "proto3";
 package orders_api;
 
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/hdtradeservices/api-proto/go/api/orders";
@@ -30,6 +31,22 @@ service OrdersService {
       body: "*"
     };
   }
+
+  // ListShippedOrders returns orders whose internal Zentail status is
+  // SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
+  //
+  // The internal status filter is enforced server-side; callers cannot
+  // request other statuses. Results are keyset-paginated: pass the
+  // next_page_cursor from the previous response to fetch the next page.
+  // An empty next_page_cursor means there are no more results. The
+  // storefront / integration is resolved from the API token, not the
+  // request.
+  rpc ListShippedOrders(ListShippedOrdersRequest)
+      returns (ListShippedOrdersResponse) {
+    option (google.api.http) = {
+      get: "/v2/storefront/orders/shipped"
+    };
+  }
 };
 
 // CancelItemsRequest is the request to cancel items in an order.
@@ -43,3 +60,75 @@ message CancelItemsRequest {
 
 // CancelItemsResponse is the response to a CancelItems request.
 message CancelItemsResponse {}
+
+// ListShippedOrdersRequest is the request to list shipped /
+// partially-shipped orders for the storefront resolved from the API token.
+message ListShippedOrdersRequest {
+  // Only return orders whose last update is at or after this time
+  // (inclusive). Maps to the channel-order last update timestamp; named
+  // to match the existing salesOrder list wording (lastUpdatedTs).
+  google.protobuf.Timestamp last_updated_ts = 1;
+
+  // Optional additional filter on the sales-channel status (the
+  // reseller_status column), e.g. the channel's own shipped status.
+  // The internal SHIPPED / PARTIALLY_SHIPPED filter is always applied
+  // regardless of this value.
+  string sales_channel_status = 2;
+
+  // Opaque pagination cursor. Empty for the first page; otherwise the
+  // next_page_cursor returned by the previous response.
+  string cursor = 3;
+
+  // Maximum number of orders to return. Zero or negative uses the
+  // server default; the server may clamp to a maximum.
+  int32 page_size = 4;
+}
+
+// ListShippedOrdersResponse is a single page of shipped orders.
+message ListShippedOrdersResponse {
+  repeated ShippedOrder orders = 1;
+
+  // The cursor token for the next page of results.
+  // If empty, there are no more results.
+  string next_page_cursor = 2;
+}
+
+// ShippedOrder is a lean view of a shipped / partially-shipped order,
+// carrying only the fields a shipment-confirmation poller needs.
+message ShippedOrder {
+  // The order ID used by the channel when the order was created.
+  string channel_order_id = 1;
+
+  // Internal Zentail order status: SHIPPED or PARTIALLY_SHIPPED.
+  string status = 2;
+
+  // The sales-channel status (reseller_status column).
+  string sales_channel_status = 3;
+
+  // When the order was last updated.
+  google.protobuf.Timestamp last_updated_ts = 4;
+
+  // The order's line items with shipment / tracking detail.
+  repeated ShippedOrderItem items = 5;
+}
+
+// ShippedOrderItem is the shipment / tracking detail for one order line.
+message ShippedOrderItem {
+  // The line item ID used by the channel.
+  string reseller_line_item_id = 1;
+
+  // Quantity shipped for this line.
+  int32 quantity_shipped = 2;
+
+  // Shipping carrier.
+  string carrier = 3;
+
+  // Tracking number.
+  string tracking = 4;
+
+  // Shipping method / service level.
+  string shipping_method = 5;
+
+  // When this line was shipped.
+  google.protobuf.Timestamp shipped_ts = 6;
+}
