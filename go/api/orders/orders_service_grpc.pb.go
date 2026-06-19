@@ -20,6 +20,16 @@ const _ = grpc.SupportPackageIsVersion7
 type OrdersServiceClient interface {
 	// CancelItems cancels items in an order.
 	CancelItems(ctx context.Context, in *CancelItemsRequest, opts ...grpc.CallOption) (*CancelItemsResponse, error)
+	// ListShippedOrders returns orders whose internal Zentail status is
+	// SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
+	//
+	// The internal status filter is enforced server-side; callers cannot
+	// request other statuses. Results are keyset-paginated: pass the
+	// next_page_cursor from the previous response to fetch the next page.
+	// An empty next_page_cursor means there are no more results. The
+	// storefront / integration is resolved from the API token, not the
+	// request.
+	ListShippedOrders(ctx context.Context, in *ListShippedOrdersRequest, opts ...grpc.CallOption) (*ListShippedOrdersResponse, error)
 }
 
 type ordersServiceClient struct {
@@ -39,12 +49,31 @@ func (c *ordersServiceClient) CancelItems(ctx context.Context, in *CancelItemsRe
 	return out, nil
 }
 
+func (c *ordersServiceClient) ListShippedOrders(ctx context.Context, in *ListShippedOrdersRequest, opts ...grpc.CallOption) (*ListShippedOrdersResponse, error) {
+	out := new(ListShippedOrdersResponse)
+	err := c.cc.Invoke(ctx, "/orders_api.OrdersService/ListShippedOrders", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrdersServiceServer is the server API for OrdersService service.
 // All implementations should embed UnimplementedOrdersServiceServer
 // for forward compatibility
 type OrdersServiceServer interface {
 	// CancelItems cancels items in an order.
 	CancelItems(context.Context, *CancelItemsRequest) (*CancelItemsResponse, error)
+	// ListShippedOrders returns orders whose internal Zentail status is
+	// SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
+	//
+	// The internal status filter is enforced server-side; callers cannot
+	// request other statuses. Results are keyset-paginated: pass the
+	// next_page_cursor from the previous response to fetch the next page.
+	// An empty next_page_cursor means there are no more results. The
+	// storefront / integration is resolved from the API token, not the
+	// request.
+	ListShippedOrders(context.Context, *ListShippedOrdersRequest) (*ListShippedOrdersResponse, error)
 }
 
 // UnimplementedOrdersServiceServer should be embedded to have forward compatible implementations.
@@ -53,6 +82,9 @@ type UnimplementedOrdersServiceServer struct {
 
 func (UnimplementedOrdersServiceServer) CancelItems(context.Context, *CancelItemsRequest) (*CancelItemsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelItems not implemented")
+}
+func (UnimplementedOrdersServiceServer) ListShippedOrders(context.Context, *ListShippedOrdersRequest) (*ListShippedOrdersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListShippedOrders not implemented")
 }
 
 // UnsafeOrdersServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -84,6 +116,24 @@ func _OrdersService_CancelItems_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrdersService_ListShippedOrders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListShippedOrdersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrdersServiceServer).ListShippedOrders(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/orders_api.OrdersService/ListShippedOrders",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrdersServiceServer).ListShippedOrders(ctx, req.(*ListShippedOrdersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrdersService_ServiceDesc is the grpc.ServiceDesc for OrdersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,6 +144,10 @@ var OrdersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelItems",
 			Handler:    _OrdersService_CancelItems_Handler,
+		},
+		{
+			MethodName: "ListShippedOrders",
+			Handler:    _OrdersService_ListShippedOrders_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

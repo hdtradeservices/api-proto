@@ -49,6 +49,62 @@
           "OrdersService"
         ]
       }
+    },
+    "/v2/storefront/orders/shipped": {
+      "get": {
+        "summary": "ListShippedOrders returns orders whose internal Zentail status is\nSHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.",
+        "description": "The internal status filter is enforced server-side; callers cannot\nrequest other statuses. Results are keyset-paginated: pass the\nnext_page_cursor from the previous response to fetch the next page.\nAn empty next_page_cursor means there are no more results. The\nstorefront / integration is resolved from the API token, not the\nrequest.",
+        "operationId": "OrdersService_ListShippedOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/orders_apiListShippedOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lastUpdatedTs",
+            "description": "Only return orders whose last update is at or after this time\n(inclusive). Maps to the channel-order last update timestamp; named\nto match the existing salesOrder list wording (lastUpdatedTs).",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "salesChannelStatus",
+            "description": "Optional additional filter on the sales-channel status (the\nreseller_status column), e.g. the channel's own shipped status.\nThe internal SHIPPED / PARTIALLY_SHIPPED filter is always applied\nregardless of this value.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "cursor",
+            "description": "Opaque pagination cursor. Empty for the first page; otherwise the\nnext_page_cursor returned by the previous response.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "description": "Maximum number of orders to return. Zero or negative uses the\nserver default; the server may clamp to a maximum.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "OrdersService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -91,6 +147,84 @@
     "orders_apiCancelItemsResponse": {
       "type": "object",
       "description": "CancelItemsResponse is the response to a CancelItems request."
+    },
+    "orders_apiListShippedOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/orders_apiShippedOrder"
+          }
+        },
+        "nextPageCursor": {
+          "type": "string",
+          "description": "The cursor token for the next page of results.\nIf empty, there are no more results."
+        }
+      },
+      "description": "ListShippedOrdersResponse is a single page of shipped orders."
+    },
+    "orders_apiShippedOrder": {
+      "type": "object",
+      "properties": {
+        "channelOrderId": {
+          "type": "string",
+          "description": "The order ID used by the channel when the order was created."
+        },
+        "status": {
+          "type": "string",
+          "description": "Internal Zentail order status: SHIPPED or PARTIALLY_SHIPPED."
+        },
+        "salesChannelStatus": {
+          "type": "string",
+          "description": "The sales-channel status (reseller_status column)."
+        },
+        "lastUpdatedTs": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the order was last updated."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/orders_apiShippedOrderItem"
+          },
+          "description": "The order's line items with shipment / tracking detail."
+        }
+      },
+      "description": "ShippedOrder is a lean view of a shipped / partially-shipped order,\ncarrying only the fields a shipment-confirmation poller needs."
+    },
+    "orders_apiShippedOrderItem": {
+      "type": "object",
+      "properties": {
+        "resellerLineItemId": {
+          "type": "string",
+          "description": "The line item ID used by the channel."
+        },
+        "quantityShipped": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Quantity shipped for this line."
+        },
+        "carrier": {
+          "type": "string",
+          "description": "Shipping carrier."
+        },
+        "tracking": {
+          "type": "string",
+          "description": "Tracking number."
+        },
+        "shippingMethod": {
+          "type": "string",
+          "description": "Shipping method / service level."
+        },
+        "shippedTs": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When this line was shipped."
+        }
+      },
+      "description": "ShippedOrderItem is the shipment / tracking detail for one order line."
     },
     "protobufAny": {
       "type": "object",
