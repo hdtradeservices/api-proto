@@ -1687,7 +1687,7 @@ ShippedOrderItem is the shipment / tracking detail for one order line.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | reseller_line_item_id | [string](#string) |  | The line item ID used by the channel. |
-| quantity_shipped | [int32](#int32) |  | Quantity shipped for this line. |
+| quantity_shipped | [int64](#int64) |  | Quantity shipped for this line. |
 | carrier | [string](#string) |  | Shipping carrier. |
 | tracking | [string](#string) |  | Tracking number. |
 | shipping_method | [string](#string) |  | Shipping method / service level. |
