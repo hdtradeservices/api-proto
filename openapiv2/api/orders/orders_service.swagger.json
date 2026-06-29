@@ -202,8 +202,8 @@
           "description": "The line item ID used by the channel."
         },
         "quantityShipped": {
-          "type": "integer",
-          "format": "int32",
+          "type": "string",
+          "format": "int64",
           "description": "Quantity shipped for this line."
         },
         "carrier": {

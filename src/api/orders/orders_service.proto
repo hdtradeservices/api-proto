@@ -118,7 +118,7 @@ message ShippedOrderItem {
   string reseller_line_item_id = 1;
 
   // Quantity shipped for this line.
-  int32 quantity_shipped = 2;
+  int64 quantity_shipped = 2;
 
   // Shipping carrier.
   string carrier = 3;
