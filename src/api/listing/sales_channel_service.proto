@@ -36,6 +36,16 @@ service SalesChannelService {
       get : "/v2/storefront/status/{storefront_id}"
     };
   }
+
+  // DeleteConfiguration tells the sales channel to delete (deactivate) the
+  // storefront's integration configuration, e.g. when the storefront is
+  // disconnected in Zentail.
+  rpc DeleteConfiguration(DeleteConfigurationRequest)
+      returns (DeleteConfigurationResponse) {
+    option (google.api.http) = {
+      delete : "/v2/storefront/configuration/{storefront_id}"
+    };
+  }
 }
 
 // InitiateIngestionRequest is the request for the InitiateIngestion RPC
@@ -52,6 +62,15 @@ message InitiateIngestionResponse {
 // StorefrontStatusRequest is the request for the StorefrontStatus RPC
 message StorefrontStatusRequest {
   string storefront_id = 1;
+}
+
+// DeleteConfigurationRequest is the request for the DeleteConfiguration RPC
+message DeleteConfigurationRequest {
+  string storefront_id = 1;
+}
+
+// DeleteConfigurationResponse is the response for the DeleteConfiguration RPC
+message DeleteConfigurationResponse {
 }
 
 // StorefrontStatusResponse contains the results of all diagnostic checks
