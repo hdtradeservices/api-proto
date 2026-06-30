@@ -112,7 +112,9 @@
     - [ListShippedOrdersRequest](#orders_api-ListShippedOrdersRequest)
     - [ListShippedOrdersResponse](#orders_api-ListShippedOrdersResponse)
     - [ShippedOrder](#orders_api-ShippedOrder)
-    - [ShippedOrderItem](#orders_api-ShippedOrderItem)
+    - [ShippedOrderLineItem](#orders_api-ShippedOrderLineItem)
+    - [ShippedOrderPackage](#orders_api-ShippedOrderPackage)
+    - [ShippedOrderPackageItem](#orders_api-ShippedOrderPackageItem)
   
     - [OrdersService](#orders_api-OrdersService)
   
@@ -1636,6 +1638,7 @@ partially-shipped orders for the storefront resolved from the API token.
 | sales_channel_status | [string](#string) |  | Optional additional filter on the sales-channel status (the reseller_status column), e.g. the channel&#39;s own shipped status. The internal SHIPPED / PARTIALLY_SHIPPED filter is always applied regardless of this value. |
 | cursor | [string](#string) |  | Opaque pagination cursor. Empty for the first page; otherwise the next_page_cursor returned by the previous response. |
 | page_size | [int32](#int32) |  | Maximum number of orders to return. Zero or negative uses the server default; the server may clamp to a maximum. |
+| include_channel_fulfilled_orders | [bool](#bool) |  | Include channel-fulfilled (FBA / AFN) orders. Defaults to false: such orders are excluded because the seller does not confirm shipment for them. Set true to include them anyway. |
 
 
 
@@ -1671,27 +1674,69 @@ carrying only the fields a shipment-confirmation poller needs.
 | status | [string](#string) |  | Internal Zentail order status: SHIPPED or PARTIALLY_SHIPPED. |
 | sales_channel_status | [string](#string) |  | The sales-channel status (reseller_status column). |
 | last_updated_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the order was last updated. |
-| items | [ShippedOrderItem](#orders_api-ShippedOrderItem) | repeated | The order&#39;s line items with shipment / tracking detail. |
+| order_number | [int64](#int64) |  | The internal Zentail order number. |
+| marketplace_id | [string](#string) |  | The sales channel&#39;s marketplace id (e.g. the Amazon marketplace). |
+| standard_service_level | [string](#string) |  | The standardized requested service level, used as a carrier-mapping fallback when a package carries no service level of its own. |
+| line_items | [ShippedOrderLineItem](#orders_api-ShippedOrderLineItem) | repeated | Order-level line items, carrying the channel line-item id and ordered quantity needed to map shipped packages back to channel order items. |
+| packages | [ShippedOrderPackage](#orders_api-ShippedOrderPackage) | repeated | Shipped packages (one per tracking number) with their per-line shipped quantities — the unit of shipment confirmation. |
 
 
 
 
 
 
-<a name="orders_api-ShippedOrderItem"></a>
+<a name="orders_api-ShippedOrderLineItem"></a>
 
-### ShippedOrderItem
-ShippedOrderItem is the shipment / tracking detail for one order line.
+### ShippedOrderLineItem
+ShippedOrderLineItem is an order-level line item (not package-scoped),
+carrying the identifiers needed to resolve a shipped package line back to
+the channel&#39;s order item.
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| reseller_line_item_id | [string](#string) |  | The line item ID used by the channel. |
-| quantity_shipped | [int64](#int64) |  | Quantity shipped for this line. |
+| line_item_id | [string](#string) |  | The Zentail line item id (purchase_order_product id), as a string to match the channel-facing representation. |
+| channel_line_item_id | [string](#string) |  | The channel&#39;s own line item id, when the channel assigns one. |
+| sku | [string](#string) |  | The SKU for this line. |
+| quantity | [int64](#int64) |  | The ordered quantity for this line. |
+
+
+
+
+
+
+<a name="orders_api-ShippedOrderPackage"></a>
+
+### ShippedOrderPackage
+ShippedOrderPackage is a single shipped package (one tracking number) with
+the line quantities it shipped.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| package_id | [int64](#int64) |  | The Zentail package id. |
 | carrier | [string](#string) |  | Shipping carrier. |
+| service_level | [string](#string) |  | Carrier service level. |
 | tracking | [string](#string) |  | Tracking number. |
-| shipping_method | [string](#string) |  | Shipping method / service level. |
-| shipped_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When this line was shipped. |
+| shipped_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the package shipped. |
+| items | [ShippedOrderPackageItem](#orders_api-ShippedOrderPackageItem) | repeated | The line items (and shipped quantities) in this package. |
+
+
+
+
+
+
+<a name="orders_api-ShippedOrderPackageItem"></a>
+
+### ShippedOrderPackageItem
+ShippedOrderPackageItem is one line&#39;s shipped quantity within a package.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| line_item_id | [string](#string) |  | The Zentail line item id (purchase_order_product id); matches ShippedOrderLineItem.line_item_id. |
+| sku | [string](#string) |  | The SKU for this line. |
+| quantity | [int64](#int64) |  | The quantity of this line shipped in this package. |
 
 
 
@@ -1715,7 +1760,7 @@ for a Listing integration.
 | CancelItems | [CancelItemsRequest](#orders_api-CancelItemsRequest) | [CancelItemsResponse](#orders_api-CancelItemsResponse) | CancelItems cancels items in an order. |
 | ListShippedOrders | [ListShippedOrdersRequest](#orders_api-ListShippedOrdersRequest) | [ListShippedOrdersResponse](#orders_api-ListShippedOrdersResponse) | ListShippedOrders returns orders whose internal Zentail status is SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
 
-The internal status filter is enforced server-side; callers cannot request other statuses. Results are keyset-paginated: pass the next_page_cursor from the previous response to fetch the next page. An empty next_page_cursor means there are no more results. The storefront / integration is resolved from the API token, not the request. |
+The internal status filter is enforced server-side; callers cannot request other statuses. Channel-fulfilled orders (FBA / AFN) are excluded by default, since the seller does not confirm shipment for them; set include_channel_fulfilled_orders to include them. Results are keyset-paginated: pass the next_page_cursor from the previous response to fetch the next page. An empty next_page_cursor means there are no more results. The storefront / integration is resolved from the API token, not the request. |
 
  
 

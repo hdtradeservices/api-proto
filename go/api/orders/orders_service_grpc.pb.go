@@ -24,11 +24,13 @@ type OrdersServiceClient interface {
 	// SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
 	//
 	// The internal status filter is enforced server-side; callers cannot
-	// request other statuses. Results are keyset-paginated: pass the
-	// next_page_cursor from the previous response to fetch the next page.
-	// An empty next_page_cursor means there are no more results. The
-	// storefront / integration is resolved from the API token, not the
-	// request.
+	// request other statuses. Channel-fulfilled orders (FBA / AFN) are
+	// excluded by default, since the seller does not confirm shipment for
+	// them; set include_channel_fulfilled_orders to include them. Results
+	// are keyset-paginated: pass the next_page_cursor from the previous
+	// response to fetch the next page. An empty next_page_cursor means there
+	// are no more results. The storefront / integration is resolved from the
+	// API token, not the request.
 	ListShippedOrders(ctx context.Context, in *ListShippedOrdersRequest, opts ...grpc.CallOption) (*ListShippedOrdersResponse, error)
 }
 
@@ -68,11 +70,13 @@ type OrdersServiceServer interface {
 	// SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
 	//
 	// The internal status filter is enforced server-side; callers cannot
-	// request other statuses. Results are keyset-paginated: pass the
-	// next_page_cursor from the previous response to fetch the next page.
-	// An empty next_page_cursor means there are no more results. The
-	// storefront / integration is resolved from the API token, not the
-	// request.
+	// request other statuses. Channel-fulfilled orders (FBA / AFN) are
+	// excluded by default, since the seller does not confirm shipment for
+	// them; set include_channel_fulfilled_orders to include them. Results
+	// are keyset-paginated: pass the next_page_cursor from the previous
+	// response to fetch the next page. An empty next_page_cursor means there
+	// are no more results. The storefront / integration is resolved from the
+	// API token, not the request.
 	ListShippedOrders(context.Context, *ListShippedOrdersRequest) (*ListShippedOrdersResponse, error)
 }
 
