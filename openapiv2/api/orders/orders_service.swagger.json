@@ -53,7 +53,7 @@
     "/v2/storefront/orders/shipped": {
       "get": {
         "summary": "ListShippedOrders returns orders whose internal Zentail status is\nSHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.",
-        "description": "The internal status filter is enforced server-side; callers cannot\nrequest other statuses. Results are keyset-paginated: pass the\nnext_page_cursor from the previous response to fetch the next page.\nAn empty next_page_cursor means there are no more results. The\nstorefront / integration is resolved from the API token, not the\nrequest.",
+        "description": "The internal status filter is enforced server-side; callers cannot\nrequest other statuses. Channel-fulfilled orders (FBA / AFN) are\nexcluded by default, since the seller does not confirm shipment for\nthem; set include_channel_fulfilled_orders to include them. Results\nare keyset-paginated: pass the next_page_cursor from the previous\nresponse to fetch the next page. An empty next_page_cursor means there\nare no more results. The storefront / integration is resolved from the\nAPI token, not the request.",
         "operationId": "OrdersService_ListShippedOrders",
         "responses": {
           "200": {
@@ -99,6 +99,13 @@
             "required": false,
             "type": "integer",
             "format": "int32"
+          },
+          {
+            "name": "includeChannelFulfilledOrders",
+            "description": "Include channel-fulfilled (FBA / AFN) orders. Defaults to false: such\norders are excluded because the seller does not confirm shipment for\nthem. Set true to include them anyway.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -184,47 +191,112 @@
           "format": "date-time",
           "description": "When the order was last updated."
         },
-        "items": {
+        "orderNumber": {
+          "type": "string",
+          "format": "int64",
+          "description": "The internal Zentail order number."
+        },
+        "marketplaceId": {
+          "type": "string",
+          "description": "The sales channel's marketplace id (e.g. the Amazon marketplace)."
+        },
+        "standardServiceLevel": {
+          "type": "string",
+          "description": "The standardized requested service level, used as a carrier-mapping\nfallback when a package carries no service level of its own."
+        },
+        "lineItems": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/orders_apiShippedOrderItem"
+            "$ref": "#/definitions/orders_apiShippedOrderLineItem"
           },
-          "description": "The order's line items with shipment / tracking detail."
+          "description": "Order-level line items, carrying the channel line-item id and ordered\nquantity needed to map shipped packages back to channel order items."
+        },
+        "packages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/orders_apiShippedOrderPackage"
+          },
+          "description": "Shipped packages (one per tracking number) with their per-line shipped\nquantities — the unit of shipment confirmation."
         }
       },
       "description": "ShippedOrder is a lean view of a shipped / partially-shipped order,\ncarrying only the fields a shipment-confirmation poller needs."
     },
-    "orders_apiShippedOrderItem": {
+    "orders_apiShippedOrderLineItem": {
       "type": "object",
       "properties": {
-        "resellerLineItemId": {
+        "lineItemId": {
           "type": "string",
-          "description": "The line item ID used by the channel."
+          "description": "The Zentail line item id (purchase_order_product id), as a string to match\nthe channel-facing representation."
         },
-        "quantityShipped": {
+        "channelLineItemId": {
+          "type": "string",
+          "description": "The channel's own line item id, when the channel assigns one."
+        },
+        "sku": {
+          "type": "string",
+          "description": "The SKU for this line."
+        },
+        "quantity": {
           "type": "string",
           "format": "int64",
-          "description": "Quantity shipped for this line."
+          "description": "The ordered quantity for this line."
+        }
+      },
+      "description": "ShippedOrderLineItem is an order-level line item (not package-scoped),\ncarrying the identifiers needed to resolve a shipped package line back to\nthe channel's order item."
+    },
+    "orders_apiShippedOrderPackage": {
+      "type": "object",
+      "properties": {
+        "packageId": {
+          "type": "string",
+          "format": "int64",
+          "description": "The Zentail package id."
         },
         "carrier": {
           "type": "string",
           "description": "Shipping carrier."
         },
+        "serviceLevel": {
+          "type": "string",
+          "description": "Carrier service level."
+        },
         "tracking": {
           "type": "string",
           "description": "Tracking number."
         },
-        "shippingMethod": {
-          "type": "string",
-          "description": "Shipping method / service level."
-        },
         "shippedTs": {
           "type": "string",
           "format": "date-time",
-          "description": "When this line was shipped."
+          "description": "When the package shipped."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/orders_apiShippedOrderPackageItem"
+          },
+          "description": "The line items (and shipped quantities) in this package."
         }
       },
-      "description": "ShippedOrderItem is the shipment / tracking detail for one order line."
+      "description": "ShippedOrderPackage is a single shipped package (one tracking number) with\nthe line quantities it shipped."
+    },
+    "orders_apiShippedOrderPackageItem": {
+      "type": "object",
+      "properties": {
+        "lineItemId": {
+          "type": "string",
+          "description": "The Zentail line item id (purchase_order_product id); matches\nShippedOrderLineItem.line_item_id."
+        },
+        "sku": {
+          "type": "string",
+          "description": "The SKU for this line."
+        },
+        "quantity": {
+          "type": "string",
+          "format": "int64",
+          "description": "The quantity of this line shipped in this package."
+        }
+      },
+      "description": "ShippedOrderPackageItem is one line's shipped quantity within a package."
     },
     "protobufAny": {
       "type": "object",

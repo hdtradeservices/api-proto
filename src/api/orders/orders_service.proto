@@ -36,11 +36,13 @@ service OrdersService {
   // SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
   //
   // The internal status filter is enforced server-side; callers cannot
-  // request other statuses. Results are keyset-paginated: pass the
-  // next_page_cursor from the previous response to fetch the next page.
-  // An empty next_page_cursor means there are no more results. The
-  // storefront / integration is resolved from the API token, not the
-  // request.
+  // request other statuses. Channel-fulfilled orders (FBA / AFN) are
+  // excluded by default, since the seller does not confirm shipment for
+  // them; set include_channel_fulfilled_orders to include them. Results
+  // are keyset-paginated: pass the next_page_cursor from the previous
+  // response to fetch the next page. An empty next_page_cursor means there
+  // are no more results. The storefront / integration is resolved from the
+  // API token, not the request.
   rpc ListShippedOrders(ListShippedOrdersRequest)
       returns (ListShippedOrdersResponse) {
     option (google.api.http) = {
@@ -82,6 +84,11 @@ message ListShippedOrdersRequest {
   // Maximum number of orders to return. Zero or negative uses the
   // server default; the server may clamp to a maximum.
   int32 page_size = 4;
+
+  // Include channel-fulfilled (FBA / AFN) orders. Defaults to false: such
+  // orders are excluded because the seller does not confirm shipment for
+  // them. Set true to include them anyway.
+  bool include_channel_fulfilled_orders = 5;
 }
 
 // ListShippedOrdersResponse is a single page of shipped orders.
@@ -108,27 +115,79 @@ message ShippedOrder {
   // When the order was last updated.
   google.protobuf.Timestamp last_updated_ts = 4;
 
-  // The order's line items with shipment / tracking detail.
-  repeated ShippedOrderItem items = 5;
+  // 5 was a per-line `items` view (ShippedOrderItem); superseded by the
+  // package-grained `packages` and order-level `line_items` below.
+  reserved 5;
+  reserved "items";
+
+  // The internal Zentail order number.
+  int64 order_number = 6;
+
+  // The sales channel's marketplace id (e.g. the Amazon marketplace).
+  string marketplace_id = 7;
+
+  // The standardized requested service level, used as a carrier-mapping
+  // fallback when a package carries no service level of its own.
+  string standard_service_level = 8;
+
+  // Order-level line items, carrying the channel line-item id and ordered
+  // quantity needed to map shipped packages back to channel order items.
+  repeated ShippedOrderLineItem line_items = 9;
+
+  // Shipped packages (one per tracking number) with their per-line shipped
+  // quantities — the unit of shipment confirmation.
+  repeated ShippedOrderPackage packages = 10;
 }
 
-// ShippedOrderItem is the shipment / tracking detail for one order line.
-message ShippedOrderItem {
-  // The line item ID used by the channel.
-  string reseller_line_item_id = 1;
+// ShippedOrderLineItem is an order-level line item (not package-scoped),
+// carrying the identifiers needed to resolve a shipped package line back to
+// the channel's order item.
+message ShippedOrderLineItem {
+  // The Zentail line item id (purchase_order_product id), as a string to match
+  // the channel-facing representation.
+  string line_item_id = 1;
 
-  // Quantity shipped for this line.
-  int64 quantity_shipped = 2;
+  // The channel's own line item id, when the channel assigns one.
+  string channel_line_item_id = 2;
+
+  // The SKU for this line.
+  string sku = 3;
+
+  // The ordered quantity for this line.
+  int64 quantity = 4;
+}
+
+// ShippedOrderPackage is a single shipped package (one tracking number) with
+// the line quantities it shipped.
+message ShippedOrderPackage {
+  // The Zentail package id.
+  int64 package_id = 1;
 
   // Shipping carrier.
-  string carrier = 3;
+  string carrier = 2;
+
+  // Carrier service level.
+  string service_level = 3;
 
   // Tracking number.
   string tracking = 4;
 
-  // Shipping method / service level.
-  string shipping_method = 5;
+  // When the package shipped.
+  google.protobuf.Timestamp shipped_ts = 5;
 
-  // When this line was shipped.
-  google.protobuf.Timestamp shipped_ts = 6;
+  // The line items (and shipped quantities) in this package.
+  repeated ShippedOrderPackageItem items = 6;
+}
+
+// ShippedOrderPackageItem is one line's shipped quantity within a package.
+message ShippedOrderPackageItem {
+  // The Zentail line item id (purchase_order_product id); matches
+  // ShippedOrderLineItem.line_item_id.
+  string line_item_id = 1;
+
+  // The SKU for this line.
+  string sku = 2;
+
+  // The quantity of this line shipped in this package.
+  int64 quantity = 3;
 }
