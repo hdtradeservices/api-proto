@@ -22,6 +22,10 @@ type SalesChannelServiceClient interface {
 	// StorefrontStatus returns the current status of a storefront
 	// as a series of diagnostic checks
 	StorefrontStatus(ctx context.Context, in *StorefrontStatusRequest, opts ...grpc.CallOption) (*StorefrontStatusResponse, error)
+	// DeleteConfiguration tells the sales channel to delete (deactivate) the
+	// storefront's integration configuration, e.g. when the storefront is
+	// disconnected in Zentail.
+	DeleteConfiguration(ctx context.Context, in *DeleteConfigurationRequest, opts ...grpc.CallOption) (*DeleteConfigurationResponse, error)
 }
 
 type salesChannelServiceClient struct {
@@ -50,6 +54,15 @@ func (c *salesChannelServiceClient) StorefrontStatus(ctx context.Context, in *St
 	return out, nil
 }
 
+func (c *salesChannelServiceClient) DeleteConfiguration(ctx context.Context, in *DeleteConfigurationRequest, opts ...grpc.CallOption) (*DeleteConfigurationResponse, error) {
+	out := new(DeleteConfigurationResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.SalesChannelService/DeleteConfiguration", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SalesChannelServiceServer is the server API for SalesChannelService service.
 // All implementations should embed UnimplementedSalesChannelServiceServer
 // for forward compatibility
@@ -58,6 +71,10 @@ type SalesChannelServiceServer interface {
 	// StorefrontStatus returns the current status of a storefront
 	// as a series of diagnostic checks
 	StorefrontStatus(context.Context, *StorefrontStatusRequest) (*StorefrontStatusResponse, error)
+	// DeleteConfiguration tells the sales channel to delete (deactivate) the
+	// storefront's integration configuration, e.g. when the storefront is
+	// disconnected in Zentail.
+	DeleteConfiguration(context.Context, *DeleteConfigurationRequest) (*DeleteConfigurationResponse, error)
 }
 
 // UnimplementedSalesChannelServiceServer should be embedded to have forward compatible implementations.
@@ -69,6 +86,9 @@ func (UnimplementedSalesChannelServiceServer) InitiateIngestion(context.Context,
 }
 func (UnimplementedSalesChannelServiceServer) StorefrontStatus(context.Context, *StorefrontStatusRequest) (*StorefrontStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StorefrontStatus not implemented")
+}
+func (UnimplementedSalesChannelServiceServer) DeleteConfiguration(context.Context, *DeleteConfigurationRequest) (*DeleteConfigurationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteConfiguration not implemented")
 }
 
 // UnsafeSalesChannelServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -118,6 +138,24 @@ func _SalesChannelService_StorefrontStatus_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SalesChannelService_DeleteConfiguration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteConfigurationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SalesChannelServiceServer).DeleteConfiguration(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.SalesChannelService/DeleteConfiguration",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SalesChannelServiceServer).DeleteConfiguration(ctx, req.(*DeleteConfigurationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SalesChannelService_ServiceDesc is the grpc.ServiceDesc for SalesChannelService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -132,6 +170,10 @@ var SalesChannelService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StorefrontStatus",
 			Handler:    _SalesChannelService_StorefrontStatus_Handler,
+		},
+		{
+			MethodName: "DeleteConfiguration",
+			Handler:    _SalesChannelService_DeleteConfiguration_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
