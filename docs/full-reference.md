@@ -23,6 +23,8 @@
     - [Variant.SettingsEntry](#listing_api-Variant-SettingsEntry)
   
 - [api/listing/sales_channel_service.proto](#api_listing_sales_channel_service-proto)
+    - [DeleteConfigurationRequest](#listing_api-DeleteConfigurationRequest)
+    - [DeleteConfigurationResponse](#listing_api-DeleteConfigurationResponse)
     - [InitiateIngestionRequest](#listing_api-InitiateIngestionRequest)
     - [InitiateIngestionResponse](#listing_api-InitiateIngestionResponse)
     - [StorefrontStatusRequest](#listing_api-StorefrontStatusRequest)
@@ -109,6 +111,8 @@
     - [CancelItemsRequest](#orders_api-CancelItemsRequest)
     - [CancelItemsRequest.CancelQuantitiesEntry](#orders_api-CancelItemsRequest-CancelQuantitiesEntry)
     - [CancelItemsResponse](#orders_api-CancelItemsResponse)
+    - [GetOrderRequest](#orders_api-GetOrderRequest)
+    - [GetOrderResponse](#orders_api-GetOrderResponse)
     - [ListShippedOrdersRequest](#orders_api-ListShippedOrdersRequest)
     - [ListShippedOrdersResponse](#orders_api-ListShippedOrdersResponse)
     - [ShippedOrder](#orders_api-ShippedOrder)
@@ -455,6 +459,31 @@ structured information about scheduled sales
 
 
 
+<a name="listing_api-DeleteConfigurationRequest"></a>
+
+### DeleteConfigurationRequest
+DeleteConfigurationRequest is the request for the DeleteConfiguration RPC
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| storefront_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-DeleteConfigurationResponse"></a>
+
+### DeleteConfigurationResponse
+DeleteConfigurationResponse is the response for the DeleteConfiguration RPC
+
+
+
+
+
+
 <a name="listing_api-InitiateIngestionRequest"></a>
 
 ### InitiateIngestionRequest
@@ -559,6 +588,7 @@ SalesChannelService provides a service for a sales channel integration&#39;s web
 | ----------- | ------------ | ------------- | ------------|
 | InitiateIngestion | [InitiateIngestionRequest](#listing_api-InitiateIngestionRequest) | [InitiateIngestionResponse](#listing_api-InitiateIngestionResponse) |  |
 | StorefrontStatus | [StorefrontStatusRequest](#listing_api-StorefrontStatusRequest) | [StorefrontStatusResponse](#listing_api-StorefrontStatusResponse) | StorefrontStatus returns the current status of a storefront as a series of diagnostic checks |
+| DeleteConfiguration | [DeleteConfigurationRequest](#listing_api-DeleteConfigurationRequest) | [DeleteConfigurationResponse](#listing_api-DeleteConfigurationResponse) | DeleteConfiguration tells the sales channel to delete (deactivate) the storefront&#39;s integration configuration, e.g. when the storefront is disconnected in Zentail. |
 
  
 
@@ -1625,6 +1655,39 @@ CancelItemsResponse is the response to a CancelItems request.
 
 
 
+<a name="orders_api-GetOrderRequest"></a>
+
+### GetOrderRequest
+GetOrderRequest identifies a single order to fetch for the storefront
+resolved from the API token. Exactly one identifier must be set.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| channel_order_id | [string](#string) |  | The order ID used by the channel when the order was created (reseller_order_id), scoped to the token&#39;s integration. |
+| order_number | [int64](#int64) |  | The internal Zentail order number (order_number). |
+| purchase_order_id | [int64](#int64) |  | The internal Zentail order id (purchase_order_id). |
+
+
+
+
+
+
+<a name="orders_api-GetOrderResponse"></a>
+
+### GetOrderResponse
+GetOrderResponse carries the requested order in the lean ShippedOrder view.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| order | [ShippedOrder](#orders_api-ShippedOrder) |  |  |
+
+
+
+
+
+
 <a name="orders_api-ListShippedOrdersRequest"></a>
 
 ### ListShippedOrdersRequest
@@ -1761,6 +1824,7 @@ for a Listing integration.
 | ListShippedOrders | [ListShippedOrdersRequest](#orders_api-ListShippedOrdersRequest) | [ListShippedOrdersResponse](#orders_api-ListShippedOrdersResponse) | ListShippedOrders returns orders whose internal Zentail status is SHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.
 
 The internal status filter is enforced server-side; callers cannot request other statuses. Channel-fulfilled orders (FBA / AFN) are excluded by default, since the seller does not confirm shipment for them; set include_channel_fulfilled_orders to include them. Results are keyset-paginated: pass the next_page_cursor from the previous response to fetch the next page. An empty next_page_cursor means there are no more results. The storefront / integration is resolved from the API token, not the request. |
+| GetOrder | [GetOrderRequest](#orders_api-GetOrderRequest) | [GetOrderResponse](#orders_api-GetOrderResponse) | GetOrder returns a single order by one of its identifiers, in the same lean ShippedOrder view ListShippedOrders returns. Unlike ListShippedOrders it applies no status filter, returning the order whatever its status, so a caller (e.g. the shipment-confirmation CLI) can fetch a specific order by channel order id, Zentail order number, or Zentail order id. The storefront / integration is resolved from the API token; a channel_order_id lookup is scoped to that integration. Returns NOT_FOUND when no order matches. |
 
  
 

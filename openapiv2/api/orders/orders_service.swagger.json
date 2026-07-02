@@ -17,6 +17,54 @@
     "application/json"
   ],
   "paths": {
+    "/v2/storefront/order": {
+      "get": {
+        "summary": "GetOrder returns a single order by one of its identifiers, in the same\nlean ShippedOrder view ListShippedOrders returns. Unlike ListShippedOrders\nit applies no status filter, returning the order whatever its status, so a\ncaller (e.g. the shipment-confirmation CLI) can fetch a specific order by\nchannel order id, Zentail order number, or Zentail order id. The\nstorefront / integration is resolved from the API token; a channel_order_id\nlookup is scoped to that integration. Returns NOT_FOUND when no order\nmatches.",
+        "operationId": "OrdersService_GetOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/orders_apiGetOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "channelOrderId",
+            "description": "The order ID used by the channel when the order was created\n(reseller_order_id), scoped to the token's integration.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "orderNumber",
+            "description": "The internal Zentail order number (order_number).",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "purchaseOrderId",
+            "description": "The internal Zentail order id (purchase_order_id).",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "OrdersService"
+        ]
+      }
+    },
     "/v2/storefront/orders/cancel": {
       "post": {
         "summary": "CancelItems cancels items in an order.",
@@ -154,6 +202,15 @@
     "orders_apiCancelItemsResponse": {
       "type": "object",
       "description": "CancelItemsResponse is the response to a CancelItems request."
+    },
+    "orders_apiGetOrderResponse": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orders_apiShippedOrder"
+        }
+      },
+      "description": "GetOrderResponse carries the requested order in the lean ShippedOrder view."
     },
     "orders_apiListShippedOrdersResponse": {
       "type": "object",
