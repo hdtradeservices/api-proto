@@ -32,6 +32,15 @@ type OrdersServiceClient interface {
 	// are no more results. The storefront / integration is resolved from the
 	// API token, not the request.
 	ListShippedOrders(ctx context.Context, in *ListShippedOrdersRequest, opts ...grpc.CallOption) (*ListShippedOrdersResponse, error)
+	// GetOrder returns a single order by one of its identifiers, in the same
+	// lean ShippedOrder view ListShippedOrders returns. Unlike ListShippedOrders
+	// it applies no status filter, returning the order whatever its status, so a
+	// caller (e.g. the shipment-confirmation CLI) can fetch a specific order by
+	// channel order id, Zentail order number, or Zentail order id. The
+	// storefront / integration is resolved from the API token; a channel_order_id
+	// lookup is scoped to that integration. Returns NOT_FOUND when no order
+	// matches.
+	GetOrder(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*GetOrderResponse, error)
 }
 
 type ordersServiceClient struct {
@@ -60,6 +69,15 @@ func (c *ordersServiceClient) ListShippedOrders(ctx context.Context, in *ListShi
 	return out, nil
 }
 
+func (c *ordersServiceClient) GetOrder(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*GetOrderResponse, error) {
+	out := new(GetOrderResponse)
+	err := c.cc.Invoke(ctx, "/orders_api.OrdersService/GetOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrdersServiceServer is the server API for OrdersService service.
 // All implementations should embed UnimplementedOrdersServiceServer
 // for forward compatibility
@@ -78,6 +96,15 @@ type OrdersServiceServer interface {
 	// are no more results. The storefront / integration is resolved from the
 	// API token, not the request.
 	ListShippedOrders(context.Context, *ListShippedOrdersRequest) (*ListShippedOrdersResponse, error)
+	// GetOrder returns a single order by one of its identifiers, in the same
+	// lean ShippedOrder view ListShippedOrders returns. Unlike ListShippedOrders
+	// it applies no status filter, returning the order whatever its status, so a
+	// caller (e.g. the shipment-confirmation CLI) can fetch a specific order by
+	// channel order id, Zentail order number, or Zentail order id. The
+	// storefront / integration is resolved from the API token; a channel_order_id
+	// lookup is scoped to that integration. Returns NOT_FOUND when no order
+	// matches.
+	GetOrder(context.Context, *GetOrderRequest) (*GetOrderResponse, error)
 }
 
 // UnimplementedOrdersServiceServer should be embedded to have forward compatible implementations.
@@ -89,6 +116,9 @@ func (UnimplementedOrdersServiceServer) CancelItems(context.Context, *CancelItem
 }
 func (UnimplementedOrdersServiceServer) ListShippedOrders(context.Context, *ListShippedOrdersRequest) (*ListShippedOrdersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListShippedOrders not implemented")
+}
+func (UnimplementedOrdersServiceServer) GetOrder(context.Context, *GetOrderRequest) (*GetOrderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrder not implemented")
 }
 
 // UnsafeOrdersServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -138,6 +168,24 @@ func _OrdersService_ListShippedOrders_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrdersService_GetOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOrderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrdersServiceServer).GetOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/orders_api.OrdersService/GetOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrdersServiceServer).GetOrder(ctx, req.(*GetOrderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrdersService_ServiceDesc is the grpc.ServiceDesc for OrdersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +200,10 @@ var OrdersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListShippedOrders",
 			Handler:    _OrdersService_ListShippedOrders_Handler,
+		},
+		{
+			MethodName: "GetOrder",
+			Handler:    _OrdersService_GetOrder_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -49,6 +49,20 @@ service OrdersService {
       get: "/v2/storefront/orders/shipped"
     };
   }
+
+  // GetOrder returns a single order by one of its identifiers, in the same
+  // lean ShippedOrder view ListShippedOrders returns. Unlike ListShippedOrders
+  // it applies no status filter, returning the order whatever its status, so a
+  // caller (e.g. the shipment-confirmation CLI) can fetch a specific order by
+  // channel order id, Zentail order number, or Zentail order id. The
+  // storefront / integration is resolved from the API token; a channel_order_id
+  // lookup is scoped to that integration. Returns NOT_FOUND when no order
+  // matches.
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse) {
+    option (google.api.http) = {
+      get: "/v2/storefront/order"
+    };
+  }
 };
 
 // CancelItemsRequest is the request to cancel items in an order.
@@ -62,6 +76,27 @@ message CancelItemsRequest {
 
 // CancelItemsResponse is the response to a CancelItems request.
 message CancelItemsResponse {}
+
+// GetOrderRequest identifies a single order to fetch for the storefront
+// resolved from the API token. Exactly one identifier must be set.
+message GetOrderRequest {
+  oneof identifier {
+    // The order ID used by the channel when the order was created
+    // (reseller_order_id), scoped to the token's integration.
+    string channel_order_id = 1;
+
+    // The internal Zentail order number (order_number).
+    int64 order_number = 2;
+
+    // The internal Zentail order id (purchase_order_id).
+    int64 purchase_order_id = 3;
+  }
+}
+
+// GetOrderResponse carries the requested order in the lean ShippedOrder view.
+message GetOrderResponse {
+  ShippedOrder order = 1;
+}
 
 // ListShippedOrdersRequest is the request to list shipped /
 // partially-shipped orders for the storefront resolved from the API token.
