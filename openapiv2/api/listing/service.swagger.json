@@ -663,6 +663,10 @@
                 },
                 "buyable": {
                   "type": "boolean"
+                },
+                "channelListingId": {
+                  "type": "string",
+                  "description": "The channel's listing-level id (Amazon ASIN, eBay ItemID, Walmart id),\ndistinct from channel_id (the variant-level id)."
                 }
               },
               "title": "UpdateStatusRequest provides the status of a SKU"
