@@ -982,6 +982,7 @@ UpdateStatusRequest provides the status of a SKU
 | channel_id | [string](#string) |  | The channel&#39;s ID for this particular SKU. Should be more specific than Listing. |
 | listing_url | [string](#string) |  |  |
 | buyable | [bool](#bool) |  |  |
+| channel_listing_id | [string](#string) |  | The channel&#39;s listing-level id (Amazon ASIN, eBay ItemID, Walmart id), distinct from channel_id (the variant-level id). |
 
 
 

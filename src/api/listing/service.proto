@@ -339,6 +339,9 @@ message UpdateStatusRequest {
   string channel_id = 4;
   string listing_url = 5;
   bool buyable = 6;
+  // The channel's listing-level id (Amazon ASIN, eBay ItemID, Walmart id),
+  // distinct from channel_id (the variant-level id).
+  string channel_listing_id = 7;
 }
 
 // UpdateStatusResponse is empty
