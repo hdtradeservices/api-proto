@@ -199,6 +199,17 @@ service ListingService {
       body : "*"
     };
   }
+
+  // SetStorefrontValidValues sets the valid values for an attribute spec whose
+  // valid values are unique to each storefront instance (e.g. a channel's
+  // approved item types, or a seller's business policies).
+  rpc SetStorefrontValidValues(SetStorefrontValidValuesRequest)
+      returns (SetStorefrontValidValuesResponse) {
+    option (google.api.http) = {
+      post : "/v2/storefront/listing/valid_values"
+      body : "*"
+    };
+  }
 }
 
 // BeginIngestionRequest is used to initiate the ingestion of listings
@@ -237,6 +248,18 @@ message EndIngestionRequest {
 
 // EndIngestionResponse is used to return the response of the EndIngestion
 message EndIngestionResponse {}
+
+// SetStorefrontValidValuesRequest sets the valid values for an attribute spec
+// whose valid values are unique to each storefront instance.
+message SetStorefrontValidValuesRequest {
+  int64 account_id = 1;
+  int64 storefront_id = 2;
+  string spec_id = 3;
+  repeated string valid_values = 4;
+}
+
+// SetStorefrontValidValuesResponse is an empty response.
+message SetStorefrontValidValuesResponse {}
 
 message CategoryForSKURequest { string sku = 1; }
 
