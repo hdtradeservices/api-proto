@@ -81,6 +81,9 @@ message Listing {
     repeated string pivot_attributes = 4;
     repeated Attribute attributes = 5;
     google.protobuf.Timestamp updated_at = 6;
+    // Channel aspect id(s) whose values drive per-variant images (e.g. eBay
+    // variesBy.aspectsImageVariesBy); empty means infer. Per ZEN-3240.
+    repeated string swatch_image_attribute_id = 7;
   }
 }
 
