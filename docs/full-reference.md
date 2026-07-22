@@ -82,6 +82,8 @@
   
 - [api/listing/taxonomy.proto](#api_listing_taxonomy-proto)
     - [AttributeSpec](#listing_api-AttributeSpec)
+    - [AttributeSpec.ObjectFieldSpec](#listing_api-AttributeSpec-ObjectFieldSpec)
+    - [AttributeSpec.ObjectFieldSpecsEntry](#listing_api-AttributeSpec-ObjectFieldSpecsEntry)
     - [AttributeSpec.ObjectSpecEntry](#listing_api-AttributeSpec-ObjectSpecEntry)
     - [ProductType](#listing_api-ProductType)
   
@@ -1260,6 +1262,7 @@ your channel.
 | valid_values | [string](#string) | repeated | If the type is SELECT or MULTI_SELECT, provide the valid values here |
 | valid_units | [string](#string) | repeated | If the type is NUMERIC_WITH_UNITS, provide the valid units here |
 | object_spec | [AttributeSpec.ObjectSpecEntry](#listing_api-AttributeSpec-ObjectSpecEntry) | repeated | The object_spec is used to specify the structure of an object. This is only used when the type is TYPE_MULTI_OBJECT. |
+| object_field_specs | [AttributeSpec.ObjectFieldSpecsEntry](#listing_api-AttributeSpec-ObjectFieldSpecsEntry) | repeated | The object_field_specs describes each sub-attribute of a TYPE_MULTI_OBJECT attribute, including per-sub-field valid values for enum sub-fields. |
 | unit | [string](#string) |  | Optional, used to specify the unit of the numeric value when the type is TYPE_NUMERIC This will allow Zentail to convert values with units in Zentail to a single numeric value if your channel does not support units |
 | level | [AttributeSpec.Level](#listing_api-AttributeSpec-Level) |  |  |
 | classification | [AttributeSpec.Classification](#listing_api-AttributeSpec-Classification) |  |  |
@@ -1270,6 +1273,41 @@ your channel.
 | suggested_values | [string](#string) | repeated | suggested values is an array of values provided as an optional enumeration of specific values that are recommended for this attribute. |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="listing_api-AttributeSpec-ObjectFieldSpec"></a>
+
+### AttributeSpec.ObjectFieldSpec
+ObjectFieldSpec carries the type and, for enum sub-fields, the valid
+values of a single sub-attribute within a TYPE_MULTI_OBJECT attribute.
+object_spec cannot carry per-sub-field valid values (it maps to Type
+only), so object_field_specs supersedes it for multi-object enums.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [AttributeSpec.Type](#listing_api-AttributeSpec-Type) |  |  |
+| valid_values | [string](#string) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-AttributeSpec-ObjectFieldSpecsEntry"></a>
+
+### AttributeSpec.ObjectFieldSpecsEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [AttributeSpec.ObjectFieldSpec](#listing_api-AttributeSpec-ObjectFieldSpec) |  |  |
 
 
 
