@@ -316,6 +316,21 @@
       "default": "LEVEL_UNSPECIFIED",
       "title": "Level specifies whether this AttributeSpec should be rendered\non the Listing-level or the Variant-level"
     },
+    "AttributeSpecObjectFieldSpec": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/listing_apiAttributeSpecType"
+        },
+        "validValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "ObjectFieldSpec carries the type and, for enum sub-fields, the valid\nvalues of a single sub-attribute within a TYPE_MULTI_OBJECT attribute.\nobject_spec cannot carry per-sub-field valid values (it maps to Type\nonly), so object_field_specs supersedes it for multi-object enums."
+    },
     "AttributeSpecUsage": {
       "type": "string",
       "enum": [
@@ -379,6 +394,13 @@
             "$ref": "#/definitions/listing_apiAttributeSpecType"
           },
           "description": "The object_spec is used to specify the structure of an object.\nThis is only used when the type is TYPE_MULTI_OBJECT."
+        },
+        "objectFieldSpecs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/AttributeSpecObjectFieldSpec"
+          },
+          "description": "The object_field_specs describes each sub-attribute of a TYPE_MULTI_OBJECT\nattribute, including per-sub-field valid values for enum sub-fields."
         },
         "unit": {
           "type": "string",

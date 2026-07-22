@@ -41,6 +41,19 @@ message AttributeSpec {
   // This is only used when the type is TYPE_MULTI_OBJECT.
   map<string, Type> object_spec = 16;
 
+  // ObjectFieldSpec carries the type and, for enum sub-fields, the valid
+  // values of a single sub-attribute within a TYPE_MULTI_OBJECT attribute.
+  // object_spec cannot carry per-sub-field valid values (it maps to Type
+  // only), so object_field_specs supersedes it for multi-object enums.
+  message ObjectFieldSpec {
+    Type type = 1;
+    repeated string valid_values = 2;
+  }
+
+  // The object_field_specs describes each sub-attribute of a TYPE_MULTI_OBJECT
+  // attribute, including per-sub-field valid values for enum sub-fields.
+  map<string, ObjectFieldSpec> object_field_specs = 17;
+
   // Optional, used to specify the unit of the numeric value when the type is
   // TYPE_NUMERIC This will allow Zentail to convert values with units in
   // Zentail to a single numeric value if your channel does not support units
