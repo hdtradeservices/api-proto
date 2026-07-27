@@ -98,6 +98,22 @@ service ListingService {
     };
   }
 
+  // ListSkusWithUpdatedInventory returns only the SKUs of variants that:
+  //
+  // 1. Have an inventory change since the last timestamp
+  //
+  // 2. Have Inventory Data enabled for the Variant
+  //
+  // Unlike ListVariantsWithUpdatedInventory it skips full-variant hydration,
+  // returning the matching SKUs directly so a high-frequency poller does not
+  // load the listing DB. Consumers re-fetch full variants via GetVariant.
+  rpc ListSkusWithUpdatedInventory(ListInventorySinceRequest)
+      returns (ListSkusResponse) {
+    option (google.api.http) = {
+      get : "/v2/storefront/listing/variant/inventory/updated/skus"
+    };
+  }
+
   // ListVariantsWithUpdatedPricing will return any variant that:
   //
   // 1. Has a pricing change since the last timestamp
@@ -328,6 +344,16 @@ message ListListingsResponse {
 // ListVariantsResponse is the response object containing a list of Variants
 message ListVariantsResponse {
   repeated Variant variants = 1;
+
+  // The cursor token for the next page of results.
+  // If empty, there are no more results.
+  string next_page_cursor = 2;
+}
+
+// ListSkusResponse is the response object containing the SKUs of variants with
+// updated inventory.
+message ListSkusResponse {
+  repeated string skus = 1;
 
   // The cursor token for the next page of results.
   // If empty, there are no more results.
