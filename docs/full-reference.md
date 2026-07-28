@@ -47,10 +47,15 @@
     - [Error](#listing_api-Error)
     - [GetBySKURequest](#listing_api-GetBySKURequest)
     - [GetRequest](#listing_api-GetRequest)
+    - [GetStorefrontValidValuesRequest](#listing_api-GetStorefrontValidValuesRequest)
+    - [GetStorefrontValidValuesResponse](#listing_api-GetStorefrontValidValuesResponse)
+    - [GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry](#listing_api-GetStorefrontValidValuesResponse-SpecIdToValidValuesEntry)
+    - [GetStorefrontValidValuesResponse.ValidValues](#listing_api-GetStorefrontValidValuesResponse-ValidValues)
     - [GetVariantRequest](#listing_api-GetVariantRequest)
     - [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest)
     - [ListListingsResponse](#listing_api-ListListingsResponse)
     - [ListSinceRequest](#listing_api-ListSinceRequest)
+    - [ListSkusResponse](#listing_api-ListSkusResponse)
     - [ListVariantsResponse](#listing_api-ListVariantsResponse)
     - [ReplaceErrorsRequest](#listing_api-ReplaceErrorsRequest)
     - [ReplaceErrorsResponse](#listing_api-ReplaceErrorsResponse)
@@ -59,6 +64,8 @@
     - [RequestIngestionResponse](#listing_api-RequestIngestionResponse)
     - [SetInventorySubmissionDetailsRequest](#listing_api-SetInventorySubmissionDetailsRequest)
     - [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse)
+    - [SetStorefrontValidValuesRequest](#listing_api-SetStorefrontValidValuesRequest)
+    - [SetStorefrontValidValuesResponse](#listing_api-SetStorefrontValidValuesResponse)
     - [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest)
     - [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse)
     - [UpdateStatusRequest](#listing_api-UpdateStatusRequest)
@@ -308,6 +315,7 @@ LATER: comment this more
 | pivot_attributes | [string](#string) | repeated |  |
 | attributes | [Attribute](#listing_api-Attribute) | repeated |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| swatch_image_attribute_id | [string](#string) | repeated | Channel aspect id(s) whose values drive per-variant images (e.g. eBay variesBy.aspectsImageVariesBy); empty means infer. Per ZEN-3240. |
 
 
 
@@ -763,6 +771,72 @@ GetRequest is the request object for the Get method
 
 
 
+<a name="listing_api-GetStorefrontValidValuesRequest"></a>
+
+### GetStorefrontValidValuesRequest
+GetStorefrontValidValuesRequest reads the valid values stored for an
+attribute spec whose valid values are unique to each storefront instance.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| account_id | [int64](#int64) |  |  |
+| storefront_id | [int64](#int64) |  |  |
+| spec_ids | [string](#string) | repeated | Limits the read to these attribute specs. Empty returns every spec that has values stored for the storefront. |
+
+
+
+
+
+
+<a name="listing_api-GetStorefrontValidValuesResponse"></a>
+
+### GetStorefrontValidValuesResponse
+GetStorefrontValidValuesResponse holds the stored valid values keyed by
+attribute spec id. A storefront that has never been synced returns an empty
+map rather than an error, and a spec with no stored values is absent.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| spec_id_to_valid_values | [GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry](#listing_api-GetStorefrontValidValuesResponse-SpecIdToValidValuesEntry) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-GetStorefrontValidValuesResponse-SpecIdToValidValuesEntry"></a>
+
+### GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [GetStorefrontValidValuesResponse.ValidValues](#listing_api-GetStorefrontValidValuesResponse-ValidValues) |  |  |
+
+
+
+
+
+
+<a name="listing_api-GetStorefrontValidValuesResponse-ValidValues"></a>
+
+### GetStorefrontValidValuesResponse.ValidValues
+ValidValues holds one attribute spec&#39;s valid values.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| valid_values | [string](#string) | repeated |  |
+
+
+
+
+
+
 <a name="listing_api-GetVariantRequest"></a>
 
 ### GetVariantRequest
@@ -821,6 +895,23 @@ ListSinceRequestRequest is the request object for the ListSinceRequest method
 | ----- | ---- | ----- | ----------- |
 | since | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | cursor | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="listing_api-ListSkusResponse"></a>
+
+### ListSkusResponse
+ListSkusResponse is the response object containing the SKUs of variants with
+updated inventory.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| skus | [string](#string) | repeated |  |
+| next_page_cursor | [string](#string) |  | The cursor token for the next page of results. If empty, there are no more results. |
 
 
 
@@ -938,6 +1029,35 @@ details
 
 ### SetInventorySubmissionDetailsResponse
 SetInventorySubmissionDetailsResponse is currently an empty response
+
+
+
+
+
+
+<a name="listing_api-SetStorefrontValidValuesRequest"></a>
+
+### SetStorefrontValidValuesRequest
+SetStorefrontValidValuesRequest sets the valid values for an attribute spec
+whose valid values are unique to each storefront instance.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| account_id | [int64](#int64) |  |  |
+| storefront_id | [int64](#int64) |  |  |
+| spec_id | [string](#string) |  |  |
+| valid_values | [string](#string) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-SetStorefrontValidValuesResponse"></a>
+
+### SetStorefrontValidValuesResponse
+SetStorefrontValidValuesResponse is an empty response.
 
 
 
@@ -1131,6 +1251,13 @@ Zentail.
 1. Has an inventory change since the last timestamp
 
 2. Inventory Data is enabled for the Variant |
+| ListSkusWithUpdatedInventory | [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest) | [ListSkusResponse](#listing_api-ListSkusResponse) | ListSkusWithUpdatedInventory returns only the SKUs of variants that:
+
+1. Have an inventory change since the last timestamp
+
+2. Have Inventory Data enabled for the Variant
+
+Unlike ListVariantsWithUpdatedInventory it skips full-variant hydration, returning the matching SKUs directly so a high-frequency poller does not load the listing DB. Consumers re-fetch full variants via GetVariant. |
 | ListVariantsWithUpdatedPricing | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedPricing will return any variant that:
 
 1. Has a pricing change since the last timestamp
@@ -1145,6 +1272,8 @@ Zentail.
 | BeginIngestion | [BeginIngestionRequest](#listing_api-BeginIngestionRequest) | [BeginIngestionResponse](#listing_api-BeginIngestionResponse) | BeginIngestion is used to initiate the ingestion of listings for a given storefront. Needs to be called before RequestIngestion. |
 | RequestIngestion | [RequestIngestionRequest](#listing_api-RequestIngestionRequest) | [RequestIngestionResponse](#listing_api-RequestIngestionResponse) | RequestIngestion is used to request ingestion of a listing into Zentail. Need to call BeginIngestion before calling this method. |
 | EndIngestion | [EndIngestionRequest](#listing_api-EndIngestionRequest) | [EndIngestionResponse](#listing_api-EndIngestionResponse) | EndIngestion is used to end the ingestion of Listings Needs to be called after all Listings requiring ingestion have been requested so that the generated Ingestion Plan can be applied. |
+| SetStorefrontValidValues | [SetStorefrontValidValuesRequest](#listing_api-SetStorefrontValidValuesRequest) | [SetStorefrontValidValuesResponse](#listing_api-SetStorefrontValidValuesResponse) | SetStorefrontValidValues sets the valid values for an attribute spec whose valid values are unique to each storefront instance (e.g. a channel&#39;s approved item types, or a seller&#39;s business policies). |
+| GetStorefrontValidValues | [GetStorefrontValidValuesRequest](#listing_api-GetStorefrontValidValuesRequest) | [GetStorefrontValidValuesResponse](#listing_api-GetStorefrontValidValuesResponse) | GetStorefrontValidValues reads back the values SetStorefrontValidValues stored, so a storefront-scoped picker can offer them. |
 
  
 

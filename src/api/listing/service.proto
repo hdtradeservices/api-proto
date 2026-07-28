@@ -226,6 +226,15 @@ service ListingService {
       body : "*"
     };
   }
+
+  // GetStorefrontValidValues reads back the values SetStorefrontValidValues
+  // stored, so a storefront-scoped picker can offer them.
+  rpc GetStorefrontValidValues(GetStorefrontValidValuesRequest)
+      returns (GetStorefrontValidValuesResponse) {
+    option (google.api.http) = {
+      get : "/v2/storefront/listing/valid_values"
+    };
+  }
 }
 
 // BeginIngestionRequest is used to initiate the ingestion of listings
@@ -276,6 +285,25 @@ message SetStorefrontValidValuesRequest {
 
 // SetStorefrontValidValuesResponse is an empty response.
 message SetStorefrontValidValuesResponse {}
+
+// GetStorefrontValidValuesRequest reads the valid values stored for an
+// attribute spec whose valid values are unique to each storefront instance.
+message GetStorefrontValidValuesRequest {
+  int64 account_id = 1;
+  int64 storefront_id = 2;
+  // Limits the read to these attribute specs. Empty returns every spec that
+  // has values stored for the storefront.
+  repeated string spec_ids = 3;
+}
+
+// GetStorefrontValidValuesResponse holds the stored valid values keyed by
+// attribute spec id. A storefront that has never been synced returns an empty
+// map rather than an error, and a spec with no stored values is absent.
+message GetStorefrontValidValuesResponse {
+  // ValidValues holds one attribute spec's valid values.
+  message ValidValues { repeated string valid_values = 1; }
+  map<string, ValidValues> spec_id_to_valid_values = 1;
+}
 
 message CategoryForSKURequest { string sku = 1; }
 
