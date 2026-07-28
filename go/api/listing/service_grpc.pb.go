@@ -100,6 +100,9 @@ type ListingServiceClient interface {
 	// valid values are unique to each storefront instance (e.g. a channel's
 	// approved item types, or a seller's business policies).
 	SetStorefrontValidValues(ctx context.Context, in *SetStorefrontValidValuesRequest, opts ...grpc.CallOption) (*SetStorefrontValidValuesResponse, error)
+	// GetStorefrontValidValues reads back the values SetStorefrontValidValues
+	// stored, so a storefront-scoped picker can offer them.
+	GetStorefrontValidValues(ctx context.Context, in *GetStorefrontValidValuesRequest, opts ...grpc.CallOption) (*GetStorefrontValidValuesResponse, error)
 }
 
 type listingServiceClient struct {
@@ -281,6 +284,15 @@ func (c *listingServiceClient) SetStorefrontValidValues(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *listingServiceClient) GetStorefrontValidValues(ctx context.Context, in *GetStorefrontValidValuesRequest, opts ...grpc.CallOption) (*GetStorefrontValidValuesResponse, error) {
+	out := new(GetStorefrontValidValuesResponse)
+	err := c.cc.Invoke(ctx, "/listing_api.ListingService/GetStorefrontValidValues", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ListingServiceServer is the server API for ListingService service.
 // All implementations should embed UnimplementedListingServiceServer
 // for forward compatibility
@@ -367,6 +379,9 @@ type ListingServiceServer interface {
 	// valid values are unique to each storefront instance (e.g. a channel's
 	// approved item types, or a seller's business policies).
 	SetStorefrontValidValues(context.Context, *SetStorefrontValidValuesRequest) (*SetStorefrontValidValuesResponse, error)
+	// GetStorefrontValidValues reads back the values SetStorefrontValidValues
+	// stored, so a storefront-scoped picker can offer them.
+	GetStorefrontValidValues(context.Context, *GetStorefrontValidValuesRequest) (*GetStorefrontValidValuesResponse, error)
 }
 
 // UnimplementedListingServiceServer should be embedded to have forward compatible implementations.
@@ -429,6 +444,9 @@ func (UnimplementedListingServiceServer) EndIngestion(context.Context, *EndInges
 }
 func (UnimplementedListingServiceServer) SetStorefrontValidValues(context.Context, *SetStorefrontValidValuesRequest) (*SetStorefrontValidValuesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetStorefrontValidValues not implemented")
+}
+func (UnimplementedListingServiceServer) GetStorefrontValidValues(context.Context, *GetStorefrontValidValuesRequest) (*GetStorefrontValidValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStorefrontValidValues not implemented")
 }
 
 // UnsafeListingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -784,6 +802,24 @@ func _ListingService_SetStorefrontValidValues_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ListingService_GetStorefrontValidValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetStorefrontValidValuesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ListingServiceServer).GetStorefrontValidValues(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/listing_api.ListingService/GetStorefrontValidValues",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ListingServiceServer).GetStorefrontValidValues(ctx, req.(*GetStorefrontValidValuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ListingService_ServiceDesc is the grpc.ServiceDesc for ListingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -866,6 +902,10 @@ var ListingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetStorefrontValidValues",
 			Handler:    _ListingService_SetStorefrontValidValues_Handler,
+		},
+		{
+			MethodName: "GetStorefrontValidValues",
+			Handler:    _ListingService_GetStorefrontValidValues_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

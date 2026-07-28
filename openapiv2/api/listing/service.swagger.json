@@ -404,6 +404,87 @@
         ]
       }
     },
+    "/v2/storefront/listing/valid_values": {
+      "get": {
+        "summary": "GetStorefrontValidValues reads back the values SetStorefrontValidValues\nstored, so a storefront-scoped picker can offer them.",
+        "operationId": "ListingService_GetStorefrontValidValues",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiGetStorefrontValidValuesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "storefrontId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "specIds",
+            "description": "Limits the read to these attribute specs. Empty returns every spec that\nhas values stored for the storefront.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      },
+      "post": {
+        "summary": "SetStorefrontValidValues sets the valid values for an attribute spec whose\nvalid values are unique to each storefront instance (e.g. a channel's\napproved item types, or a seller's business policies).",
+        "operationId": "ListingService_SetStorefrontValidValues",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiSetStorefrontValidValuesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/listing_apiSetStorefrontValidValuesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/v2/storefront/listing/variant/inventory/updated": {
       "get": {
         "summary": "ListVariantsWithUpdatedInventory will return any variant that:",
@@ -414,6 +495,52 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/listing_apiListVariantsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "externalChangesOnly",
+            "description": "Only return variants with inventory changes that have happened\noutside of sales on this channel.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
+    "/v2/storefront/listing/variant/inventory/updated/skus": {
+      "get": {
+        "summary": "ListSkusWithUpdatedInventory returns only the SKUs of variants that:",
+        "description": "1. Have an inventory change since the last timestamp\n\n2. Have Inventory Data enabled for the Variant\n\nUnlike ListVariantsWithUpdatedInventory it skips full-variant hydration,\nreturning the matching SKUs directly so a high-frequency poller does not\nload the listing DB. Consumers re-fetch full variants via GetVariant.",
+        "operationId": "ListingService_ListSkusWithUpdatedInventory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListSkusResponse"
             }
           },
           "default": {
@@ -758,6 +885,18 @@
       ],
       "default": "SEVERITY_UNSPECIFIED"
     },
+    "GetStorefrontValidValuesResponseValidValues": {
+      "type": "object",
+      "properties": {
+        "validValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "ValidValues holds one attribute spec's valid values."
+    },
     "InventoryWarehouseQuantity": {
       "type": "object",
       "properties": {
@@ -797,6 +936,13 @@
         "updatedAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "swatchImageAttributeId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Channel aspect id(s) whose values drive per-variant images (e.g. eBay\nvariesBy.aspectsImageVariesBy); empty means infer. Per ZEN-3240."
         }
       }
     },
@@ -1121,6 +1267,18 @@
       ],
       "default": "TYPE_UNSPECIFIED"
     },
+    "listing_apiGetStorefrontValidValuesResponse": {
+      "type": "object",
+      "properties": {
+        "specIdToValidValues": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/GetStorefrontValidValuesResponseValidValues"
+          }
+        }
+      },
+      "description": "GetStorefrontValidValuesResponse holds the stored valid values keyed by\nattribute spec id. A storefront that has never been synced returns an empty\nmap rather than an error, and a spec with no stored values is absent."
+    },
     "listing_apiListListingsResponse": {
       "type": "object",
       "properties": {
@@ -1136,6 +1294,22 @@
         }
       },
       "title": "ListListingsResponse is the response object containing a list of Listings"
+    },
+    "listing_apiListSkusResponse": {
+      "type": "object",
+      "properties": {
+        "skus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nextPageCursor": {
+          "type": "string",
+          "description": "The cursor token for the next page of results.\nIf empty, there are no more results."
+        }
+      },
+      "description": "ListSkusResponse is the response object containing the SKUs of variants with\nupdated inventory."
     },
     "listing_apiListVariantsResponse": {
       "type": "object",
@@ -1244,6 +1418,33 @@
     "listing_apiSetInventorySubmissionDetailsResponse": {
       "type": "object",
       "title": "SetInventorySubmissionDetailsResponse is currently an empty response"
+    },
+    "listing_apiSetStorefrontValidValuesRequest": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "storefrontId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "specId": {
+          "type": "string"
+        },
+        "validValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "SetStorefrontValidValuesRequest sets the valid values for an attribute spec\nwhose valid values are unique to each storefront instance."
+    },
+    "listing_apiSetStorefrontValidValuesResponse": {
+      "type": "object",
+      "description": "SetStorefrontValidValuesResponse is an empty response."
     },
     "listing_apiStandardStatus": {
       "type": "string",
