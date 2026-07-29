@@ -297,6 +297,10 @@
           "type": "string",
           "format": "int64",
           "description": "The ordered quantity for this line."
+        },
+        "channelSku": {
+          "type": "string",
+          "description": "The SKU the channel itself listed this line under\n(reseller_suggested_sku). Differs from sku whenever the line is an alias\nof a catalog product, so channel-side lookups keyed on the seller SKU\nmust use this rather than sku."
         }
       },
       "description": "ShippedOrderLineItem is an order-level line item (not package-scoped),\ncarrying the identifiers needed to resolve a shipped package line back to\nthe channel's order item."
@@ -351,6 +355,10 @@
           "type": "string",
           "format": "int64",
           "description": "The quantity of this line shipped in this package."
+        },
+        "channelSku": {
+          "type": "string",
+          "description": "The SKU the channel itself listed this line under; see\nShippedOrderLineItem.channel_sku."
         }
       },
       "description": "ShippedOrderPackageItem is one line's shipped quantity within a package."

@@ -190,6 +190,12 @@ message ShippedOrderLineItem {
 
   // The ordered quantity for this line.
   int64 quantity = 4;
+
+  // The SKU the channel itself listed this line under
+  // (reseller_suggested_sku). Differs from sku whenever the line is an alias
+  // of a catalog product, so channel-side lookups keyed on the seller SKU
+  // must use this rather than sku.
+  string channel_sku = 5;
 }
 
 // ShippedOrderPackage is a single shipped package (one tracking number) with
@@ -225,4 +231,8 @@ message ShippedOrderPackageItem {
 
   // The quantity of this line shipped in this package.
   int64 quantity = 3;
+
+  // The SKU the channel itself listed this line under; see
+  // ShippedOrderLineItem.channel_sku.
+  string channel_sku = 4;
 }
