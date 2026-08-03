@@ -228,7 +228,6 @@ type Attribute struct {
 
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Types that are assignable to Value:
-	//
 	//	*Attribute_TextValue
 	//	*Attribute_NumericValue
 	//	*Attribute_NumericWithUnitsValue
@@ -404,7 +403,6 @@ type Variant_Inventory struct {
 	MerchantFulfillableWarehouseQuantities []*Variant_Inventory_WarehouseQuantity `protobuf:"bytes,7,rep,name=merchant_fulfillable_warehouse_quantities,json=merchantFulfillableWarehouseQuantities,proto3" json:"merchant_fulfillable_warehouse_quantities,omitempty"`
 	StorefrontFulfillableQuantity          int64                                  `protobuf:"varint,4,opt,name=storefront_fulfillable_quantity,json=storefrontFulfillableQuantity,proto3" json:"storefront_fulfillable_quantity,omitempty"`
 	UpdatedAt                              *timestamppb.Timestamp                 `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	UpdatedExternallyAt                    *timestamppb.Timestamp                 `protobuf:"bytes,6,opt,name=updated_externally_at,json=updatedExternallyAt,proto3" json:"updated_externally_at,omitempty"`
 }
 
 func (x *Variant_Inventory) Reset() {
@@ -477,13 +475,6 @@ func (x *Variant_Inventory) GetStorefrontFulfillableQuantity() int64 {
 func (x *Variant_Inventory) GetUpdatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
-	}
-	return nil
-}
-
-func (x *Variant_Inventory) GetUpdatedExternallyAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedExternallyAt
 	}
 	return nil
 }
@@ -1064,7 +1055,6 @@ type Attribute_Value struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Value:
-	//
 	//	*Attribute_Value_TextValue
 	//	*Attribute_Value_NumericValue
 	//	*Attribute_Value_NumericWithUnitsValue
@@ -1249,7 +1239,7 @@ var file_api_listing_listing_proto_rawDesc = []byte{
 	0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0b, 0x6c, 0x69, 0x73,
 	0x74, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
 	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74,
-	0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xff, 0x0c, 0x0a, 0x07, 0x56, 0x61,
+	0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xaf, 0x0c, 0x0a, 0x07, 0x56, 0x61,
 	0x72, 0x69, 0x61, 0x6e, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x6b, 0x75, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x03, 0x73, 0x6b, 0x75, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x68, 0x61, 0x6e, 0x6e,
 	0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x68, 0x61,
@@ -1281,7 +1271,7 @@ var file_api_listing_listing_proto_rawDesc = []byte{
 	0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a,
-	0xc5, 0x04, 0x0a, 0x09, 0x49, 0x6e, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x72, 0x79, 0x12, 0x18, 0x0a,
+	0xf5, 0x03, 0x0a, 0x09, 0x49, 0x6e, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x72, 0x79, 0x12, 0x18, 0x0a,
 	0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07,
 	0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x25, 0x0a, 0x0e, 0x74, 0x6f, 0x74, 0x61, 0x6c,
 	0x5f, 0x71, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52,
@@ -1307,12 +1297,7 @@ var file_api_listing_listing_proto_rawDesc = []byte{
 	0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
 	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54,
 	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x64, 0x41, 0x74, 0x12, 0x4e, 0x0a, 0x15, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x65,
-	0x78, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x6c, 0x79, 0x5f, 0x61, 0x74, 0x18, 0x06, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x13,
-	0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x45, 0x78, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x6c,
-	0x79, 0x41, 0x74, 0x1a, 0x52, 0x0a, 0x11, 0x57, 0x61, 0x72, 0x65, 0x68, 0x6f, 0x75, 0x73, 0x65,
+	0x64, 0x41, 0x74, 0x1a, 0x52, 0x0a, 0x11, 0x57, 0x61, 0x72, 0x65, 0x68, 0x6f, 0x75, 0x73, 0x65,
 	0x51, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x21, 0x0a, 0x0c, 0x77, 0x61, 0x72, 0x65,
 	0x68, 0x6f, 0x75, 0x73, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b,
 	0x77, 0x61, 0x72, 0x65, 0x68, 0x6f, 0x75, 0x73, 0x65, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x71,
@@ -1541,28 +1526,27 @@ var file_api_listing_listing_proto_depIdxs = []int32{
 	17, // 15: listing_api.Attribute.submitted_at:type_name -> google.protobuf.Timestamp
 	7,  // 16: listing_api.Variant.Inventory.merchant_fulfillable_warehouse_quantities:type_name -> listing_api.Variant.Inventory.WarehouseQuantity
 	17, // 17: listing_api.Variant.Inventory.updated_at:type_name -> google.protobuf.Timestamp
-	17, // 18: listing_api.Variant.Inventory.updated_externally_at:type_name -> google.protobuf.Timestamp
-	2,  // 19: listing_api.Variant.Attributes.attributes:type_name -> listing_api.Attribute
-	17, // 20: listing_api.Variant.Attributes.updated_at:type_name -> google.protobuf.Timestamp
-	2,  // 21: listing_api.Variant.Pricing.attributes:type_name -> listing_api.Attribute
-	17, // 22: listing_api.Variant.Pricing.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 23: listing_api.Variant.Pricing.sales:type_name -> listing_api.Variant.Pricing.ScheduledSale
-	17, // 24: listing_api.Variant.Pricing.ScheduledSale.start_at:type_name -> google.protobuf.Timestamp
-	17, // 25: listing_api.Variant.Pricing.ScheduledSale.end_at:type_name -> google.protobuf.Timestamp
-	2,  // 26: listing_api.Listing.ProductData.attributes:type_name -> listing_api.Attribute
-	17, // 27: listing_api.Listing.ProductData.updated_at:type_name -> google.protobuf.Timestamp
-	15, // 28: listing_api.Attribute.MultiObject.items:type_name -> listing_api.Attribute.MultiObject.Item
-	10, // 29: listing_api.Attribute.Value.numeric_with_units_value:type_name -> listing_api.Attribute.NumericWithUnits
-	11, // 30: listing_api.Attribute.Value.multi_text_value:type_name -> listing_api.Attribute.MultiText
-	12, // 31: listing_api.Attribute.Value.money_value:type_name -> listing_api.Attribute.Money
-	13, // 32: listing_api.Attribute.Value.multi_object_value:type_name -> listing_api.Attribute.MultiObject
-	16, // 33: listing_api.Attribute.MultiObject.Item.properties:type_name -> listing_api.Attribute.MultiObject.Item.PropertiesEntry
-	14, // 34: listing_api.Attribute.MultiObject.Item.PropertiesEntry.value:type_name -> listing_api.Attribute.Value
-	35, // [35:35] is the sub-list for method output_type
-	35, // [35:35] is the sub-list for method input_type
-	35, // [35:35] is the sub-list for extension type_name
-	35, // [35:35] is the sub-list for extension extendee
-	0,  // [0:35] is the sub-list for field type_name
+	2,  // 18: listing_api.Variant.Attributes.attributes:type_name -> listing_api.Attribute
+	17, // 19: listing_api.Variant.Attributes.updated_at:type_name -> google.protobuf.Timestamp
+	2,  // 20: listing_api.Variant.Pricing.attributes:type_name -> listing_api.Attribute
+	17, // 21: listing_api.Variant.Pricing.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 22: listing_api.Variant.Pricing.sales:type_name -> listing_api.Variant.Pricing.ScheduledSale
+	17, // 23: listing_api.Variant.Pricing.ScheduledSale.start_at:type_name -> google.protobuf.Timestamp
+	17, // 24: listing_api.Variant.Pricing.ScheduledSale.end_at:type_name -> google.protobuf.Timestamp
+	2,  // 25: listing_api.Listing.ProductData.attributes:type_name -> listing_api.Attribute
+	17, // 26: listing_api.Listing.ProductData.updated_at:type_name -> google.protobuf.Timestamp
+	15, // 27: listing_api.Attribute.MultiObject.items:type_name -> listing_api.Attribute.MultiObject.Item
+	10, // 28: listing_api.Attribute.Value.numeric_with_units_value:type_name -> listing_api.Attribute.NumericWithUnits
+	11, // 29: listing_api.Attribute.Value.multi_text_value:type_name -> listing_api.Attribute.MultiText
+	12, // 30: listing_api.Attribute.Value.money_value:type_name -> listing_api.Attribute.Money
+	13, // 31: listing_api.Attribute.Value.multi_object_value:type_name -> listing_api.Attribute.MultiObject
+	16, // 32: listing_api.Attribute.MultiObject.Item.properties:type_name -> listing_api.Attribute.MultiObject.Item.PropertiesEntry
+	14, // 33: listing_api.Attribute.MultiObject.Item.PropertiesEntry.value:type_name -> listing_api.Attribute.Value
+	34, // [34:34] is the sub-list for method output_type
+	34, // [34:34] is the sub-list for method input_type
+	34, // [34:34] is the sub-list for extension type_name
+	34, // [34:34] is the sub-list for extension extendee
+	0,  // [0:34] is the sub-list for field type_name
 }
 
 func init() { file_api_listing_listing_proto_init() }

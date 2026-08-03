@@ -377,7 +377,6 @@ Inventory contains information about the availability of this variant
 | merchant_fulfillable_warehouse_quantities | [Variant.Inventory.WarehouseQuantity](#listing_api-Variant-Inventory-WarehouseQuantity) | repeated |  |
 | storefront_fulfillable_quantity | [int64](#int64) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| updated_externally_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 
 
@@ -861,7 +860,6 @@ GetVariantRequest is the request object for the GetVariant method
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | since | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| external_changes_only | [bool](#bool) |  | Only return variants with inventory changes that have happened outside of sales on this channel. |
 | cursor | [string](#string) |  |  |
 
 
@@ -1930,6 +1928,7 @@ the channel&#39;s order item.
 | channel_line_item_id | [string](#string) |  | The channel&#39;s own line item id, when the channel assigns one. |
 | sku | [string](#string) |  | The SKU for this line. |
 | quantity | [int64](#int64) |  | The ordered quantity for this line. |
+| channel_sku | [string](#string) |  | The SKU the channel itself listed this line under (reseller_suggested_sku). Differs from sku whenever the line is an alias of a catalog product, so channel-side lookups keyed on the seller SKU must use this rather than sku. |
 
 
 
@@ -1968,6 +1967,7 @@ ShippedOrderPackageItem is one line&#39;s shipped quantity within a package.
 | line_item_id | [string](#string) |  | The Zentail line item id (purchase_order_product id); matches ShippedOrderLineItem.line_item_id. |
 | sku | [string](#string) |  | The SKU for this line. |
 | quantity | [int64](#int64) |  | The quantity of this line shipped in this package. |
+| channel_sku | [string](#string) |  | The SKU the channel itself listed this line under; see ShippedOrderLineItem.channel_sku. |
 
 
 

@@ -35,7 +35,6 @@ message Variant {
     repeated WarehouseQuantity merchant_fulfillable_warehouse_quantities = 7;
     int64 storefront_fulfillable_quantity = 4;
     google.protobuf.Timestamp updated_at = 5;
-    google.protobuf.Timestamp updated_externally_at = 6;
   }
 
   // Attributes is a container for a list of attributes of a similar

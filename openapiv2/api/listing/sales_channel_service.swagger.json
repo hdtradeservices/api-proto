@@ -48,6 +48,37 @@
         ]
       }
     },
+    "/v2/storefront/configuration/{storefrontId}": {
+      "delete": {
+        "summary": "DeleteConfiguration tells the sales channel to delete (deactivate) the\nstorefront's integration configuration, e.g. when the storefront is\ndisconnected in Zentail.",
+        "operationId": "SalesChannelService_DeleteConfiguration",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiDeleteConfigurationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "storefrontId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "SalesChannelService"
+        ]
+      }
+    },
     "/v2/storefront/status/{storefrontId}": {
       "get": {
         "summary": "StorefrontStatus returns the current status of a storefront\nas a series of diagnostic checks",
@@ -126,6 +157,10 @@
           }
         }
       }
+    },
+    "listing_apiDeleteConfigurationResponse": {
+      "type": "object",
+      "title": "DeleteConfigurationResponse is the response for the DeleteConfiguration RPC"
     },
     "listing_apiInitiateIngestionRequest": {
       "type": "object",
