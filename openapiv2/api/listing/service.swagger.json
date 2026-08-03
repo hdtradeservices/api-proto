@@ -513,13 +513,6 @@
             "format": "date-time"
           },
           {
-            "name": "externalChangesOnly",
-            "description": "Only return variants with inventory changes that have happened\noutside of sales on this channel.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
             "name": "cursor",
             "in": "query",
             "required": false,
@@ -557,13 +550,6 @@
             "required": false,
             "type": "string",
             "format": "date-time"
-          },
-          {
-            "name": "externalChangesOnly",
-            "description": "Only return variants with inventory changes that have happened\noutside of sales on this channel.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
           },
           {
             "name": "cursor",
@@ -1023,10 +1009,6 @@
           "format": "int64"
         },
         "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedExternallyAt": {
           "type": "string",
           "format": "date-time"
         }

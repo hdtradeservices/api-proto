@@ -348,9 +348,6 @@ message SetInventorySubmissionDetailsResponse {}
 
 message ListInventorySinceRequest {
   google.protobuf.Timestamp since = 1;
-  // Only return variants with inventory changes that have happened
-  // outside of sales on this channel.
-  bool external_changes_only = 2;
   string cursor = 3;
 }
 
