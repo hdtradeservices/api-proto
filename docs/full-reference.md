@@ -52,6 +52,7 @@
     - [GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry](#listing_api-GetStorefrontValidValuesResponse-SpecIdToValidValuesEntry)
     - [GetStorefrontValidValuesResponse.ValidValues](#listing_api-GetStorefrontValidValuesResponse-ValidValues)
     - [GetVariantRequest](#listing_api-GetVariantRequest)
+    - [ListInventoryDriftRequest](#listing_api-ListInventoryDriftRequest)
     - [ListInventorySinceRequest](#listing_api-ListInventorySinceRequest)
     - [ListListingsResponse](#listing_api-ListListingsResponse)
     - [ListSinceRequest](#listing_api-ListSinceRequest)
@@ -851,6 +852,24 @@ GetVariantRequest is the request object for the GetVariant method
 
 
 
+<a name="listing_api-ListInventoryDriftRequest"></a>
+
+### ListInventoryDriftRequest
+ListInventoryDriftRequest is the request object for
+ListSkusWithInventoryDrift. Both durations are tuning knobs for the caller&#39;s
+poll cadence, so they travel on the request rather than being fixed here.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| stable_for | [google.protobuf.Duration](#google-protobuf-Duration) |  | Only report a variant whose intended quantity has been unchanged for at least this long, so the reconciler does not duplicate a push the live inventory poller already has in flight. Defaults to 15 minutes. |
+| failure_backoff | [google.protobuf.Duration](#google-protobuf-Duration) |  | How long to leave a variant alone after a failed submission attempt. The submissions table keeps only the latest attempt per variant, so there is no attempt count to cap; this bounds the retry rate instead, and a listing the channel will never accept re-reports once per interval rather than every cycle. Defaults to 24 hours. |
+
+
+
+
+
+
 <a name="listing_api-ListInventorySinceRequest"></a>
 
 ### ListInventorySinceRequest
@@ -1256,6 +1275,11 @@ Zentail.
 2. Have Inventory Data enabled for the Variant
 
 Unlike ListVariantsWithUpdatedInventory it skips full-variant hydration, returning the matching SKUs directly so a high-frequency poller does not load the listing DB. Consumers re-fetch full variants via GetVariant. |
+| ListSkusWithInventoryDrift | [ListInventoryDriftRequest](#listing_api-ListInventoryDriftRequest) | [ListSkusResponse](#listing_api-ListSkusResponse) | ListSkusWithInventoryDrift returns the SKUs of inventory-enabled variants whose last recorded submission to the channel disagrees with the quantity Zentail currently intends to send.
+
+This is a level check, not an edge trigger. ListSkusWithUpdatedInventory reports a variant once, when its inventory timestamp advances, so an event dropped by the poller can never be retried and the row stays stranded (ZEN-4161). Drift is derived from state we already store, so it re-reports the row on every call until a send lands, then goes quiet on its own.
+
+The response is capped server-side and carries no cursor: a level check needs none, because whatever the cap cuts off is reported on the next call, oldest stranded row first. |
 | ListVariantsWithUpdatedPricing | [ListSinceRequest](#listing_api-ListSinceRequest) | [ListVariantsResponse](#listing_api-ListVariantsResponse) | ListVariantsWithUpdatedPricing will return any variant that:
 
 1. Has a pricing change since the last timestamp

@@ -4,6 +4,7 @@ package listing_api;
 import "api/listing/listing.proto";
 import "api/listing/submission.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "google/type/money.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -111,6 +112,26 @@ service ListingService {
       returns (ListSkusResponse) {
     option (google.api.http) = {
       get : "/v2/storefront/listing/variant/inventory/updated/skus"
+    };
+  }
+
+  // ListSkusWithInventoryDrift returns the SKUs of inventory-enabled variants
+  // whose last recorded submission to the channel disagrees with the quantity
+  // Zentail currently intends to send.
+  //
+  // This is a level check, not an edge trigger. ListSkusWithUpdatedInventory
+  // reports a variant once, when its inventory timestamp advances, so an event
+  // dropped by the poller can never be retried and the row stays stranded
+  // (ZEN-4161). Drift is derived from state we already store, so it re-reports
+  // the row on every call until a send lands, then goes quiet on its own.
+  //
+  // The response is capped server-side and carries no cursor: a level check
+  // needs none, because whatever the cap cuts off is reported on the next call,
+  // oldest stranded row first.
+  rpc ListSkusWithInventoryDrift(ListInventoryDriftRequest)
+      returns (ListSkusResponse) {
+    option (google.api.http) = {
+      get : "/v2/storefront/listing/variant/inventory/drift/skus"
     };
   }
 
@@ -349,6 +370,23 @@ message SetInventorySubmissionDetailsResponse {}
 message ListInventorySinceRequest {
   google.protobuf.Timestamp since = 1;
   string cursor = 3;
+}
+
+// ListInventoryDriftRequest is the request object for
+// ListSkusWithInventoryDrift. Both durations are tuning knobs for the caller's
+// poll cadence, so they travel on the request rather than being fixed here.
+message ListInventoryDriftRequest {
+  // Only report a variant whose intended quantity has been unchanged for at
+  // least this long, so the reconciler does not duplicate a push the live
+  // inventory poller already has in flight. Defaults to 15 minutes.
+  google.protobuf.Duration stable_for = 1;
+
+  // How long to leave a variant alone after a failed submission attempt. The
+  // submissions table keeps only the latest attempt per variant, so there is no
+  // attempt count to cap; this bounds the retry rate instead, and a listing the
+  // channel will never accept re-reports once per interval rather than every
+  // cycle. Defaults to 24 hours.
+  google.protobuf.Duration failure_backoff = 2;
 }
 
 // ListSinceRequestRequest is the request object for the ListSinceRequest method

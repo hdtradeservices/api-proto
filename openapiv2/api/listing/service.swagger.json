@@ -485,6 +485,46 @@
         ]
       }
     },
+    "/v2/storefront/listing/variant/inventory/drift/skus": {
+      "get": {
+        "summary": "ListSkusWithInventoryDrift returns the SKUs of inventory-enabled variants\nwhose last recorded submission to the channel disagrees with the quantity\nZentail currently intends to send.",
+        "description": "This is a level check, not an edge trigger. ListSkusWithUpdatedInventory\nreports a variant once, when its inventory timestamp advances, so an event\ndropped by the poller can never be retried and the row stays stranded\n(ZEN-4161). Drift is derived from state we already store, so it re-reports\nthe row on every call until a send lands, then goes quiet on its own.\n\nThe response is capped server-side and carries no cursor: a level check\nneeds none, because whatever the cap cuts off is reported on the next call,\noldest stranded row first.",
+        "operationId": "ListingService_ListSkusWithInventoryDrift",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/listing_apiListSkusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "stableFor",
+            "description": "Only report a variant whose intended quantity has been unchanged for at\nleast this long, so the reconciler does not duplicate a push the live\ninventory poller already has in flight. Defaults to 15 minutes.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "failureBackoff",
+            "description": "How long to leave a variant alone after a failed submission attempt. The\nsubmissions table keeps only the latest attempt per variant, so there is no\nattempt count to cap; this bounds the retry rate instead, and a listing the\nchannel will never accept re-reports once per interval rather than every\ncycle. Defaults to 24 hours.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ListingService"
+        ]
+      }
+    },
     "/v2/storefront/listing/variant/inventory/updated": {
       "get": {
         "summary": "ListVariantsWithUpdatedInventory will return any variant that:",
