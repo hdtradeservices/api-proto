@@ -1274,7 +1274,7 @@
         },
         "message": {
           "type": "string",
-          "title": "Message is required if Type is TYPE_OTHER"
+          "title": "Message is required if Type is TYPE_OTHER or TYPE_TOO_MANY_VALUES"
         }
       }
     },
@@ -1285,9 +1285,11 @@
         "TYPE_MISSING_VALUE",
         "TYPE_INVALID_VALUE",
         "TYPE_RESTRICTED_VALUE",
-        "TYPE_OTHER"
+        "TYPE_OTHER",
+        "TYPE_TOO_MANY_VALUES"
       ],
-      "default": "TYPE_UNSPECIFIED"
+      "default": "TYPE_UNSPECIFIED",
+      "description": " - TYPE_TOO_MANY_VALUES: The attribute carries more values than the channel accepts for it. The\nchannel rejects the whole submission over its cap, so Zentail omits this\none attribute and reports it here."
     },
     "listing_apiGetStorefrontValidValuesResponse": {
       "type": "object",
