@@ -491,9 +491,13 @@ message Error {
     TYPE_INVALID_VALUE = 2;
     TYPE_RESTRICTED_VALUE = 3;
     TYPE_OTHER = 4;
+    // The attribute carries more values than the channel accepts for it. The
+    // channel rejects the whole submission over its cap, so Zentail omits this
+    // one attribute and reports it here.
+    TYPE_TOO_MANY_VALUES = 5;
   }
   Type type = 3;
-  // Message is required if Type is TYPE_OTHER
+  // Message is required if Type is TYPE_OTHER or TYPE_TOO_MANY_VALUES
   string message = 4;
 }
 

@@ -734,7 +734,7 @@ EndIngestionResponse is used to return the response of the EndIngestion
 | attribute_ids | [string](#string) | repeated | One or more attributes that this error applies to |
 | severity | [Error.Severity](#listing_api-Error-Severity) |  |  |
 | type | [Error.Type](#listing_api-Error-Type) |  |  |
-| message | [string](#string) |  | Message is required if Type is TYPE_OTHER |
+| message | [string](#string) |  | Message is required if Type is TYPE_OTHER or TYPE_TOO_MANY_VALUES |
 
 
 
@@ -1202,6 +1202,7 @@ UpdateSubmissionRequest is used to move a submission to another status
 | TYPE_INVALID_VALUE | 2 |  |
 | TYPE_RESTRICTED_VALUE | 3 |  |
 | TYPE_OTHER | 4 |  |
+| TYPE_TOO_MANY_VALUES | 5 | The attribute carries more values than the channel accepts for it. The channel rejects the whole submission over its cap, so Zentail omits this one attribute and reports it here. |
 
 
 
