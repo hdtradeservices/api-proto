@@ -413,6 +413,23 @@ message ListVariantsResponse {
   string next_page_cursor = 2;
 }
 
+// SkuListing pairs a SKU with the listing that carries it, so a caller can
+// group by listing. eBay charges its revision budget per listing rather than
+// per SKU, and groups variations under one listing (ZEN-4477).
+message SkuListing {
+  string sku = 1;
+
+  // Zentail's listing id, matching Listing.id -- not the channel's, which this
+  // file calls channel_listing_id. Both sit on the variant row, and Zentail's
+  // is the safe one to meter a revision budget against because it groups every
+  // variation, so it can only over-group. On account 338 eBay storefront 3
+  // (2026-09-11), 25 of 28 multi-SKU listings shared one channel id and 3
+  // carried one per SKU: grouping by the channel id would split those 3 and
+  // emit more, and under-emitting is the safe direction for a cap you must not
+  // overrun.
+  string listing_id = 2;
+}
+
 // ListSkusResponse is the response object containing the SKUs of variants with
 // updated inventory.
 message ListSkusResponse {
@@ -421,6 +438,21 @@ message ListSkusResponse {
   // The cursor token for the next page of results.
   // If empty, there are no more results.
   string next_page_cursor = 2;
+
+  // The same variants as `skus`, same length and same order, each paired with
+  // its listing. Populated only by ListSkusWithInventoryDrift, and additive on
+  // purpose: `skus` stays authoritative, so the shipped Amazon reconciler that
+  // reads only `skus` needs no change (ZEN-4477).
+  //
+  // A variant whose listing cannot be resolved is still reported, with an empty
+  // listing_id, because dropping it would silently skip a drifted SKU. Group
+  // those separately rather than pooling them under one empty key.
+  //
+  // Treat a non-empty `skus` with an empty `drift_listings` as an error, never
+  // as "no work". That is exactly what a consumer deployed ahead of the server
+  // populating this field would see, and cross-repo deploy order cannot be
+  // enforced (ZEN-4161).
+  repeated SkuListing drift_listings = 3;
 }
 
 // GetRequest is the request object for the Get method

@@ -1331,6 +1331,13 @@
         "nextPageCursor": {
           "type": "string",
           "description": "The cursor token for the next page of results.\nIf empty, there are no more results."
+        },
+        "driftListings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listing_apiSkuListing"
+          },
+          "description": "The same variants as `skus`, same length and same order, each paired with\nits listing. Populated only by ListSkusWithInventoryDrift, and additive on\npurpose: `skus` stays authoritative, so the shipped Amazon reconciler that\nreads only `skus` needs no change (ZEN-4477).\n\nA variant whose listing cannot be resolved is still reported, with an empty\nlisting_id, because dropping it would silently skip a drifted SKU. Group\nthose separately rather than pooling them under one empty key.\n\nTreat a non-empty `skus` with an empty `drift_listings` as an error, never\nas \"no work\". That is exactly what a consumer deployed ahead of the server\npopulating this field would see, and cross-repo deploy order cannot be\nenforced (ZEN-4161)."
         }
       },
       "description": "ListSkusResponse is the response object containing the SKUs of variants with\nupdated inventory."
@@ -1469,6 +1476,19 @@
     "listing_apiSetStorefrontValidValuesResponse": {
       "type": "object",
       "description": "SetStorefrontValidValuesResponse is an empty response."
+    },
+    "listing_apiSkuListing": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string"
+        },
+        "listingId": {
+          "type": "string",
+          "description": "Zentail's listing id, matching Listing.id -- not the channel's, which this\nfile calls channel_listing_id. Both sit on the variant row, and Zentail's\nis the safe one to meter a revision budget against because it groups every\nvariation, so it can only over-group. On account 338 eBay storefront 3\n(2026-09-11), 25 of 28 multi-SKU listings shared one channel id and 3\ncarried one per SKU: grouping by the channel id would split those 3 and\nemit more, and under-emitting is the safe direction for a cap you must not\noverrun."
+        }
+      },
+      "description": "SkuListing pairs a SKU with the listing that carries it, so a caller can\ngroup by listing. eBay charges its revision budget per listing rather than\nper SKU, and groups variations under one listing (ZEN-4477)."
     },
     "listing_apiStandardStatus": {
       "type": "string",
