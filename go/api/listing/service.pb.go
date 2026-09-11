@@ -182,7 +182,7 @@ func (x Error_Severity) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Error_Severity.Descriptor instead.
 func (Error_Severity) EnumDescriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{31, 0}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{32, 0}
 }
 
 type Error_Type int32
@@ -243,7 +243,7 @@ func (x Error_Type) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Error_Type.Descriptor instead.
 func (Error_Type) EnumDescriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{31, 1}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{32, 1}
 }
 
 // BeginIngestionRequest is used to initiate the ingestion of listings
@@ -1456,6 +1456,72 @@ func (x *ListVariantsResponse) GetNextPageCursor() string {
 	return ""
 }
 
+// SkuListing pairs a SKU with the listing that carries it, so a caller can
+// group by listing. eBay charges its revision budget per listing rather than
+// per SKU, and groups variations under one listing (ZEN-4477).
+type SkuListing struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Sku string `protobuf:"bytes,1,opt,name=sku,proto3" json:"sku,omitempty"`
+	// Zentail's listing id, matching Listing.id -- not the channel's, which this
+	// file calls channel_listing_id. Both sit on the variant row, and Zentail's
+	// is the safe one to meter a revision budget against because it groups every
+	// variation, so it can only over-group. On account 338 eBay storefront 3
+	// (2026-09-11), 25 of 28 multi-SKU listings shared one channel id and 3
+	// carried one per SKU: grouping by the channel id would split those 3 and
+	// emit more, and under-emitting is the safe direction for a cap you must not
+	// overrun.
+	ListingId string `protobuf:"bytes,2,opt,name=listing_id,json=listingId,proto3" json:"listing_id,omitempty"`
+}
+
+func (x *SkuListing) Reset() {
+	*x = SkuListing{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_listing_service_proto_msgTypes[22]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SkuListing) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SkuListing) ProtoMessage() {}
+
+func (x *SkuListing) ProtoReflect() protoreflect.Message {
+	mi := &file_api_listing_service_proto_msgTypes[22]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SkuListing.ProtoReflect.Descriptor instead.
+func (*SkuListing) Descriptor() ([]byte, []int) {
+	return file_api_listing_service_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *SkuListing) GetSku() string {
+	if x != nil {
+		return x.Sku
+	}
+	return ""
+}
+
+func (x *SkuListing) GetListingId() string {
+	if x != nil {
+		return x.ListingId
+	}
+	return ""
+}
+
 // ListSkusResponse is the response object containing the SKUs of variants with
 // updated inventory.
 type ListSkusResponse struct {
@@ -1467,12 +1533,26 @@ type ListSkusResponse struct {
 	// The cursor token for the next page of results.
 	// If empty, there are no more results.
 	NextPageCursor string `protobuf:"bytes,2,opt,name=next_page_cursor,json=nextPageCursor,proto3" json:"next_page_cursor,omitempty"`
+	// The same variants as `skus`, same length and same order, each paired with
+	// its listing. Populated only by ListSkusWithInventoryDrift, and additive on
+	// purpose: `skus` stays authoritative, so the shipped Amazon reconciler that
+	// reads only `skus` needs no change (ZEN-4477).
+	//
+	// A variant whose listing cannot be resolved is still reported, with an empty
+	// listing_id, because dropping it would silently skip a drifted SKU. Group
+	// those separately rather than pooling them under one empty key.
+	//
+	// Treat a non-empty `skus` with an empty `drift_listings` as an error, never
+	// as "no work". That is exactly what a consumer deployed ahead of the server
+	// populating this field would see, and cross-repo deploy order cannot be
+	// enforced (ZEN-4161).
+	DriftListings []*SkuListing `protobuf:"bytes,3,rep,name=drift_listings,json=driftListings,proto3" json:"drift_listings,omitempty"`
 }
 
 func (x *ListSkusResponse) Reset() {
 	*x = ListSkusResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[22]
+		mi := &file_api_listing_service_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1485,7 +1565,7 @@ func (x *ListSkusResponse) String() string {
 func (*ListSkusResponse) ProtoMessage() {}
 
 func (x *ListSkusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[22]
+	mi := &file_api_listing_service_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1498,7 +1578,7 @@ func (x *ListSkusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSkusResponse.ProtoReflect.Descriptor instead.
 func (*ListSkusResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{22}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListSkusResponse) GetSkus() []string {
@@ -1515,6 +1595,13 @@ func (x *ListSkusResponse) GetNextPageCursor() string {
 	return ""
 }
 
+func (x *ListSkusResponse) GetDriftListings() []*SkuListing {
+	if x != nil {
+		return x.DriftListings
+	}
+	return nil
+}
+
 // GetRequest is the request object for the Get method
 type GetRequest struct {
 	state         protoimpl.MessageState
@@ -1527,7 +1614,7 @@ type GetRequest struct {
 func (x *GetRequest) Reset() {
 	*x = GetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[23]
+		mi := &file_api_listing_service_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1540,7 +1627,7 @@ func (x *GetRequest) String() string {
 func (*GetRequest) ProtoMessage() {}
 
 func (x *GetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[23]
+	mi := &file_api_listing_service_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1553,7 +1640,7 @@ func (x *GetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRequest.ProtoReflect.Descriptor instead.
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{23}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetRequest) GetListingId() string {
@@ -1575,7 +1662,7 @@ type GetVariantRequest struct {
 func (x *GetVariantRequest) Reset() {
 	*x = GetVariantRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[24]
+		mi := &file_api_listing_service_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1588,7 +1675,7 @@ func (x *GetVariantRequest) String() string {
 func (*GetVariantRequest) ProtoMessage() {}
 
 func (x *GetVariantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[24]
+	mi := &file_api_listing_service_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1601,7 +1688,7 @@ func (x *GetVariantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVariantRequest.ProtoReflect.Descriptor instead.
 func (*GetVariantRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{24}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *GetVariantRequest) GetSku() string {
@@ -1623,7 +1710,7 @@ type GetBySKURequest struct {
 func (x *GetBySKURequest) Reset() {
 	*x = GetBySKURequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[25]
+		mi := &file_api_listing_service_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1636,7 +1723,7 @@ func (x *GetBySKURequest) String() string {
 func (*GetBySKURequest) ProtoMessage() {}
 
 func (x *GetBySKURequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[25]
+	mi := &file_api_listing_service_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1649,7 +1736,7 @@ func (x *GetBySKURequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBySKURequest.ProtoReflect.Descriptor instead.
 func (*GetBySKURequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{25}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *GetBySKURequest) GetSku() string {
@@ -1681,7 +1768,7 @@ type UpdateStatusRequest struct {
 func (x *UpdateStatusRequest) Reset() {
 	*x = UpdateStatusRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[26]
+		mi := &file_api_listing_service_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1694,7 +1781,7 @@ func (x *UpdateStatusRequest) String() string {
 func (*UpdateStatusRequest) ProtoMessage() {}
 
 func (x *UpdateStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[26]
+	mi := &file_api_listing_service_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1707,7 +1794,7 @@ func (x *UpdateStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateStatusRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{26}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *UpdateStatusRequest) GetSku() string {
@@ -1769,7 +1856,7 @@ type UpdateStatusResponse struct {
 func (x *UpdateStatusResponse) Reset() {
 	*x = UpdateStatusResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[27]
+		mi := &file_api_listing_service_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1782,7 +1869,7 @@ func (x *UpdateStatusResponse) String() string {
 func (*UpdateStatusResponse) ProtoMessage() {}
 
 func (x *UpdateStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[27]
+	mi := &file_api_listing_service_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1795,7 +1882,7 @@ func (x *UpdateStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatusResponse.ProtoReflect.Descriptor instead.
 func (*UpdateStatusResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{27}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{28}
 }
 
 // UpdateChannelListingIDRequest provides the status of a SKU
@@ -1811,7 +1898,7 @@ type UpdateChannelListingIDRequest struct {
 func (x *UpdateChannelListingIDRequest) Reset() {
 	*x = UpdateChannelListingIDRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[28]
+		mi := &file_api_listing_service_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1824,7 +1911,7 @@ func (x *UpdateChannelListingIDRequest) String() string {
 func (*UpdateChannelListingIDRequest) ProtoMessage() {}
 
 func (x *UpdateChannelListingIDRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[28]
+	mi := &file_api_listing_service_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1837,7 +1924,7 @@ func (x *UpdateChannelListingIDRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateChannelListingIDRequest.ProtoReflect.Descriptor instead.
 func (*UpdateChannelListingIDRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{28}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *UpdateChannelListingIDRequest) GetSku() string {
@@ -1864,7 +1951,7 @@ type UpdateChannelListingIDResponse struct {
 func (x *UpdateChannelListingIDResponse) Reset() {
 	*x = UpdateChannelListingIDResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[29]
+		mi := &file_api_listing_service_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1877,7 +1964,7 @@ func (x *UpdateChannelListingIDResponse) String() string {
 func (*UpdateChannelListingIDResponse) ProtoMessage() {}
 
 func (x *UpdateChannelListingIDResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[29]
+	mi := &file_api_listing_service_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1890,7 +1977,7 @@ func (x *UpdateChannelListingIDResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateChannelListingIDResponse.ProtoReflect.Descriptor instead.
 func (*UpdateChannelListingIDResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{29}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{30}
 }
 
 // ReplaceErrorsRequest provides all the channel-generated errors for a SKU
@@ -1907,7 +1994,7 @@ type ReplaceErrorsRequest struct {
 func (x *ReplaceErrorsRequest) Reset() {
 	*x = ReplaceErrorsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[30]
+		mi := &file_api_listing_service_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1920,7 +2007,7 @@ func (x *ReplaceErrorsRequest) String() string {
 func (*ReplaceErrorsRequest) ProtoMessage() {}
 
 func (x *ReplaceErrorsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[30]
+	mi := &file_api_listing_service_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1933,7 +2020,7 @@ func (x *ReplaceErrorsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReplaceErrorsRequest.ProtoReflect.Descriptor instead.
 func (*ReplaceErrorsRequest) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{30}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *ReplaceErrorsRequest) GetSku() string {
@@ -1973,7 +2060,7 @@ type Error struct {
 func (x *Error) Reset() {
 	*x = Error{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[31]
+		mi := &file_api_listing_service_proto_msgTypes[32]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1986,7 +2073,7 @@ func (x *Error) String() string {
 func (*Error) ProtoMessage() {}
 
 func (x *Error) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[31]
+	mi := &file_api_listing_service_proto_msgTypes[32]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1999,7 +2086,7 @@ func (x *Error) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Error.ProtoReflect.Descriptor instead.
 func (*Error) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{31}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *Error) GetAttributeIds() []string {
@@ -2040,7 +2127,7 @@ type ReplaceErrorsResponse struct {
 func (x *ReplaceErrorsResponse) Reset() {
 	*x = ReplaceErrorsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[32]
+		mi := &file_api_listing_service_proto_msgTypes[33]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2053,7 +2140,7 @@ func (x *ReplaceErrorsResponse) String() string {
 func (*ReplaceErrorsResponse) ProtoMessage() {}
 
 func (x *ReplaceErrorsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[32]
+	mi := &file_api_listing_service_proto_msgTypes[33]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2066,7 +2153,7 @@ func (x *ReplaceErrorsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReplaceErrorsResponse.ProtoReflect.Descriptor instead.
 func (*ReplaceErrorsResponse) Descriptor() ([]byte, []int) {
-	return file_api_listing_service_proto_rawDescGZIP(), []int{32}
+	return file_api_listing_service_proto_rawDescGZIP(), []int{33}
 }
 
 type RequestIngestionRequest_Variant struct {
@@ -2082,7 +2169,7 @@ type RequestIngestionRequest_Variant struct {
 func (x *RequestIngestionRequest_Variant) Reset() {
 	*x = RequestIngestionRequest_Variant{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[33]
+		mi := &file_api_listing_service_proto_msgTypes[34]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2095,7 +2182,7 @@ func (x *RequestIngestionRequest_Variant) String() string {
 func (*RequestIngestionRequest_Variant) ProtoMessage() {}
 
 func (x *RequestIngestionRequest_Variant) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[33]
+	mi := &file_api_listing_service_proto_msgTypes[34]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2144,7 +2231,7 @@ type GetStorefrontValidValuesResponse_ValidValues struct {
 func (x *GetStorefrontValidValuesResponse_ValidValues) Reset() {
 	*x = GetStorefrontValidValuesResponse_ValidValues{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_listing_service_proto_msgTypes[34]
+		mi := &file_api_listing_service_proto_msgTypes[35]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2157,7 +2244,7 @@ func (x *GetStorefrontValidValuesResponse_ValidValues) String() string {
 func (*GetStorefrontValidValuesResponse_ValidValues) ProtoMessage() {}
 
 func (x *GetStorefrontValidValuesResponse_ValidValues) ProtoReflect() protoreflect.Message {
-	mi := &file_api_listing_service_proto_msgTypes[34]
+	mi := &file_api_listing_service_proto_msgTypes[35]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2379,12 +2466,20 @@ var file_api_listing_service_proto_rawDesc = []byte{
 	0x70, 0x69, 0x2e, 0x56, 0x61, 0x72, 0x69, 0x61, 0x6e, 0x74, 0x52, 0x08, 0x76, 0x61, 0x72, 0x69,
 	0x61, 0x6e, 0x74, 0x73, 0x12, 0x28, 0x0a, 0x10, 0x6e, 0x65, 0x78, 0x74, 0x5f, 0x70, 0x61, 0x67,
 	0x65, 0x5f, 0x63, 0x75, 0x72, 0x73, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e,
-	0x6e, 0x65, 0x78, 0x74, 0x50, 0x61, 0x67, 0x65, 0x43, 0x75, 0x72, 0x73, 0x6f, 0x72, 0x22, 0x50,
+	0x6e, 0x65, 0x78, 0x74, 0x50, 0x61, 0x67, 0x65, 0x43, 0x75, 0x72, 0x73, 0x6f, 0x72, 0x22, 0x3d,
+	0x0a, 0x0a, 0x53, 0x6b, 0x75, 0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x12, 0x10, 0x0a, 0x03,
+	0x73, 0x6b, 0x75, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x73, 0x6b, 0x75, 0x12, 0x1d,
+	0x0a, 0x0a, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x09, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x64, 0x22, 0x90, 0x01,
 	0x0a, 0x10, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x6b, 0x75, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
 	0x73, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x6b, 0x75, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09,
 	0x52, 0x04, 0x73, 0x6b, 0x75, 0x73, 0x12, 0x28, 0x0a, 0x10, 0x6e, 0x65, 0x78, 0x74, 0x5f, 0x70,
 	0x61, 0x67, 0x65, 0x5f, 0x63, 0x75, 0x72, 0x73, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x0e, 0x6e, 0x65, 0x78, 0x74, 0x50, 0x61, 0x67, 0x65, 0x43, 0x75, 0x72, 0x73, 0x6f, 0x72,
+	0x12, 0x3e, 0x0a, 0x0e, 0x64, 0x72, 0x69, 0x66, 0x74, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e,
+	0x67, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x69,
+	0x6e, 0x67, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x6b, 0x75, 0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e,
+	0x67, 0x52, 0x0d, 0x64, 0x72, 0x69, 0x66, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73,
 	0x22, 0x2b, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d,
 	0x0a, 0x0a, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x09, 0x6c, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x64, 0x22, 0x25, 0x0a,
@@ -2692,7 +2787,7 @@ func file_api_listing_service_proto_rawDescGZIP() []byte {
 }
 
 var file_api_listing_service_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_api_listing_service_proto_msgTypes = make([]protoimpl.MessageInfo, 37)
+var file_api_listing_service_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
 var file_api_listing_service_proto_goTypes = []interface{}{
 	(StandardStatus)(0),                                  // 0: listing_api.StandardStatus
 	(UpdateSubmissionRequest_Status)(0),                  // 1: listing_api.UpdateSubmissionRequest.Status
@@ -2720,98 +2815,100 @@ var file_api_listing_service_proto_goTypes = []interface{}{
 	(*ListSinceRequest)(nil),                             // 23: listing_api.ListSinceRequest
 	(*ListListingsResponse)(nil),                         // 24: listing_api.ListListingsResponse
 	(*ListVariantsResponse)(nil),                         // 25: listing_api.ListVariantsResponse
-	(*ListSkusResponse)(nil),                             // 26: listing_api.ListSkusResponse
-	(*GetRequest)(nil),                                   // 27: listing_api.GetRequest
-	(*GetVariantRequest)(nil),                            // 28: listing_api.GetVariantRequest
-	(*GetBySKURequest)(nil),                              // 29: listing_api.GetBySKURequest
-	(*UpdateStatusRequest)(nil),                          // 30: listing_api.UpdateStatusRequest
-	(*UpdateStatusResponse)(nil),                         // 31: listing_api.UpdateStatusResponse
-	(*UpdateChannelListingIDRequest)(nil),                // 32: listing_api.UpdateChannelListingIDRequest
-	(*UpdateChannelListingIDResponse)(nil),               // 33: listing_api.UpdateChannelListingIDResponse
-	(*ReplaceErrorsRequest)(nil),                         // 34: listing_api.ReplaceErrorsRequest
-	(*Error)(nil),                                        // 35: listing_api.Error
-	(*ReplaceErrorsResponse)(nil),                        // 36: listing_api.ReplaceErrorsResponse
-	(*RequestIngestionRequest_Variant)(nil),              // 37: listing_api.RequestIngestionRequest.Variant
-	(*GetStorefrontValidValuesResponse_ValidValues)(nil), // 38: listing_api.GetStorefrontValidValuesResponse.ValidValues
-	nil,                           // 39: listing_api.GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry
-	nil,                           // 40: listing_api.UpdateSubmissionRequest.MetadataEntry
-	(*Attribute)(nil),             // 41: listing_api.Attribute
-	(*Submission)(nil),            // 42: listing_api.Submission
-	(*timestamppb.Timestamp)(nil), // 43: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),   // 44: google.protobuf.Duration
-	(*Listing)(nil),               // 45: listing_api.Listing
-	(*Variant)(nil),               // 46: listing_api.Variant
-	(*money.Money)(nil),           // 47: google.type.Money
+	(*SkuListing)(nil),                                   // 26: listing_api.SkuListing
+	(*ListSkusResponse)(nil),                             // 27: listing_api.ListSkusResponse
+	(*GetRequest)(nil),                                   // 28: listing_api.GetRequest
+	(*GetVariantRequest)(nil),                            // 29: listing_api.GetVariantRequest
+	(*GetBySKURequest)(nil),                              // 30: listing_api.GetBySKURequest
+	(*UpdateStatusRequest)(nil),                          // 31: listing_api.UpdateStatusRequest
+	(*UpdateStatusResponse)(nil),                         // 32: listing_api.UpdateStatusResponse
+	(*UpdateChannelListingIDRequest)(nil),                // 33: listing_api.UpdateChannelListingIDRequest
+	(*UpdateChannelListingIDResponse)(nil),               // 34: listing_api.UpdateChannelListingIDResponse
+	(*ReplaceErrorsRequest)(nil),                         // 35: listing_api.ReplaceErrorsRequest
+	(*Error)(nil),                                        // 36: listing_api.Error
+	(*ReplaceErrorsResponse)(nil),                        // 37: listing_api.ReplaceErrorsResponse
+	(*RequestIngestionRequest_Variant)(nil),              // 38: listing_api.RequestIngestionRequest.Variant
+	(*GetStorefrontValidValuesResponse_ValidValues)(nil), // 39: listing_api.GetStorefrontValidValuesResponse.ValidValues
+	nil,                           // 40: listing_api.GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry
+	nil,                           // 41: listing_api.UpdateSubmissionRequest.MetadataEntry
+	(*Attribute)(nil),             // 42: listing_api.Attribute
+	(*Submission)(nil),            // 43: listing_api.Submission
+	(*timestamppb.Timestamp)(nil), // 44: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),   // 45: google.protobuf.Duration
+	(*Listing)(nil),               // 46: listing_api.Listing
+	(*Variant)(nil),               // 47: listing_api.Variant
+	(*money.Money)(nil),           // 48: google.type.Money
 }
 var file_api_listing_service_proto_depIdxs = []int32{
-	41, // 0: listing_api.RequestIngestionRequest.attributes:type_name -> listing_api.Attribute
-	37, // 1: listing_api.RequestIngestionRequest.variants:type_name -> listing_api.RequestIngestionRequest.Variant
-	39, // 2: listing_api.GetStorefrontValidValuesResponse.spec_id_to_valid_values:type_name -> listing_api.GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry
-	42, // 3: listing_api.CreateSubmissionsRequest.submissions:type_name -> listing_api.Submission
-	42, // 4: listing_api.CreateSubmissionsResponse.submissions:type_name -> listing_api.Submission
-	40, // 5: listing_api.UpdateSubmissionRequest.metadata:type_name -> listing_api.UpdateSubmissionRequest.MetadataEntry
-	43, // 6: listing_api.UpdateSubmissionRequest.changed_at:type_name -> google.protobuf.Timestamp
+	42, // 0: listing_api.RequestIngestionRequest.attributes:type_name -> listing_api.Attribute
+	38, // 1: listing_api.RequestIngestionRequest.variants:type_name -> listing_api.RequestIngestionRequest.Variant
+	40, // 2: listing_api.GetStorefrontValidValuesResponse.spec_id_to_valid_values:type_name -> listing_api.GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry
+	43, // 3: listing_api.CreateSubmissionsRequest.submissions:type_name -> listing_api.Submission
+	43, // 4: listing_api.CreateSubmissionsResponse.submissions:type_name -> listing_api.Submission
+	41, // 5: listing_api.UpdateSubmissionRequest.metadata:type_name -> listing_api.UpdateSubmissionRequest.MetadataEntry
+	44, // 6: listing_api.UpdateSubmissionRequest.changed_at:type_name -> google.protobuf.Timestamp
 	1,  // 7: listing_api.UpdateSubmissionRequest.status:type_name -> listing_api.UpdateSubmissionRequest.Status
-	43, // 8: listing_api.ListInventorySinceRequest.since:type_name -> google.protobuf.Timestamp
-	44, // 9: listing_api.ListInventoryDriftRequest.stable_for:type_name -> google.protobuf.Duration
-	44, // 10: listing_api.ListInventoryDriftRequest.failure_backoff:type_name -> google.protobuf.Duration
-	43, // 11: listing_api.ListSinceRequest.since:type_name -> google.protobuf.Timestamp
-	45, // 12: listing_api.ListListingsResponse.listings:type_name -> listing_api.Listing
-	46, // 13: listing_api.ListVariantsResponse.variants:type_name -> listing_api.Variant
-	0,  // 14: listing_api.UpdateStatusRequest.status:type_name -> listing_api.StandardStatus
-	35, // 15: listing_api.ReplaceErrorsRequest.errors:type_name -> listing_api.Error
-	2,  // 16: listing_api.Error.severity:type_name -> listing_api.Error.Severity
-	3,  // 17: listing_api.Error.type:type_name -> listing_api.Error.Type
-	47, // 18: listing_api.RequestIngestionRequest.Variant.price:type_name -> google.type.Money
-	41, // 19: listing_api.RequestIngestionRequest.Variant.attributes:type_name -> listing_api.Attribute
-	38, // 20: listing_api.GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry.value:type_name -> listing_api.GetStorefrontValidValuesResponse.ValidValues
-	27, // 21: listing_api.ListingService.Get:input_type -> listing_api.GetRequest
-	29, // 22: listing_api.ListingService.GetBySKU:input_type -> listing_api.GetBySKURequest
-	14, // 23: listing_api.ListingService.CategoryForSKU:input_type -> listing_api.CategoryForSKURequest
-	28, // 24: listing_api.ListingService.GetVariant:input_type -> listing_api.GetVariantRequest
-	23, // 25: listing_api.ListingService.ListNewListings:input_type -> listing_api.ListSinceRequest
-	23, // 26: listing_api.ListingService.ListUpdatedListings:input_type -> listing_api.ListSinceRequest
-	21, // 27: listing_api.ListingService.ListVariantsWithUpdatedInventory:input_type -> listing_api.ListInventorySinceRequest
-	21, // 28: listing_api.ListingService.ListSkusWithUpdatedInventory:input_type -> listing_api.ListInventorySinceRequest
-	22, // 29: listing_api.ListingService.ListSkusWithInventoryDrift:input_type -> listing_api.ListInventoryDriftRequest
-	23, // 30: listing_api.ListingService.ListVariantsWithUpdatedPricing:input_type -> listing_api.ListSinceRequest
-	30, // 31: listing_api.ListingService.UpdateStatus:input_type -> listing_api.UpdateStatusRequest
-	32, // 32: listing_api.ListingService.UpdateChannelListingID:input_type -> listing_api.UpdateChannelListingIDRequest
-	34, // 33: listing_api.ListingService.ReplaceErrors:input_type -> listing_api.ReplaceErrorsRequest
-	16, // 34: listing_api.ListingService.CreateSubmissions:input_type -> listing_api.CreateSubmissionsRequest
-	18, // 35: listing_api.ListingService.UpdateSubmission:input_type -> listing_api.UpdateSubmissionRequest
-	19, // 36: listing_api.ListingService.SetInventorySubmissionDetails:input_type -> listing_api.SetInventorySubmissionDetailsRequest
-	4,  // 37: listing_api.ListingService.BeginIngestion:input_type -> listing_api.BeginIngestionRequest
-	6,  // 38: listing_api.ListingService.RequestIngestion:input_type -> listing_api.RequestIngestionRequest
-	8,  // 39: listing_api.ListingService.EndIngestion:input_type -> listing_api.EndIngestionRequest
-	10, // 40: listing_api.ListingService.SetStorefrontValidValues:input_type -> listing_api.SetStorefrontValidValuesRequest
-	12, // 41: listing_api.ListingService.GetStorefrontValidValues:input_type -> listing_api.GetStorefrontValidValuesRequest
-	45, // 42: listing_api.ListingService.Get:output_type -> listing_api.Listing
-	45, // 43: listing_api.ListingService.GetBySKU:output_type -> listing_api.Listing
-	15, // 44: listing_api.ListingService.CategoryForSKU:output_type -> listing_api.CategoryForSKUResponse
-	46, // 45: listing_api.ListingService.GetVariant:output_type -> listing_api.Variant
-	24, // 46: listing_api.ListingService.ListNewListings:output_type -> listing_api.ListListingsResponse
-	24, // 47: listing_api.ListingService.ListUpdatedListings:output_type -> listing_api.ListListingsResponse
-	25, // 48: listing_api.ListingService.ListVariantsWithUpdatedInventory:output_type -> listing_api.ListVariantsResponse
-	26, // 49: listing_api.ListingService.ListSkusWithUpdatedInventory:output_type -> listing_api.ListSkusResponse
-	26, // 50: listing_api.ListingService.ListSkusWithInventoryDrift:output_type -> listing_api.ListSkusResponse
-	25, // 51: listing_api.ListingService.ListVariantsWithUpdatedPricing:output_type -> listing_api.ListVariantsResponse
-	31, // 52: listing_api.ListingService.UpdateStatus:output_type -> listing_api.UpdateStatusResponse
-	33, // 53: listing_api.ListingService.UpdateChannelListingID:output_type -> listing_api.UpdateChannelListingIDResponse
-	36, // 54: listing_api.ListingService.ReplaceErrors:output_type -> listing_api.ReplaceErrorsResponse
-	17, // 55: listing_api.ListingService.CreateSubmissions:output_type -> listing_api.CreateSubmissionsResponse
-	42, // 56: listing_api.ListingService.UpdateSubmission:output_type -> listing_api.Submission
-	20, // 57: listing_api.ListingService.SetInventorySubmissionDetails:output_type -> listing_api.SetInventorySubmissionDetailsResponse
-	5,  // 58: listing_api.ListingService.BeginIngestion:output_type -> listing_api.BeginIngestionResponse
-	7,  // 59: listing_api.ListingService.RequestIngestion:output_type -> listing_api.RequestIngestionResponse
-	9,  // 60: listing_api.ListingService.EndIngestion:output_type -> listing_api.EndIngestionResponse
-	11, // 61: listing_api.ListingService.SetStorefrontValidValues:output_type -> listing_api.SetStorefrontValidValuesResponse
-	13, // 62: listing_api.ListingService.GetStorefrontValidValues:output_type -> listing_api.GetStorefrontValidValuesResponse
-	42, // [42:63] is the sub-list for method output_type
-	21, // [21:42] is the sub-list for method input_type
-	21, // [21:21] is the sub-list for extension type_name
-	21, // [21:21] is the sub-list for extension extendee
-	0,  // [0:21] is the sub-list for field type_name
+	44, // 8: listing_api.ListInventorySinceRequest.since:type_name -> google.protobuf.Timestamp
+	45, // 9: listing_api.ListInventoryDriftRequest.stable_for:type_name -> google.protobuf.Duration
+	45, // 10: listing_api.ListInventoryDriftRequest.failure_backoff:type_name -> google.protobuf.Duration
+	44, // 11: listing_api.ListSinceRequest.since:type_name -> google.protobuf.Timestamp
+	46, // 12: listing_api.ListListingsResponse.listings:type_name -> listing_api.Listing
+	47, // 13: listing_api.ListVariantsResponse.variants:type_name -> listing_api.Variant
+	26, // 14: listing_api.ListSkusResponse.drift_listings:type_name -> listing_api.SkuListing
+	0,  // 15: listing_api.UpdateStatusRequest.status:type_name -> listing_api.StandardStatus
+	36, // 16: listing_api.ReplaceErrorsRequest.errors:type_name -> listing_api.Error
+	2,  // 17: listing_api.Error.severity:type_name -> listing_api.Error.Severity
+	3,  // 18: listing_api.Error.type:type_name -> listing_api.Error.Type
+	48, // 19: listing_api.RequestIngestionRequest.Variant.price:type_name -> google.type.Money
+	42, // 20: listing_api.RequestIngestionRequest.Variant.attributes:type_name -> listing_api.Attribute
+	39, // 21: listing_api.GetStorefrontValidValuesResponse.SpecIdToValidValuesEntry.value:type_name -> listing_api.GetStorefrontValidValuesResponse.ValidValues
+	28, // 22: listing_api.ListingService.Get:input_type -> listing_api.GetRequest
+	30, // 23: listing_api.ListingService.GetBySKU:input_type -> listing_api.GetBySKURequest
+	14, // 24: listing_api.ListingService.CategoryForSKU:input_type -> listing_api.CategoryForSKURequest
+	29, // 25: listing_api.ListingService.GetVariant:input_type -> listing_api.GetVariantRequest
+	23, // 26: listing_api.ListingService.ListNewListings:input_type -> listing_api.ListSinceRequest
+	23, // 27: listing_api.ListingService.ListUpdatedListings:input_type -> listing_api.ListSinceRequest
+	21, // 28: listing_api.ListingService.ListVariantsWithUpdatedInventory:input_type -> listing_api.ListInventorySinceRequest
+	21, // 29: listing_api.ListingService.ListSkusWithUpdatedInventory:input_type -> listing_api.ListInventorySinceRequest
+	22, // 30: listing_api.ListingService.ListSkusWithInventoryDrift:input_type -> listing_api.ListInventoryDriftRequest
+	23, // 31: listing_api.ListingService.ListVariantsWithUpdatedPricing:input_type -> listing_api.ListSinceRequest
+	31, // 32: listing_api.ListingService.UpdateStatus:input_type -> listing_api.UpdateStatusRequest
+	33, // 33: listing_api.ListingService.UpdateChannelListingID:input_type -> listing_api.UpdateChannelListingIDRequest
+	35, // 34: listing_api.ListingService.ReplaceErrors:input_type -> listing_api.ReplaceErrorsRequest
+	16, // 35: listing_api.ListingService.CreateSubmissions:input_type -> listing_api.CreateSubmissionsRequest
+	18, // 36: listing_api.ListingService.UpdateSubmission:input_type -> listing_api.UpdateSubmissionRequest
+	19, // 37: listing_api.ListingService.SetInventorySubmissionDetails:input_type -> listing_api.SetInventorySubmissionDetailsRequest
+	4,  // 38: listing_api.ListingService.BeginIngestion:input_type -> listing_api.BeginIngestionRequest
+	6,  // 39: listing_api.ListingService.RequestIngestion:input_type -> listing_api.RequestIngestionRequest
+	8,  // 40: listing_api.ListingService.EndIngestion:input_type -> listing_api.EndIngestionRequest
+	10, // 41: listing_api.ListingService.SetStorefrontValidValues:input_type -> listing_api.SetStorefrontValidValuesRequest
+	12, // 42: listing_api.ListingService.GetStorefrontValidValues:input_type -> listing_api.GetStorefrontValidValuesRequest
+	46, // 43: listing_api.ListingService.Get:output_type -> listing_api.Listing
+	46, // 44: listing_api.ListingService.GetBySKU:output_type -> listing_api.Listing
+	15, // 45: listing_api.ListingService.CategoryForSKU:output_type -> listing_api.CategoryForSKUResponse
+	47, // 46: listing_api.ListingService.GetVariant:output_type -> listing_api.Variant
+	24, // 47: listing_api.ListingService.ListNewListings:output_type -> listing_api.ListListingsResponse
+	24, // 48: listing_api.ListingService.ListUpdatedListings:output_type -> listing_api.ListListingsResponse
+	25, // 49: listing_api.ListingService.ListVariantsWithUpdatedInventory:output_type -> listing_api.ListVariantsResponse
+	27, // 50: listing_api.ListingService.ListSkusWithUpdatedInventory:output_type -> listing_api.ListSkusResponse
+	27, // 51: listing_api.ListingService.ListSkusWithInventoryDrift:output_type -> listing_api.ListSkusResponse
+	25, // 52: listing_api.ListingService.ListVariantsWithUpdatedPricing:output_type -> listing_api.ListVariantsResponse
+	32, // 53: listing_api.ListingService.UpdateStatus:output_type -> listing_api.UpdateStatusResponse
+	34, // 54: listing_api.ListingService.UpdateChannelListingID:output_type -> listing_api.UpdateChannelListingIDResponse
+	37, // 55: listing_api.ListingService.ReplaceErrors:output_type -> listing_api.ReplaceErrorsResponse
+	17, // 56: listing_api.ListingService.CreateSubmissions:output_type -> listing_api.CreateSubmissionsResponse
+	43, // 57: listing_api.ListingService.UpdateSubmission:output_type -> listing_api.Submission
+	20, // 58: listing_api.ListingService.SetInventorySubmissionDetails:output_type -> listing_api.SetInventorySubmissionDetailsResponse
+	5,  // 59: listing_api.ListingService.BeginIngestion:output_type -> listing_api.BeginIngestionResponse
+	7,  // 60: listing_api.ListingService.RequestIngestion:output_type -> listing_api.RequestIngestionResponse
+	9,  // 61: listing_api.ListingService.EndIngestion:output_type -> listing_api.EndIngestionResponse
+	11, // 62: listing_api.ListingService.SetStorefrontValidValues:output_type -> listing_api.SetStorefrontValidValuesResponse
+	13, // 63: listing_api.ListingService.GetStorefrontValidValues:output_type -> listing_api.GetStorefrontValidValuesResponse
+	43, // [43:64] is the sub-list for method output_type
+	22, // [22:43] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_api_listing_service_proto_init() }
@@ -3087,7 +3184,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListSkusResponse); i {
+			switch v := v.(*SkuListing); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3099,7 +3196,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetRequest); i {
+			switch v := v.(*ListSkusResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3111,7 +3208,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetVariantRequest); i {
+			switch v := v.(*GetRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3123,7 +3220,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetBySKURequest); i {
+			switch v := v.(*GetVariantRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3135,7 +3232,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateStatusRequest); i {
+			switch v := v.(*GetBySKURequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3147,7 +3244,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateStatusResponse); i {
+			switch v := v.(*UpdateStatusRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3159,7 +3256,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateChannelListingIDRequest); i {
+			switch v := v.(*UpdateStatusResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3171,7 +3268,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateChannelListingIDResponse); i {
+			switch v := v.(*UpdateChannelListingIDRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3183,7 +3280,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReplaceErrorsRequest); i {
+			switch v := v.(*UpdateChannelListingIDResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3195,7 +3292,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Error); i {
+			switch v := v.(*ReplaceErrorsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3207,7 +3304,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReplaceErrorsResponse); i {
+			switch v := v.(*Error); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3219,7 +3316,7 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RequestIngestionRequest_Variant); i {
+			switch v := v.(*ReplaceErrorsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3231,6 +3328,18 @@ func file_api_listing_service_proto_init() {
 			}
 		}
 		file_api_listing_service_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RequestIngestionRequest_Variant); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_listing_service_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetStorefrontValidValuesResponse_ValidValues); i {
 			case 0:
 				return &v.state
@@ -3249,7 +3358,7 @@ func file_api_listing_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_listing_service_proto_rawDesc,
 			NumEnums:      4,
-			NumMessages:   37,
+			NumMessages:   38,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

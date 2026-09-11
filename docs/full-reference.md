@@ -67,6 +67,7 @@
     - [SetInventorySubmissionDetailsResponse](#listing_api-SetInventorySubmissionDetailsResponse)
     - [SetStorefrontValidValuesRequest](#listing_api-SetStorefrontValidValuesRequest)
     - [SetStorefrontValidValuesResponse](#listing_api-SetStorefrontValidValuesResponse)
+    - [SkuListing](#listing_api-SkuListing)
     - [UpdateChannelListingIDRequest](#listing_api-UpdateChannelListingIDRequest)
     - [UpdateChannelListingIDResponse](#listing_api-UpdateChannelListingIDResponse)
     - [UpdateStatusRequest](#listing_api-UpdateStatusRequest)
@@ -929,6 +930,11 @@ updated inventory.
 | ----- | ---- | ----- | ----------- |
 | skus | [string](#string) | repeated |  |
 | next_page_cursor | [string](#string) |  | The cursor token for the next page of results. If empty, there are no more results. |
+| drift_listings | [SkuListing](#listing_api-SkuListing) | repeated | The same variants as `skus`, same length and same order, each paired with its listing. Populated only by ListSkusWithInventoryDrift, and additive on purpose: `skus` stays authoritative, so the shipped Amazon reconciler that reads only `skus` needs no change (ZEN-4477).
+
+A variant whose listing cannot be resolved is still reported, with an empty listing_id, because dropping it would silently skip a drifted SKU. Group those separately rather than pooling them under one empty key.
+
+Treat a non-empty `skus` with an empty `drift_listings` as an error, never as &#34;no work&#34;. That is exactly what a consumer deployed ahead of the server populating this field would see, and cross-repo deploy order cannot be enforced (ZEN-4161). |
 
 
 
@@ -1075,6 +1081,24 @@ whose valid values are unique to each storefront instance.
 
 ### SetStorefrontValidValuesResponse
 SetStorefrontValidValuesResponse is an empty response.
+
+
+
+
+
+
+<a name="listing_api-SkuListing"></a>
+
+### SkuListing
+SkuListing pairs a SKU with the listing that carries it, so a caller can
+group by listing. eBay charges its revision budget per listing rather than
+per SKU, and groups variations under one listing (ZEN-4477).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sku | [string](#string) |  |  |
+| listing_id | [string](#string) |  | Zentail&#39;s listing id, matching Listing.id -- not the channel&#39;s, which this file calls channel_listing_id. Both sit on the variant row, and Zentail&#39;s is the safe one to meter a revision budget against because it groups every variation, so it can only over-group. On account 338 eBay storefront 3 (2026-09-11), 25 of 28 multi-SKU listings shared one channel id and 3 carried one per SKU: grouping by the channel id would split those 3 and emit more, and under-emitting is the safe direction for a cap you must not overrun. |
 
 
 
