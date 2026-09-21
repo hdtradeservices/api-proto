@@ -48,7 +48,7 @@ GET <RedirectURL>/?client_id=<client_id>&code=<authorization code>
 3. The application should then have the user log in to their system
 (or use their session if they are already logged in).
 4. From the backend, the application should send a POST request to https://api.zentail.com/v1/token
-with a `Content-type` of `application/x-www-form-urlencoded` and the following data: `grant_type=authorization_code&code=<authorization code>&redirect_uri=<redirect uri>`.
+with a `Content-type` of `application/x-www-form-urlencoded` and the following data: `grant_type=authorization_code&authorization_code=<authorization code>&redirect_uri=<redirect uri>`.
 
 > [!IMPORTANT]
 > The redirect URI must match the one provided during registration.
