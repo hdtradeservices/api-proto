@@ -88,6 +88,7 @@ message Listing {
 
 // Attribute has data that describes a Listing or a Listing's Variants
 message Attribute {
+  // Drift probe for ZEN-5329: this comment is not regenerated into go/ or docs/.
   string id = 1;
 
   // NumericWithUnits supports values like 1 lb
