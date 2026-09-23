@@ -4,10 +4,7 @@ The sales channel integration guide has moved to the Zentail developer docs
 portal, and is published at
 <https://developer.zentail.com/sales-channel-integration/getting-started>.
 
-These files were deleted; the pages below replace them. **These new URLs go
-live with the [ZEN-5275](https://linear.app/zentail-dev/issue/ZEN-5275) domain
-cutover to `developer.zentail.com`** — until then, the same content is served
-at `https://developer-preview.zentail.com/sales-channel-integration/...`.
+These files were deleted; the pages below replace them.
 
 | Was | Now |
 | --- | --- |
