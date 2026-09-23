@@ -73,6 +73,10 @@ message Listing {
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
 
+  // DO NOT MERGE: ZEN-5330 lint probe. Deliberately singular name on a
+  // repeated field to confirm buildkite/api-proto/lint fails CI.
+  repeated string probe_item = 99;
+
   message ProductData {
     bool enabled = 1;
     string category_id = 2;
