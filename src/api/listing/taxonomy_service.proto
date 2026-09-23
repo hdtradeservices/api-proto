@@ -12,7 +12,6 @@ option go_package = "github.com/hdtradeservices/api-proto/go/api/listing";
 service TaxonomyService {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
     name: "Listing Taxonomy Service",
-    // protolint:disable:next MAX_LINE_LENGTH
     description: "Listing Taxonomy Service provides a service for managing the taxonomy data for a listing integration."
   };
 

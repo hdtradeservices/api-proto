@@ -19,7 +19,6 @@ version: "v2";
 service OrdersService {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
     name: "Sales Channel Orders Service",
-    // protolint:disable:next MAX_LINE_LENGTH
     description: "The Orders Service provides APIs for managing orders in Zentail for a sales channel / listing integration."
   };
 

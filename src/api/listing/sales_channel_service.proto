@@ -17,7 +17,6 @@ version : "v2";
 service SalesChannelService {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
     name : "Sales Channel Webhooks Service",
-    // protolint:disable:next MAX_LINE_LENGTH
     description : ""
   };
 
