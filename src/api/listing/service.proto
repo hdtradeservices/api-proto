@@ -24,7 +24,6 @@ version : "v2";
 service ListingService {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
     name : "Listings Service",
-    // protolint:disable:next MAX_LINE_LENGTH
     description : "Listings Service provides a service for listing related "
                   "operations\nThis includes retrieving listings as well as "
                   "sending back statuses to Zentail"
