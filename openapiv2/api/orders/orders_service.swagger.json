@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "OrdersService",
+      "name": "Sales Channel Orders Service",
       "description": "The Orders Service provides APIs for managing orders in Zentail for a sales channel / listing integration."
     }
   ],
@@ -61,7 +61,7 @@
           }
         ],
         "tags": [
-          "OrdersService"
+          "Sales Channel Orders Service"
         ]
       }
     },
@@ -86,6 +86,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "CancelItemsRequest is the request to cancel items in an order.",
             "in": "body",
             "required": true,
             "schema": {
@@ -94,7 +95,7 @@
           }
         ],
         "tags": [
-          "OrdersService"
+          "Sales Channel Orders Service"
         ]
       }
     },
@@ -157,7 +158,7 @@
           }
         ],
         "tags": [
-          "OrdersService"
+          "Sales Channel Orders Service"
         ]
       }
     }
@@ -176,6 +177,7 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
@@ -218,6 +220,7 @@
         "orders": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/orders_apiShippedOrder"
           }
         },
@@ -264,6 +267,7 @@
         "lineItems": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/orders_apiShippedOrderLineItem"
           },
           "description": "Order-level line items, carrying the channel line-item id and ordered\nquantity needed to map shipped packages back to channel order items."
@@ -271,6 +275,7 @@
         "packages": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/orders_apiShippedOrderPackage"
           },
           "description": "Shipped packages (one per tracking number) with their per-line shipped\nquantities — the unit of shipment confirmation."
@@ -333,6 +338,7 @@
         "items": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/orders_apiShippedOrderPackageItem"
           },
           "description": "The line items (and shipped quantities) in this package."

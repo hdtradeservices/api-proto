@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "ListingService",
+      "name": "Listings Service",
       "description": "Listings Service provides a service for listing related operations\nThis includes retrieving listings as well as sending back statuses to Zentail"
     }
   ],
@@ -46,7 +46,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -79,7 +79,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -112,7 +112,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -151,7 +151,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -190,7 +190,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -221,7 +221,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -252,7 +252,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -285,7 +285,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -320,22 +320,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "inventoryLevelSent": {
-                  "type": "string",
-                  "format": "int64"
-                },
-                "successful": {
-                  "type": "boolean"
-                }
-              },
-              "title": "SetInventorySubmissionDetailsRequest is used to create inventory submission\ndetails"
+              "$ref": "#/definitions/ListingServiceSetInventorySubmissionDetailsBody"
             }
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -376,31 +366,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "contentReceived": {
-                  "type": "string"
-                },
-                "metadata": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  }
-                },
-                "changedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "status": {
-                  "$ref": "#/definitions/listing_apiUpdateSubmissionRequestStatus"
-                }
-              },
-              "title": "UpdateSubmissionRequest is used to move a submission to another status"
+              "$ref": "#/definitions/ListingServiceUpdateSubmissionBody"
             }
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -450,7 +421,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       },
       "post": {
@@ -473,6 +444,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "SetStorefrontValidValuesRequest sets the valid values for an attribute spec\nwhose valid values are unique to each storefront instance.",
             "in": "body",
             "required": true,
             "schema": {
@@ -481,7 +453,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -521,7 +493,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -560,7 +532,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -599,7 +571,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -638,7 +610,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -669,7 +641,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -703,18 +675,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "channelId": {
-                  "type": "string"
-                }
-              },
-              "title": "UpdateChannelListingIDRequest provides the status of a SKU"
+              "$ref": "#/definitions/ListingServiceUpdateChannelListingIDBody"
             }
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -748,24 +714,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "submissionType": {
-                  "type": "string"
-                },
-                "errors": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/listing_apiError"
-                  }
-                }
-              },
-              "title": "ReplaceErrorsRequest provides all the channel-generated errors for a SKU"
+              "$ref": "#/definitions/ListingServiceReplaceErrorsBody"
             }
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -799,35 +753,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "$ref": "#/definitions/listing_apiStandardStatus"
-                },
-                "channelStatus": {
-                  "type": "string"
-                },
-                "channelId": {
-                  "type": "string",
-                  "description": "The channel's ID for this particular SKU.\nShould be more specific than Listing."
-                },
-                "listingUrl": {
-                  "type": "string"
-                },
-                "buyable": {
-                  "type": "boolean"
-                },
-                "channelListingId": {
-                  "type": "string",
-                  "description": "The channel's listing-level id (Amazon ASIN, eBay ItemID, Walmart id),\ndistinct from channel_id (the variant-level id)."
-                }
-              },
-              "title": "UpdateStatusRequest provides the status of a SKU"
+              "$ref": "#/definitions/ListingServiceUpdateStatusBody"
             }
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     },
@@ -858,7 +789,7 @@
           }
         ],
         "tags": [
-          "ListingService"
+          "Listings Service"
         ]
       }
     }
@@ -870,6 +801,7 @@
         "items": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/MultiObjectItem"
           }
         }
@@ -956,6 +888,7 @@
         "attributes": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiAttribute"
           }
         },
@@ -971,6 +904,92 @@
           "description": "Channel aspect id(s) whose values drive per-variant images (e.g. eBay\nvariesBy.aspectsImageVariesBy); empty means infer. Per ZEN-3240."
         }
       }
+    },
+    "ListingServiceReplaceErrorsBody": {
+      "type": "object",
+      "properties": {
+        "submissionType": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/listing_apiError"
+          }
+        }
+      },
+      "title": "ReplaceErrorsRequest provides all the channel-generated errors for a SKU"
+    },
+    "ListingServiceSetInventorySubmissionDetailsBody": {
+      "type": "object",
+      "properties": {
+        "inventoryLevelSent": {
+          "type": "string",
+          "format": "int64"
+        },
+        "successful": {
+          "type": "boolean"
+        }
+      },
+      "title": "SetInventorySubmissionDetailsRequest is used to create inventory submission\ndetails"
+    },
+    "ListingServiceUpdateChannelListingIDBody": {
+      "type": "object",
+      "properties": {
+        "channelId": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateChannelListingIDRequest provides the status of a SKU"
+    },
+    "ListingServiceUpdateStatusBody": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/listing_apiStandardStatus"
+        },
+        "channelStatus": {
+          "type": "string"
+        },
+        "channelId": {
+          "type": "string",
+          "description": "The channel's ID for this particular SKU.\nShould be more specific than Listing."
+        },
+        "listingUrl": {
+          "type": "string"
+        },
+        "buyable": {
+          "type": "boolean"
+        },
+        "channelListingId": {
+          "type": "string",
+          "description": "The channel's listing-level id (Amazon ASIN, eBay ItemID, Walmart id),\ndistinct from channel_id (the variant-level id)."
+        }
+      },
+      "title": "UpdateStatusRequest provides the status of a SKU"
+    },
+    "ListingServiceUpdateSubmissionBody": {
+      "type": "object",
+      "properties": {
+        "contentReceived": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "changedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/listing_apiUpdateSubmissionRequestStatus"
+        }
+      },
+      "title": "UpdateSubmissionRequest is used to move a submission to another status"
     },
     "MultiObjectItem": {
       "type": "object",
@@ -1013,6 +1032,7 @@
         "attributes": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiAttribute"
           }
         },
@@ -1041,6 +1061,7 @@
         "merchantFulfillableWarehouseQuantities": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/InventoryWarehouseQuantity"
           }
         },
@@ -1064,6 +1085,7 @@
         "attributes": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiAttribute"
           }
         },
@@ -1074,6 +1096,7 @@
         "sales": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/PricingScheduledSale"
           }
         }
@@ -1093,6 +1116,7 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
@@ -1224,6 +1248,7 @@
         "submissions": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiSubmission"
           }
         }
@@ -1236,6 +1261,7 @@
         "submissions": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiSubmission"
           }
         }
@@ -1309,6 +1335,7 @@
         "listings": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiListing"
           }
         },
@@ -1335,6 +1362,7 @@
         "driftListings": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiSkuListing"
           },
           "description": "The same variants as `skus`, same length and same order, each paired with\nits listing. Populated only by ListSkusWithInventoryDrift, and additive on\npurpose: `skus` stays authoritative, so the shipped Amazon reconciler that\nreads only `skus` needs no change (ZEN-4477).\n\nA variant whose listing cannot be resolved is still reported, with an empty\nlisting_id, because dropping it would silently skip a drifted SKU. Group\nthose separately rather than pooling them under one empty key.\n\nTreat a non-empty `skus` with an empty `drift_listings` as an error, never\nas \"no work\". That is exactly what a consumer deployed ahead of the server\npopulating this field would see, and cross-repo deploy order cannot be\nenforced (ZEN-4161)."
@@ -1348,6 +1376,7 @@
         "variants": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiVariant"
           }
         },
@@ -1374,6 +1403,7 @@
         "variants": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiVariant"
           }
         },
@@ -1412,6 +1442,7 @@
         "attributes": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiAttribute"
           },
           "title": "Listing-level Attributes that are not variant-specific"
@@ -1419,6 +1450,7 @@
         "variants": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiRequestIngestionRequestVariant"
           }
         }
@@ -1437,6 +1469,7 @@
         "attributes": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiAttribute"
           }
         }
