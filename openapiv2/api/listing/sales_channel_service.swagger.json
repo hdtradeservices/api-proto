@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "SalesChannelService"
+      "name": "Sales Channel Webhooks Service"
     }
   ],
   "consumes": [
@@ -44,7 +44,7 @@
           }
         ],
         "tags": [
-          "SalesChannelService"
+          "Sales Channel Webhooks Service"
         ]
       }
     },
@@ -75,7 +75,7 @@
           }
         ],
         "tags": [
-          "SalesChannelService"
+          "Sales Channel Webhooks Service"
         ]
       }
     },
@@ -106,7 +106,7 @@
           }
         ],
         "tags": [
-          "SalesChannelService"
+          "Sales Channel Webhooks Service"
         ]
       }
     }
@@ -153,6 +153,7 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
@@ -190,6 +191,7 @@
         "checks": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/StorefrontStatusResponseCheck"
           }
         }

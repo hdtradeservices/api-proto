@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "TaxonomyService",
+      "name": "Listing Taxonomy Service",
       "description": "Listing Taxonomy Service provides a service for managing the taxonomy data for a listing integration."
     }
   ],
@@ -44,7 +44,7 @@
           }
         ],
         "tags": [
-          "TaxonomyService"
+          "Listing Taxonomy Service"
         ]
       },
       "post": {
@@ -76,18 +76,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "attributeSpec": {
-                  "$ref": "#/definitions/listing_apiAttributeSpec"
-                }
-              },
-              "title": "CreateAttributeSpecRequest is used to create a new AttributeSpec"
+              "$ref": "#/definitions/TaxonomyServiceCreateAttributeSpecBody"
             }
           }
         ],
         "tags": [
-          "TaxonomyService"
+          "Listing Taxonomy Service"
         ]
       },
       "put": {
@@ -119,18 +113,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "attributeSpec": {
-                  "$ref": "#/definitions/listing_apiAttributeSpec"
-                }
-              },
-              "title": "UpdateAttributeSpecRequest is used to update an existing AttributeSpec"
+              "$ref": "#/definitions/TaxonomyServiceUpdateAttributeSpecBody"
             }
           }
         ],
         "tags": [
-          "TaxonomyService"
+          "Listing Taxonomy Service"
         ]
       }
     },
@@ -167,7 +155,7 @@
           }
         ],
         "tags": [
-          "TaxonomyService"
+          "Listing Taxonomy Service"
         ]
       },
       "delete": {
@@ -202,7 +190,7 @@
           }
         ],
         "tags": [
-          "TaxonomyService"
+          "Listing Taxonomy Service"
         ]
       }
     },
@@ -225,7 +213,7 @@
           }
         },
         "tags": [
-          "TaxonomyService"
+          "Listing Taxonomy Service"
         ]
       },
       "post": {
@@ -256,7 +244,7 @@
           }
         ],
         "tags": [
-          "TaxonomyService"
+          "Listing Taxonomy Service"
         ]
       }
     },
@@ -287,7 +275,7 @@
           }
         ],
         "tags": [
-          "TaxonomyService"
+          "Listing Taxonomy Service"
         ]
       }
     }
@@ -342,6 +330,24 @@
       "default": "USAGE_UNSPECIFIED",
       "title": "Usage indicates if the spec is required or just recommended"
     },
+    "TaxonomyServiceCreateAttributeSpecBody": {
+      "type": "object",
+      "properties": {
+        "attributeSpec": {
+          "$ref": "#/definitions/listing_apiAttributeSpec"
+        }
+      },
+      "title": "CreateAttributeSpecRequest is used to create a new AttributeSpec"
+    },
+    "TaxonomyServiceUpdateAttributeSpecBody": {
+      "type": "object",
+      "properties": {
+        "attributeSpec": {
+          "$ref": "#/definitions/listing_apiAttributeSpec"
+        }
+      },
+      "title": "UpdateAttributeSpecRequest is used to update an existing AttributeSpec"
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -355,6 +361,7 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
@@ -497,6 +504,7 @@
         "attributeSpecs": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiAttributeSpec"
           }
         }
@@ -509,6 +517,7 @@
         "productTypes": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/listing_apiProductType"
           }
         }
