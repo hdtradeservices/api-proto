@@ -6,7 +6,8 @@
   },
   "tags": [
     {
-      "name": "Sales Channel Webhooks Service"
+      "name": "Sales Channel Webhooks Service",
+      "description": "Callbacks a sales channel integration serves on its own host, for Zentail to call. Once Zentail starts calling them, it signs every call with HMAC-SHA256 in the X-Zentail-Timestamp and X-Zentail-Signature headers; see https://developer.zentail.com/sales-channel-integration/callbacks/ for how to verify them."
     }
   ],
   "consumes": [

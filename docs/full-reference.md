@@ -593,7 +593,28 @@ CheckState represents the result state of a diagnostic check
 <a name="listing_api-SalesChannelService"></a>
 
 ### SalesChannelService
-SalesChannelService provides a service for a sales channel integration&#39;s webhook related operations
+SalesChannelService is the set of callbacks a sales channel integration serves on
+its own host, for Zentail to call.
+
+Authentication: Zentail signs every call it makes to a partner host with
+HMAC-SHA256, keyed with the application&#39;s callback signing secret. Zentail does
+not call these endpoints yet; once it does, every call carries two headers:
+
+  - X-Zentail-Timestamp: the Unix time in seconds when Zentail signed the call.
+  - X-Zentail-Signature: v1=&lt;lowercase hex HMAC-SHA256 of the signing string&gt;.
+    While a secret is being rotated it holds one comma-separated v1= value per
+    active secret, and a call is genuine if any one of them matches.
+
+The signing string is four parts joined by a single &#34;\n&#34;: the timestamp header
+value, the HTTP method in upper case, the request path and query exactly as sent,
+and the raw request body. GET and DELETE send an empty body, so their signing
+string ends in &#34;\n&#34;. The method and path are signed because two of the three
+callbacks carry the storefront only in the path.
+
+A partner rejects a call whose signature does not match, or whose timestamp is
+more than 300 seconds from its own clock, with HTTP 401 and a google.rpc.Status
+of code 16 (UNAUTHENTICATED). The full guide:
+https://developer.zentail.com/sales-channel-integration/callbacks/
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
