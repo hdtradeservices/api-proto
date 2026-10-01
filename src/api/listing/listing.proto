@@ -89,6 +89,13 @@ message Listing {
     repeated string swatch_image_attribute_id = 7;
 
     // protolint:enable REPEATED_FIELD_NAMES_PLURALIZED
+
+    // Each variant publishes as its own item, not as a variation family: the
+    // listing is a split with no pivots left. Per ZEN-5811.
+    bool standalone_variants = 8;
+    // The Product Group's own listing SKU, which an earlier publish may have
+    // used as the variation parent. Set only with standalone_variants.
+    string base_listing_sku = 9;
   }
 }
 
