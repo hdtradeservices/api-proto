@@ -909,7 +909,11 @@
         },
         "baseListingSku": {
           "type": "string",
-          "description": "The Product Group's own listing SKU, which an earlier publish may have\nused as the variation parent. Set only with standalone_variants."
+          "description": "The Product Group's own listing SKU, which an earlier publish may have\nused as the variation parent. Set on a listing that submits no parent:\na standalone split, or a split with one variant."
+        },
+        "retireBaseParent": {
+          "type": "boolean",
+          "description": "base_listing_sku is safe to delete: no other split still uses it as its\nparent. When false the channel only unlinks this listing's items from\nit. Per ZEN-6076."
         }
       }
     },
