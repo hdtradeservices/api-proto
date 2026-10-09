@@ -319,7 +319,8 @@ LATER: comment this more
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | swatch_image_attribute_id | [string](#string) | repeated | Channel aspect id(s) whose values drive per-variant images (e.g. eBay variesBy.aspectsImageVariesBy); empty means infer. Per ZEN-3240. |
 | standalone_variants | [bool](#bool) |  | Each variant publishes as its own item, not as a variation family: the listing is a split with no pivots left. Per ZEN-5811. |
-| base_listing_sku | [string](#string) |  | The Product Group&#39;s own listing SKU, which an earlier publish may have used as the variation parent. Set only with standalone_variants. |
+| base_listing_sku | [string](#string) |  | The Product Group&#39;s own listing SKU, which an earlier publish may have used as the variation parent. Set on a listing that submits no parent: a standalone split, or a split with one variant. |
+| retire_base_parent | [bool](#bool) |  | base_listing_sku is safe to delete: no other split still uses it as its parent. When false the channel only unlinks this listing&#39;s items from it. Per ZEN-6076. |
 
 
 

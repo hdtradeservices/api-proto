@@ -94,8 +94,13 @@ message Listing {
     // listing is a split with no pivots left. Per ZEN-5811.
     bool standalone_variants = 8;
     // The Product Group's own listing SKU, which an earlier publish may have
-    // used as the variation parent. Set only with standalone_variants.
+    // used as the variation parent. Set on a listing that submits no parent:
+    // a standalone split, or a split with one variant.
     string base_listing_sku = 9;
+    // base_listing_sku is safe to delete: no other split still uses it as its
+    // parent. When false the channel only unlinks this listing's items from
+    // it. Per ZEN-6076.
+    bool retire_base_parent = 10;
   }
 }
 
