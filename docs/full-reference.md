@@ -14,6 +14,8 @@
     - [Attribute.Value](#listing_api-Attribute-Value)
     - [Listing](#listing_api-Listing)
     - [Listing.ProductData](#listing_api-Listing-ProductData)
+    - [PivotOption](#listing_api-PivotOption)
+    - [PivotOptionValue](#listing_api-PivotOptionValue)
     - [Variant](#listing_api-Variant)
     - [Variant.Attributes](#listing_api-Variant-Attributes)
     - [Variant.Inventory](#listing_api-Variant-Inventory)
@@ -321,6 +323,46 @@ LATER: comment this more
 | standalone_variants | [bool](#bool) |  | Each variant publishes as its own item, not as a variation family: the listing is a split with no pivots left. Per ZEN-5811. |
 | base_listing_sku | [string](#string) |  | The Product Group&#39;s own listing SKU, which an earlier publish may have used as the variation parent. Set on a listing that submits no parent: a standalone split, or a split with one variant. |
 | retire_base_parent | [bool](#bool) |  | base_listing_sku is safe to delete: no other split still uses it as its parent. When false the channel only unlinks this listing&#39;s items from it. Per ZEN-6076. |
+| pivot_options | [PivotOption](#listing_api-PivotOption) | repeated | The pivots this listing still varies by, as a storefront shows them to shoppers. Set for BigCommerce and Shopify only. Per ZEN-6639. |
+
+
+
+
+
+
+<a name="listing_api-PivotOption"></a>
+
+### PivotOption
+PivotOption is one pivot a listing varies by, as a storefront shows it:
+a BigCommerce option or a Shopify option.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| attribute_id | [string](#string) |  | The catalog pivot attribute spec id. |
+| display_name | [string](#string) |  | The alias when set, else attribute_id title-cased with &#34;_&#34; as a space. |
+| alias | [string](#string) |  | The merchant&#39;s own name for the pivot, unformatted. Empty when unset. |
+| sort_order | [int32](#int32) |  | 1-based position among all of the Product Group&#39;s pivots, split ones included. |
+| display_type | [string](#string) |  | &#34;swatch&#34; for the group&#39;s swatch attribute, else the storefront&#39;s option_type setting, else &#34;dropdown&#34;. |
+| values | [PivotOptionValue](#listing_api-PivotOptionValue) | repeated |  |
+
+
+
+
+
+
+<a name="listing_api-PivotOptionValue"></a>
+
+### PivotOptionValue
+PivotOptionValue is one value of a PivotOption.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| label | [string](#string) |  | Labels are case-folded across every option: the first casing seen wins. |
+| sort_order | [int32](#int32) |  | 1-based, in variant order. |
+| swatch_image_url | [string](#string) |  | Set on a swatch option only: the variant&#39;s swatch image, else its primary image. |
+| skus | [string](#string) | repeated | The listing SKUs that carry this value. |
 
 
 

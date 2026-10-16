@@ -914,6 +914,14 @@
         "retireBaseParent": {
           "type": "boolean",
           "description": "base_listing_sku is safe to delete: no other split still uses it as its\nparent. When false the channel only unlinks this listing's items from\nit. Per ZEN-6076."
+        },
+        "pivotOptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/listing_apiPivotOption"
+          },
+          "description": "The pivots this listing still varies by, as a storefront shows them\nto shoppers. Set for BigCommerce and Shopify only. Per ZEN-6639."
         }
       }
     },
@@ -1429,6 +1437,66 @@
         }
       },
       "title": "Listing is a representation of a product to be sold on a Channel\nLATER: comment this more"
+    },
+    "listing_apiPivotOption": {
+      "type": "object",
+      "properties": {
+        "attributeId": {
+          "type": "string",
+          "description": "The catalog pivot attribute spec id."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The alias when set, else attribute_id title-cased with \"_\" as a space."
+        },
+        "alias": {
+          "type": "string",
+          "description": "The merchant's own name for the pivot, unformatted. Empty when unset."
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32",
+          "description": "1-based position among all of the Product Group's pivots, split ones\nincluded."
+        },
+        "displayType": {
+          "type": "string",
+          "description": "\"swatch\" for the group's swatch attribute, else the storefront's\noption_type setting, else \"dropdown\"."
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/listing_apiPivotOptionValue"
+          }
+        }
+      },
+      "description": "PivotOption is one pivot a listing varies by, as a storefront shows it:\na BigCommerce option or a Shopify option."
+    },
+    "listing_apiPivotOptionValue": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "Labels are case-folded across every option: the first casing seen wins."
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32",
+          "description": "1-based, in variant order."
+        },
+        "swatchImageUrl": {
+          "type": "string",
+          "description": "Set on a swatch option only: the variant's swatch image, else its\nprimary image."
+        },
+        "skus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The listing SKUs that carry this value."
+        }
+      },
+      "description": "PivotOptionValue is one value of a PivotOption."
     },
     "listing_apiReplaceErrorsResponse": {
       "type": "object",

@@ -101,7 +101,41 @@ message Listing {
     // parent. When false the channel only unlinks this listing's items from
     // it. Per ZEN-6076.
     bool retire_base_parent = 10;
+    // The pivots this listing still varies by, as a storefront shows them
+    // to shoppers. Set for BigCommerce and Shopify only. Per ZEN-6639.
+    repeated PivotOption pivot_options = 11;
   }
+}
+
+// PivotOption is one pivot a listing varies by, as a storefront shows it:
+// a BigCommerce option or a Shopify option.
+message PivotOption {
+  // The catalog pivot attribute spec id.
+  string attribute_id = 1;
+  // The alias when set, else attribute_id title-cased with "_" as a space.
+  string display_name = 2;
+  // The merchant's own name for the pivot, unformatted. Empty when unset.
+  string alias = 3;
+  // 1-based position among all of the Product Group's pivots, split ones
+  // included.
+  int32 sort_order = 4;
+  // "swatch" for the group's swatch attribute, else the storefront's
+  // option_type setting, else "dropdown".
+  string display_type = 5;
+  repeated PivotOptionValue values = 6;
+}
+
+// PivotOptionValue is one value of a PivotOption.
+message PivotOptionValue {
+  // Labels are case-folded across every option: the first casing seen wins.
+  string label = 1;
+  // 1-based, in variant order.
+  int32 sort_order = 2;
+  // Set on a swatch option only: the variant's swatch image, else its
+  // primary image.
+  string swatch_image_url = 3;
+  // The listing SKUs that carry this value.
+  repeated string skus = 4;
 }
 
 // Attribute has data that describes a Listing or a Listing's Variants
