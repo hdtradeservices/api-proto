@@ -324,6 +324,7 @@ LATER: comment this more
 | base_listing_sku | [string](#string) |  | The Product Group&#39;s own listing SKU, which an earlier publish may have used as the variation parent. Set on a listing that submits no parent: a standalone split, or a split with one variant. |
 | retire_base_parent | [bool](#bool) |  | base_listing_sku is safe to delete: no other split still uses it as its parent. When false the channel only unlinks this listing&#39;s items from it. Per ZEN-6076. |
 | pivot_options | [PivotOption](#listing_api-PivotOption) | repeated | The pivots this listing still varies by, as a storefront shows them to shoppers. Set for BigCommerce and Shopify only. Per ZEN-6639. |
+| split | [bool](#bool) |  | This listing is one of its Product Group&#39;s splits, the one that kept the unsplit listing&#39;s id included. Per ZEN-7092. |
 
 
 

@@ -104,6 +104,9 @@ message Listing {
     // The pivots this listing still varies by, as a storefront shows them
     // to shoppers. Set for BigCommerce and Shopify only. Per ZEN-6639.
     repeated PivotOption pivot_options = 11;
+    // This listing is one of its Product Group's splits, the one that kept
+    // the unsplit listing's id included. Per ZEN-7092.
+    bool split = 12;
   }
 }
 
