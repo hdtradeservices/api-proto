@@ -922,6 +922,10 @@
             "$ref": "#/definitions/listing_apiPivotOption"
           },
           "description": "The pivots this listing still varies by, as a storefront shows them\nto shoppers. Set for BigCommerce and Shopify only. Per ZEN-6639."
+        },
+        "split": {
+          "type": "boolean",
+          "description": "This listing is one of its Product Group's splits, the one that kept\nthe unsplit listing's id included. Per ZEN-7092."
         }
       }
     },
