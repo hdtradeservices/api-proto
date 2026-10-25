@@ -14,6 +14,7 @@
     - [Attribute.Value](#listing_api-Attribute-Value)
     - [Listing](#listing_api-Listing)
     - [Listing.ProductData](#listing_api-Listing-ProductData)
+    - [Metafield](#listing_api-Metafield)
     - [PivotOption](#listing_api-PivotOption)
     - [PivotOptionValue](#listing_api-PivotOptionValue)
     - [Variant](#listing_api-Variant)
@@ -325,6 +326,27 @@ LATER: comment this more
 | retire_base_parent | [bool](#bool) |  | base_listing_sku is safe to delete: no other split still uses it as its parent. When false the channel only unlinks this listing&#39;s items from it. Per ZEN-6076. |
 | pivot_options | [PivotOption](#listing_api-PivotOption) | repeated | The pivots this listing still varies by, as a storefront shows them to shoppers. Set for BigCommerce and Shopify only. Per ZEN-6639. |
 | split | [bool](#bool) |  | This listing is one of its Product Group&#39;s splits, the one that kept the unsplit listing&#39;s id included. Per ZEN-7092. |
+| metafields | [Metafield](#listing_api-Metafield) | repeated | Shopify metafield values, built from the storefront&#39;s metafield specs. Set for Shopify only. Per ZEN-6876. |
+
+
+
+
+
+
+<a name="listing_api-Metafield"></a>
+
+### Metafield
+Metafield is one Shopify metafield value, built from a storefront
+metafield spec.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  |  |
+| key | [string](#string) |  | The spec&#39;s key, else its display name. |
+| type | [string](#string) |  | Shopify&#39;s value type, such as &#34;list.single_line_text_field&#34;. |
+| value | [string](#string) |  | A list.* value is a JSON array. A reference is the merchant&#39;s raw label: the Shopify service resolves it against the live shop. |
+| sku | [string](#string) |  | The variant&#39;s listing SKU. Empty for a product metafield. |
 
 
 

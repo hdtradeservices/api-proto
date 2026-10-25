@@ -926,6 +926,14 @@
         "split": {
           "type": "boolean",
           "description": "This listing is one of its Product Group's splits, the one that kept\nthe unsplit listing's id included. Per ZEN-7092."
+        },
+        "metafields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/listing_apiMetafield"
+          },
+          "description": "Shopify metafield values, built from the storefront's metafield\nspecs. Set for Shopify only. Per ZEN-6876."
         }
       }
     },
@@ -1441,6 +1449,31 @@
         }
       },
       "title": "Listing is a representation of a product to be sold on a Channel\nLATER: comment this more"
+    },
+    "listing_apiMetafield": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string",
+          "description": "The spec's key, else its display name."
+        },
+        "type": {
+          "type": "string",
+          "description": "Shopify's value type, such as \"list.single_line_text_field\"."
+        },
+        "value": {
+          "type": "string",
+          "description": "A list.* value is a JSON array. A reference is the merchant's raw\nlabel: the Shopify service resolves it against the live shop."
+        },
+        "sku": {
+          "type": "string",
+          "description": "The variant's listing SKU. Empty for a product metafield."
+        }
+      },
+      "description": "Metafield is one Shopify metafield value, built from a storefront\nmetafield spec."
     },
     "listing_apiPivotOption": {
       "type": "object",
