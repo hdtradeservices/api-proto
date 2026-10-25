@@ -107,7 +107,25 @@ message Listing {
     // This listing is one of its Product Group's splits, the one that kept
     // the unsplit listing's id included. Per ZEN-7092.
     bool split = 12;
+    // Shopify metafield values, built from the storefront's metafield
+    // specs. Set for Shopify only. Per ZEN-6876.
+    repeated Metafield metafields = 13;
   }
+}
+
+// Metafield is one Shopify metafield value, built from a storefront
+// metafield spec.
+message Metafield {
+  string namespace = 1;
+  // The spec's key, else its display name.
+  string key = 2;
+  // Shopify's value type, such as "list.single_line_text_field".
+  string type = 3;
+  // A list.* value is a JSON array. A reference is the merchant's raw
+  // label: the Shopify service resolves it against the live shop.
+  string value = 4;
+  // The variant's listing SKU. Empty for a product metafield.
+  string sku = 5;
 }
 
 // PivotOption is one pivot a listing varies by, as a storefront shows it:
