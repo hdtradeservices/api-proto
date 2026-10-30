@@ -99,6 +99,55 @@
         ]
       }
     },
+    "/v2/storefront/orders/cancelled": {
+      "get": {
+        "summary": "ListCancelledOrders returns orders cancelled in whole or in part, for\ncancel polling: orders with at least one cancelled line, or whose\ninternal Zentail status is CANCELLED or PARTIALLY_CANCELLED.",
+        "description": "Find what was cancelled from the lines, not the order status: a partly\ncancelled order usually keeps the status of its remaining lines. Each\nline's cancelled_quantity is the number of its units cancelled. An order\nwith no lines can still come back, with status CANCELLED; key it by\norder_number.\n\nIt returns every cancel recorded in Zentail, including ones the channel\nreported, not only the merchant's. Each order carries all of its lines,\ncancelled or not. Results are the orders' current state, not cancel\nevents: an order comes back each time it is updated, and a line's\ncancelled_quantity can rise again later, or fall if a cancel is undone.\nSo a caller must keep, for each line, the cancelled_quantity it last\nacted on, act only when the count rises above it, and lower it when the\ncount falls.\n\nThe cancel filter is enforced server-side; callers cannot request other\norders. Results are keyset-paginated in last-update order: pass the\nnext_page_cursor from the previous response to fetch the next page. An\nempty next_page_cursor means there are no more results. The storefront /\nintegration is resolved from the API token, not the request.",
+        "operationId": "OrdersService_ListCancelledOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/orders_apiListCancelledOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lastUpdatedTs",
+            "description": "Only return orders whose last update is at or after this time\n(inclusive). An order's last update time is stamped when the change\nstarts, not when it commits, so start each poll a little before the\nprevious poll began.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "cursor",
+            "description": "Opaque pagination cursor. Empty for the first page; otherwise the\nnext_page_cursor returned by the previous response.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "description": "Maximum number of orders to return. Zero or negative uses the\nserver default; the server may clamp to a maximum.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Sales Channel Orders Service"
+        ]
+      }
+    },
     "/v2/storefront/orders/shipped": {
       "get": {
         "summary": "ListShippedOrders returns orders whose internal Zentail status is\nSHIPPED or PARTIALLY_SHIPPED, for shipment-confirmation polling.",
@@ -205,6 +254,87 @@
       "type": "object",
       "description": "CancelItemsResponse is the response to a CancelItems request."
     },
+    "orders_apiCancelledOrder": {
+      "type": "object",
+      "properties": {
+        "channelOrderId": {
+          "type": "string",
+          "description": "The order ID used by the channel when the order was created."
+        },
+        "orderNumber": {
+          "type": "string",
+          "format": "int64",
+          "description": "The internal Zentail order number."
+        },
+        "status": {
+          "type": "string",
+          "description": "Internal Zentail order status. A partly cancelled order usually keeps\nthe status of its remaining lines, such as SHIPPED, so use the lines to\nfind what was cancelled."
+        },
+        "salesChannelStatus": {
+          "type": "string",
+          "description": "The sales-channel status (reseller_status column)."
+        },
+        "orderTs": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the order was placed."
+        },
+        "lastUpdatedTs": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the order was last updated."
+        },
+        "cancellationReason": {
+          "type": "string",
+          "description": "The reason recorded with the order's most recent cancel, if any. There\nis one per order, so each cancel replaces the last one's reason, and it\nmay come from the channel rather than the merchant."
+        },
+        "lineItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/orders_apiCancelledOrderLineItem"
+          },
+          "description": "Every line on the order, cancelled or not."
+        }
+      },
+      "description": "CancelledOrder is a lean view of an order cancelled in whole or in part,\ncarrying the fields a cancel poller needs."
+    },
+    "orders_apiCancelledOrderLineItem": {
+      "type": "object",
+      "properties": {
+        "lineItemId": {
+          "type": "string",
+          "description": "The Zentail line item id (purchase_order_product id), as a string to match\nShippedOrderLineItem.line_item_id."
+        },
+        "channelLineItemId": {
+          "type": "string",
+          "description": "The channel's own line item id, when the channel assigns one."
+        },
+        "sku": {
+          "type": "string",
+          "description": "The SKU for this line."
+        },
+        "channelSku": {
+          "type": "string",
+          "description": "The SKU the channel itself listed this line under; see\nShippedOrderLineItem.channel_sku."
+        },
+        "quantity": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ordered quantity for this line."
+        },
+        "cancelledQuantity": {
+          "type": "string",
+          "format": "int64",
+          "description": "How many units of this line are cancelled. For a line whose status is\nCANCELLED this is every unit not returned, even when the cancel set only\nthe line status."
+        },
+        "status": {
+          "type": "string",
+          "description": "Internal Zentail line status, such as PENDING, SHIPPED, CANCELLED or\nPARTIALLY_CANCELLED."
+        }
+      },
+      "description": "CancelledOrderLineItem is one line of a CancelledOrder, with how much of it\nwas cancelled."
+    },
     "orders_apiGetOrderResponse": {
       "type": "object",
       "properties": {
@@ -213,6 +343,23 @@
         }
       },
       "description": "GetOrderResponse carries the requested order in the lean ShippedOrder view."
+    },
+    "orders_apiListCancelledOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/orders_apiCancelledOrder"
+          }
+        },
+        "nextPageCursor": {
+          "type": "string",
+          "description": "The cursor token for the next page of results.\nIf empty, there are no more results."
+        }
+      },
+      "description": "ListCancelledOrdersResponse is a single page of cancelled orders."
     },
     "orders_apiListShippedOrdersResponse": {
       "type": "object",
