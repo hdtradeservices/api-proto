@@ -32,6 +32,31 @@ type OrdersServiceClient interface {
 	// are no more results. The storefront / integration is resolved from the
 	// API token, not the request.
 	ListShippedOrders(ctx context.Context, in *ListShippedOrdersRequest, opts ...grpc.CallOption) (*ListShippedOrdersResponse, error)
+	// ListCancelledOrders returns orders cancelled in whole or in part, for
+	// cancel polling: orders with at least one cancelled line, or whose
+	// internal Zentail status is CANCELLED or PARTIALLY_CANCELLED.
+	//
+	// Find what was cancelled from the lines, not the order status: a partly
+	// cancelled order usually keeps the status of its remaining lines. Each
+	// line's cancelled_quantity is the number of its units cancelled. An order
+	// with no lines can still come back, with status CANCELLED; key it by
+	// order_number.
+	//
+	// It returns every cancel recorded in Zentail, including ones the channel
+	// reported, not only the merchant's. Each order carries all of its lines,
+	// cancelled or not. Results are the orders' current state, not cancel
+	// events: an order comes back each time it is updated, and a line's
+	// cancelled_quantity can rise again later, or fall if a cancel is undone.
+	// So a caller must keep, for each line, the cancelled_quantity it last
+	// acted on, act only when the count rises above it, and lower it when the
+	// count falls.
+	//
+	// The cancel filter is enforced server-side; callers cannot request other
+	// orders. Results are keyset-paginated in last-update order: pass the
+	// next_page_cursor from the previous response to fetch the next page. An
+	// empty next_page_cursor means there are no more results. The storefront /
+	// integration is resolved from the API token, not the request.
+	ListCancelledOrders(ctx context.Context, in *ListCancelledOrdersRequest, opts ...grpc.CallOption) (*ListCancelledOrdersResponse, error)
 	// GetOrder returns a single order by one of its identifiers, in the same
 	// lean ShippedOrder view ListShippedOrders returns. Unlike ListShippedOrders
 	// it applies no status filter, returning the order whatever its status, so a
@@ -69,6 +94,15 @@ func (c *ordersServiceClient) ListShippedOrders(ctx context.Context, in *ListShi
 	return out, nil
 }
 
+func (c *ordersServiceClient) ListCancelledOrders(ctx context.Context, in *ListCancelledOrdersRequest, opts ...grpc.CallOption) (*ListCancelledOrdersResponse, error) {
+	out := new(ListCancelledOrdersResponse)
+	err := c.cc.Invoke(ctx, "/orders_api.OrdersService/ListCancelledOrders", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *ordersServiceClient) GetOrder(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*GetOrderResponse, error) {
 	out := new(GetOrderResponse)
 	err := c.cc.Invoke(ctx, "/orders_api.OrdersService/GetOrder", in, out, opts...)
@@ -96,6 +130,31 @@ type OrdersServiceServer interface {
 	// are no more results. The storefront / integration is resolved from the
 	// API token, not the request.
 	ListShippedOrders(context.Context, *ListShippedOrdersRequest) (*ListShippedOrdersResponse, error)
+	// ListCancelledOrders returns orders cancelled in whole or in part, for
+	// cancel polling: orders with at least one cancelled line, or whose
+	// internal Zentail status is CANCELLED or PARTIALLY_CANCELLED.
+	//
+	// Find what was cancelled from the lines, not the order status: a partly
+	// cancelled order usually keeps the status of its remaining lines. Each
+	// line's cancelled_quantity is the number of its units cancelled. An order
+	// with no lines can still come back, with status CANCELLED; key it by
+	// order_number.
+	//
+	// It returns every cancel recorded in Zentail, including ones the channel
+	// reported, not only the merchant's. Each order carries all of its lines,
+	// cancelled or not. Results are the orders' current state, not cancel
+	// events: an order comes back each time it is updated, and a line's
+	// cancelled_quantity can rise again later, or fall if a cancel is undone.
+	// So a caller must keep, for each line, the cancelled_quantity it last
+	// acted on, act only when the count rises above it, and lower it when the
+	// count falls.
+	//
+	// The cancel filter is enforced server-side; callers cannot request other
+	// orders. Results are keyset-paginated in last-update order: pass the
+	// next_page_cursor from the previous response to fetch the next page. An
+	// empty next_page_cursor means there are no more results. The storefront /
+	// integration is resolved from the API token, not the request.
+	ListCancelledOrders(context.Context, *ListCancelledOrdersRequest) (*ListCancelledOrdersResponse, error)
 	// GetOrder returns a single order by one of its identifiers, in the same
 	// lean ShippedOrder view ListShippedOrders returns. Unlike ListShippedOrders
 	// it applies no status filter, returning the order whatever its status, so a
@@ -116,6 +175,9 @@ func (UnimplementedOrdersServiceServer) CancelItems(context.Context, *CancelItem
 }
 func (UnimplementedOrdersServiceServer) ListShippedOrders(context.Context, *ListShippedOrdersRequest) (*ListShippedOrdersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListShippedOrders not implemented")
+}
+func (UnimplementedOrdersServiceServer) ListCancelledOrders(context.Context, *ListCancelledOrdersRequest) (*ListCancelledOrdersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCancelledOrders not implemented")
 }
 func (UnimplementedOrdersServiceServer) GetOrder(context.Context, *GetOrderRequest) (*GetOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrder not implemented")
@@ -168,6 +230,24 @@ func _OrdersService_ListShippedOrders_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrdersService_ListCancelledOrders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCancelledOrdersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrdersServiceServer).ListCancelledOrders(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/orders_api.OrdersService/ListCancelledOrders",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrdersServiceServer).ListCancelledOrders(ctx, req.(*ListCancelledOrdersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _OrdersService_GetOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetOrderRequest)
 	if err := dec(in); err != nil {
@@ -200,6 +280,10 @@ var OrdersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListShippedOrders",
 			Handler:    _OrdersService_ListShippedOrders_Handler,
+		},
+		{
+			MethodName: "ListCancelledOrders",
+			Handler:    _OrdersService_ListCancelledOrders_Handler,
 		},
 		{
 			MethodName: "GetOrder",

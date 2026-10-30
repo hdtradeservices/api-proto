@@ -48,6 +48,37 @@ service OrdersService {
     };
   }
 
+  // ListCancelledOrders returns orders cancelled in whole or in part, for
+  // cancel polling: orders with at least one cancelled line, or whose
+  // internal Zentail status is CANCELLED or PARTIALLY_CANCELLED.
+  //
+  // Find what was cancelled from the lines, not the order status: a partly
+  // cancelled order usually keeps the status of its remaining lines. Each
+  // line's cancelled_quantity is the number of its units cancelled. An order
+  // with no lines can still come back, with status CANCELLED; key it by
+  // order_number.
+  //
+  // It returns every cancel recorded in Zentail, including ones the channel
+  // reported, not only the merchant's. Each order carries all of its lines,
+  // cancelled or not. Results are the orders' current state, not cancel
+  // events: an order comes back each time it is updated, and a line's
+  // cancelled_quantity can rise again later, or fall if a cancel is undone.
+  // So a caller must keep, for each line, the cancelled_quantity it last
+  // acted on, act only when the count rises above it, and lower it when the
+  // count falls.
+  //
+  // The cancel filter is enforced server-side; callers cannot request other
+  // orders. Results are keyset-paginated in last-update order: pass the
+  // next_page_cursor from the previous response to fetch the next page. An
+  // empty next_page_cursor means there are no more results. The storefront /
+  // integration is resolved from the API token, not the request.
+  rpc ListCancelledOrders(ListCancelledOrdersRequest)
+      returns (ListCancelledOrdersResponse) {
+    option (google.api.http) = {
+      get: "/v2/storefront/orders/cancelled"
+    };
+  }
+
   // GetOrder returns a single order by one of its identifiers, in the same
   // lean ShippedOrder view ListShippedOrders returns. Unlike ListShippedOrders
   // it applies no status filter, returning the order whatever its status, so a
@@ -233,4 +264,93 @@ message ShippedOrderPackageItem {
   // The SKU the channel itself listed this line under; see
   // ShippedOrderLineItem.channel_sku.
   string channel_sku = 4;
+}
+
+// ListCancelledOrdersRequest is the request to list cancelled /
+// partially-cancelled orders for the storefront resolved from the API token.
+message ListCancelledOrdersRequest {
+  // Only return orders whose last update is at or after this time
+  // (inclusive). An order's last update time is stamped when the change
+  // starts, not when it commits, so start each poll a little before the
+  // previous poll began.
+  google.protobuf.Timestamp last_updated_ts = 1;
+
+  // Opaque pagination cursor. Empty for the first page; otherwise the
+  // next_page_cursor returned by the previous response.
+  string cursor = 2;
+
+  // Maximum number of orders to return. Zero or negative uses the
+  // server default; the server may clamp to a maximum.
+  int32 page_size = 3;
+}
+
+// ListCancelledOrdersResponse is a single page of cancelled orders.
+message ListCancelledOrdersResponse {
+  repeated CancelledOrder orders = 1;
+
+  // The cursor token for the next page of results.
+  // If empty, there are no more results.
+  string next_page_cursor = 2;
+}
+
+// CancelledOrder is a lean view of an order cancelled in whole or in part,
+// carrying the fields a cancel poller needs.
+message CancelledOrder {
+  // The order ID used by the channel when the order was created.
+  string channel_order_id = 1;
+
+  // The internal Zentail order number.
+  int64 order_number = 2;
+
+  // Internal Zentail order status. A partly cancelled order usually keeps
+  // the status of its remaining lines, such as SHIPPED, so use the lines to
+  // find what was cancelled.
+  string status = 3;
+
+  // The sales-channel status (reseller_status column).
+  string sales_channel_status = 4;
+
+  // When the order was placed.
+  google.protobuf.Timestamp order_ts = 5;
+
+  // When the order was last updated.
+  google.protobuf.Timestamp last_updated_ts = 6;
+
+  // The reason recorded with the order's most recent cancel, if any. There
+  // is one per order, so each cancel replaces the last one's reason, and it
+  // may come from the channel rather than the merchant.
+  string cancellation_reason = 7;
+
+  // Every line on the order, cancelled or not.
+  repeated CancelledOrderLineItem line_items = 8;
+}
+
+// CancelledOrderLineItem is one line of a CancelledOrder, with how much of it
+// was cancelled.
+message CancelledOrderLineItem {
+  // The Zentail line item id (purchase_order_product id), as a string to match
+  // ShippedOrderLineItem.line_item_id.
+  string line_item_id = 1;
+
+  // The channel's own line item id, when the channel assigns one.
+  string channel_line_item_id = 2;
+
+  // The SKU for this line.
+  string sku = 3;
+
+  // The SKU the channel itself listed this line under; see
+  // ShippedOrderLineItem.channel_sku.
+  string channel_sku = 4;
+
+  // The ordered quantity for this line.
+  int64 quantity = 5;
+
+  // How many units of this line are cancelled. For a line whose status is
+  // CANCELLED this is every unit not returned, even when the cancel set only
+  // the line status.
+  int64 cancelled_quantity = 6;
+
+  // Internal Zentail line status, such as PENDING, SHIPPED, CANCELLED or
+  // PARTIALLY_CANCELLED.
+  string status = 7;
 }
