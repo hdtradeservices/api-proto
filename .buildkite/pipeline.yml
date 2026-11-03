@@ -7,7 +7,7 @@
 steps:
   - label: ":pipeline: upload"
     key: upload
-    command: buildkite-agent pipeline upload .buildkite/pipeline.ci.yml
+    command: zt-ci pipeline-upload pipeline.ci.yml
     agents: { queue: go }
 
   # Start developer-docs' update-pins for this commit (ZEN-5331). depends_on the upload step
