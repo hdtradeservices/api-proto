@@ -27,4 +27,7 @@ message Submission {
   google.protobuf.Timestamp prepared_at     = 8;
   google.protobuf.Timestamp submitted_at    = 9;
   google.protobuf.Timestamp acknowledged_at = 10;
+  // send_id names the send this row records. The writer picks it, and repeats
+  // it on every UpdateSubmission that answers this send.
+  string send_id = 12;
 }
