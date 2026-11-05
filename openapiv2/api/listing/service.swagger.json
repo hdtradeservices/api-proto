@@ -1019,6 +1019,10 @@
         },
         "status": {
           "$ref": "#/definitions/listing_apiUpdateSubmissionRequestStatus"
+        },
+        "sendId": {
+          "type": "string",
+          "description": "send_id names the send this answers: the send_id the writer put on the\nSubmission it created. Listing records the answer only when it matches the\nheld row's send_id; when either side has none it falls back to its own rules."
         }
       },
       "title": "UpdateSubmissionRequest is used to move a submission to another status"
@@ -1700,6 +1704,10 @@
         "acknowledgedAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "sendId": {
+          "type": "string",
+          "description": "send_id names the send this row records. The writer picks it, and repeats\nit on every UpdateSubmission that answers this send."
         }
       },
       "title": "Submission represents specific data sent to a channel for a particular SKU"

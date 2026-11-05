@@ -1269,6 +1269,7 @@ UpdateSubmissionRequest is used to move a submission to another status
 | metadata | [UpdateSubmissionRequest.MetadataEntry](#listing_api-UpdateSubmissionRequest-MetadataEntry) | repeated |  |
 | changed_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | status | [UpdateSubmissionRequest.Status](#listing_api-UpdateSubmissionRequest-Status) |  |  |
+| send_id | [string](#string) |  | send_id names the send this answers: the send_id the writer put on the Submission it created. Listing records the answer only when it matches the held row&#39;s send_id; when either side has none it falls back to its own rules. |
 
 
 
@@ -1478,6 +1479,7 @@ Submission represents specific data sent to a channel for a particular SKU
 | prepared_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | submitted_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | acknowledged_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| send_id | [string](#string) |  | send_id names the send this row records. The writer picks it, and repeats it on every UpdateSubmission that answers this send. |
 
 
 

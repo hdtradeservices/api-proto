@@ -353,6 +353,10 @@ message UpdateSubmissionRequest {
   }
 
   Status status = 6;
+  // send_id names the send this answers: the send_id the writer put on the
+  // Submission it created. Listing records the answer only when it matches the
+  // held row's send_id; when either side has none it falls back to its own rules.
+  string send_id = 7;
 }
 
 // SetInventorySubmissionDetailsRequest is used to create inventory submission
