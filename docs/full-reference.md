@@ -1061,6 +1061,7 @@ ReplaceErrorsRequest provides all the channel-generated errors for a SKU
 | sku | [string](#string) |  |  |
 | submission_type | [string](#string) |  |  |
 | errors | [Error](#listing_api-Error) | repeated |  |
+| send_id | [string](#string) |  | The send this answer belongs to. A channel&#39;s answer writer sets it so a cleared error can be traced to the send that carried a merchant&#39;s fix. |
 
 
 

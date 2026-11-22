@@ -949,6 +949,10 @@
             "type": "object",
             "$ref": "#/definitions/listing_apiError"
           }
+        },
+        "sendId": {
+          "type": "string",
+          "description": "The send this answer belongs to. A channel's answer writer sets it so a\ncleared error can be traced to the send that carried a merchant's fix."
         }
       },
       "title": "ReplaceErrorsRequest provides all the channel-generated errors for a SKU"

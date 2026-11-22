@@ -508,6 +508,9 @@ message ReplaceErrorsRequest {
   string sku = 1;
   string submission_type = 3;
   repeated Error errors = 2;
+  // The send this answer belongs to. A channel's answer writer sets it so a
+  // cleared error can be traced to the send that carried a merchant's fix.
+  string send_id = 4;
 }
 
 message Error {
